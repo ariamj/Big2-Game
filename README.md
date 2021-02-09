@@ -43,3 +43,11 @@ we had family dinners or gatherings. There were always more than four people who
 decks of cards instead of one. My aunt is also a creative person who enjoys altering the rules of games and making her 
 own games as well, thus, the new rules for how chips are paid. Being able to make something that my family "created" 
 --or rather altered I guess--into an actual game would be fun and interesting.
+
+
+## USER STORIES
+
+- As a user, I want to be able to select the amount of players playing in the game
+- As a user, I want to be able to play a hand on the table
+- As a user, I want to both add and remove chips from my drawer
+- As a user, I want to both view the cards in my hand and the current cards/hand on the table
