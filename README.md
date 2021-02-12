@@ -19,7 +19,13 @@ There are 9 different types of hands that are possible to be played:
 - Straight flush
 - Royal straight flush
 
-With the last 6 hands being 5 card hands (they are played in sets of 5 cards).
+With the last 6 hands being 5 card hands (they are played in sets of 5 cards). The cards also increase from 3 to the
+king--like normal counting--with the ace being bigger than the king and 2 being the greatest. As for their suits, they
+are ordered as follows from lowest to highest:
+1. Diamonds
+2. Clubs
+3. Hearts
+4. Spade
 
 There are also chips to either be won or lost:
 - White chips are worth 1 point
@@ -47,7 +53,7 @@ own games as well, thus, the new rules for how chips are paid. Being able to mak
 
 ## USER STORIES
 
-- As a user, I want to be able to select the amount of players playing in the game
+- As a user, I want to be able to select the number of players playing in the game
 - As a user, I want to be able to play a hand on the table
 - As a user, I want to both add and remove chips from my drawer
 - As a user, I want to both view the cards in my hand and the current cards/hand on the table
