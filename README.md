@@ -3,7 +3,7 @@
 ## ***What will the application do?***
 
 There are many different applications with their variations of Big 2, however, this application has its own version of
-the game. Similar to the normal game of Big 2, each player will be dealt a hand of cards. The number of cards per hand 
+the game. Similar to the normal game of Big 2, each player will be dealt some cards. The number of cards  
 will depend on the number of players. However, unlike the normal game, this application will allow for more than 4 
 people to play at a time with the use of multiple decks of cards. The user can also choose to either deal all the cards
 out or play with only 13 cards per player.
@@ -19,9 +19,10 @@ There are 9 different types of hands that are possible to be played:
 - Straight flush
 - Royal straight flush
 
-With the last 6 hands being 5 card hands (they are played in sets of 5 cards). The cards also increase from 3 to the
-king--like normal counting--with the ace being bigger than the king and 2 being the greatest. As for their suits, they
-are ordered as follows from lowest to highest:
+With the last 6 hands being 5 card hands (they are played in sets of 5 cards). The number of cards being played must 
+the number of cards that the most recent hand played has.
+The cards also increase in ranking from 3 to the king--like normal counting--with the ace being bigger than the king 
+and 2 being the greatest. As for their suits, they are ranked as follows from lowest to highest:
 1. Diamonds
 2. Clubs
 3. Hearts
@@ -33,8 +34,8 @@ There are also chips to either be won or lost:
 - Red chips are worth 10 points
 - Gold chips are worth 25 points
 
-At the end of each game, the amount of cards each player has left in their hand is equivalent to the number of points 
-that they lose with the except of the 2. If the play still has a 2 in their hand, that card is worth 5 points (ie. they 
+At the end of each game, the amount of cards each player has left is equivalent to the number of points 
+that they lose with the exception of the 2. If the play still has a 2, that card is worth 5 points (ie. they 
 lose an extra 4 points on top).
 
 ## ***Who will use it?***
@@ -56,4 +57,4 @@ own games as well, thus, the new rules for how chips are paid. Being able to mak
 - As a user, I want to be able to select the number of players playing in the game
 - As a user, I want to be able to play a hand on the table
 - As a user, I want to both add and remove chips from my drawer
-- As a user, I want to both view the cards in my hand and the current cards/hand on the table
+- As a user, I want to both view my cards, and the current cards/hand on the table
