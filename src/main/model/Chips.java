@@ -9,17 +9,41 @@ public class Chips {
 
     private String colour;
 
-    public Chips() {
-        //stub
+    /**
+     * Creates a chip with the colour colour
+     */
+    public Chips(String colour) {
+        this.colour = colour.toLowerCase();
     }
 
     //getters
     public String getColour() {
-        return null;
+        return this.colour;
     }
 
-    //setters
-    public void setColour() {
-        //stub
+    //getters
+    public int getValue() {
+        if (colour.equals("white")) {
+            return WHITE_CHIP_VALUE;
+        } else if (colour.equals("blue")) {
+            return BLUE_CHIP_VALUE;
+        } else if (colour.equals("red")) {
+            return RED_CHIP_VALUE;
+        } else {
+            return GOLD_CHIP_VALUE;
+        }
+    }
+
+    //EFFECTS: returns the string representation of a chip
+    public String toString() {
+        if (colour.equals("white")) {
+            return "W";
+        } else if (colour.equals("blue")) {
+            return "B";
+        } else if (colour.equals("red")) {
+            return "R";
+        } else {
+            return "G";
+        }
     }
 }
