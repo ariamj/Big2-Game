@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,8 +20,7 @@ public class TablePileTest {
     @Test
     public void testTopHandInPileOneCard() {
         Card card = new Card(3, "diamond");
-        List<Card> hand = new ArrayList<>();
-        hand.add(card);
+        Hand hand = new Hand(new ArrayList<>(Arrays.asList(card)));
         pile.playHandInPile(hand);
         List<Card> cardsInPile = new ArrayList<>();
         cardsInPile.add(card);
@@ -31,9 +31,8 @@ public class TablePileTest {
 
     @Test
     public void testTopHandInPileTwoCards() {
-        List<Card> hand = new ArrayList<>();
-        hand.add(new Card(3, "diamond"));
-        hand.add(new Card(3,"spade"));
+        Hand hand = new Hand(new ArrayList<>(Arrays.asList(new Card(3, "diamond"),
+                new Card(3,"spade"))));
         pile.playHandInPile(hand);
         assertEquals(2, pile.getSize());
 

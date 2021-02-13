@@ -10,12 +10,12 @@ public class Card {
 
     /**
      * Creates a new card with a rank and suit.
-     *  rank must be within the range of [1,13]
-     *  suit must be one of either:
-     *      - diamond
-     *      - clubs
-     *      - heart
-     *      - spade
+     * rank must be within the range of [1,13]
+     * suit must be one of either:
+     * - diamond
+     * - clubs
+     * - heart
+     * - spade
      */
     public Card(int rank, String suit) {
         this.rank = rank;

@@ -19,11 +19,11 @@ public class DeckOfCardsTest {
         assertEquals(52, deck.getSize());
     }
 
-    @Test
-    public void testRemoveCard() {
-        Card card = deck.removeCard();
-        assertEquals(51, deck.getSize());
-        assertEquals(1, card.getRank());
-        assertEquals("diamond", card.getSuit());
-    }
+//    @Test
+//    public void testRemoveCard() {
+//        Card card = deck.removeCard();
+//        assertEquals(51, deck.getSize());
+//        assertEquals(1, card.getRank());
+//        assertEquals("diamond", card.getSuit());
+//    }
 }

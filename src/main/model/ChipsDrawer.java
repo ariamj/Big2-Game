@@ -5,11 +5,16 @@ import java.util.List;
 
 // Represents the chips that player is in possession of
 public class ChipsDrawer {
+    private static final String WHITE = "white";
+    private static final String BLUE = "blue";
+    private static final String RED = "red";
+    private static final String GOLD = "gold";
 
     private int numWhiteChips;
     private int numBlueChips;
     private int numRedChips;
     private int numGoldChips;
+    private int balance;
     private List<Chips> drawer;
 
     /**
@@ -25,6 +30,30 @@ public class ChipsDrawer {
         this.numBlueChips = numBlueChips;
         this.numRedChips = numRedChips;
         this.numGoldChips = numGoldChips;
+        insertInitialChipsInDrawer(numWhiteChips, numBlueChips, numRedChips, numGoldChips);
+    }
+
+    private void insertInitialChipsInDrawer(int numWhiteChips, int numBlueChips, int numRedChips, int numGoldChips) {
+        for (int i = 0; i < numWhiteChips; i++) {
+            Chips whiteChip = new Chips(WHITE);
+            drawer.add(whiteChip);
+            balance += whiteChip.getValue();
+        }
+        for (int i = 0; i < numBlueChips; i++) {
+            Chips blueChip = new Chips(BLUE);
+            drawer.add(blueChip);
+            balance += blueChip.getValue();
+        }
+        for (int i = 0; i < numRedChips; i++) {
+            Chips redChip = new Chips(RED);
+            drawer.add(redChip);
+            balance += redChip.getValue();
+        }
+        for (int i = 0; i < numGoldChips; i++) {
+            Chips goldChip = new Chips(GOLD);
+            drawer.add(goldChip);
+            balance += goldChip.getValue();
+        }
     }
 
     /**
@@ -33,7 +62,23 @@ public class ChipsDrawer {
      * EFFECTS: removes chip from drawer
      */
     public void removeChipFromDrawer(Chips chip) {
-        drawer.remove(chip);
+        String colour = chip.getColour();
+//        drawer.remove(chip);
+        for (int i = 0; i < drawer.size(); i++) {
+            if (drawer.get(i).getColour().equals(colour)) {
+                drawer.remove(i);
+                break;
+            }
+        }
+        if (colour.equals(WHITE)) {
+            numWhiteChips--;
+        } else if (colour.equals(BLUE)) {
+            numBlueChips--;
+        } else if (colour.equals(RED)) {
+            numRedChips--;
+        } else {
+            numGoldChips--;
+        }
     }
 
     /**
@@ -42,6 +87,21 @@ public class ChipsDrawer {
      */
     public void addChipToDrawer(Chips chip) {
         drawer.add(chip);
+        String colour = chip.getColour();
+        if (colour.equals(WHITE)) {
+            numWhiteChips++;
+        } else if (colour.equals(BLUE)) {
+            numBlueChips++;
+        } else if (colour.equals(RED)) {
+            numRedChips++;
+        } else {
+            numGoldChips++;
+        }
+    }
+
+    //EFFECTS: returns the total points in drawer
+    public int getBalance() {
+        return balance;
     }
 
     //EFFECTS: returns the number of chips in the drawer
@@ -67,5 +127,17 @@ public class ChipsDrawer {
     //getters
     public int getNumGoldChips() {
         return numGoldChips;
+    }
+
+    //EFFECTS: returns a string representation of the chip drawer
+    public String toString() {
+        String drawerString = "[";
+        for (int i = 0; i < drawer.size(); i++) {
+            drawerString += drawer.get(i).toString();
+            if (i != drawer.size() - 1) {
+                drawerString += ", ";
+            }
+        }
+        return drawerString + "]";
     }
 }

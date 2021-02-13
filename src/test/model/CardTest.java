@@ -28,7 +28,7 @@ public class CardTest {
 
     @Test
     public void testGetSuit() {
-        assertEquals("Diamond", card.getSuit());
+        assertEquals("diamond", card.getSuit());
     }
 
     @Test

@@ -1,46 +1,45 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // Represents the cards that the player has currently
-public class PlayerCards {
+public class PlayerCards extends ListOfCards {
 
-    private List<Card> playerCards;
+//    private ListOfCards playerCards;
 
     /**
      * Creates an empty set for a player hand
      */
-    public PlayerCards(List<Card> cards) {
-        playerCards = cards;
+    public PlayerCards(ListOfCards cards) {
+        super(cards.getListOfCards());
     }
 
     /**
      * REQUIRES: playerCards is not empty
      * MODIFIES: this
      * EFFECTS: player plays a hand
-     *          - if hand is valid (greater than the most recent hand played and is a valid poker hand):
-     *              - remove cards from playerCards
-     *              - return hand
-     *          else: try again
+     * - remove cards from playerCards
+     * - return hand
      */
-    public List<Card> playHand(List<Card> hand) {
-        return null;
+    public Hand playHand(Hand hand) {
+        for (int i = 0; i < this.getSize(); i++) {
+            if (hand.contains(this.getListOfCards().get(i))) {
+                this.getListOfCards().remove(i);
+                i--;
+            }
+        }
+        return hand;
     }
 
     /**
      * EFFECTS: returns true if given hand is a valid hand
-     *              ie. ranking of hand is higher or equal to most recent played hand
-     *                  and is a valid type hand
+     * ie. ranking of hand is higher or equal to most recent played hand
+     * and is a valid type hand
      */
-    private boolean isValidHand(List<Card> hand) {
+    private boolean canPlayHand(Hand hand) {
+        if (hand.isValidTypeHand()) {
+            return true;
+        }
         return false;
-    }
-
-
-    //EFFECTS: returns number of cards in playerCards
-    public int getSize() {
-        return playerCards.size();
     }
 }
