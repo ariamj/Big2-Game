@@ -21,7 +21,7 @@ public class TablePileTest {
         Card card = new Card(3, "diamond");
         List<Card> hand = new ArrayList<>();
         hand.add(card);
-        pile.topHandInPile(hand);
+        pile.playHandInPile(hand);
         List<Card> cardsInPile = new ArrayList<>();
         cardsInPile.add(card);
         assertEquals(1, cardsInPile.size(), pile.getSize());
@@ -34,7 +34,7 @@ public class TablePileTest {
         List<Card> hand = new ArrayList<>();
         hand.add(new Card(3, "diamond"));
         hand.add(new Card(3,"spade"));
-        pile.topHandInPile(hand);
+        pile.playHandInPile(hand);
         assertEquals(2, pile.getSize());
 
         //tests for is correct card in pile....

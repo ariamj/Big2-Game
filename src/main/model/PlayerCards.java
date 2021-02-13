@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // Represents the cards that the player has currently
@@ -7,8 +9,11 @@ public class PlayerCards {
 
     private List<Card> playerCards;
 
+    /**
+     * Creates an empty set for a player hand
+     */
     public PlayerCards(List<Card> cards) {
-        //stub
+        playerCards = cards;
     }
 
     /**
@@ -24,8 +29,18 @@ public class PlayerCards {
         return null;
     }
 
+    /**
+     * EFFECTS: returns true if given hand is a valid hand
+     *              ie. ranking of hand is higher or equal to most recent played hand
+     *                  and is a valid type hand
+     */
+    private boolean isValidHand(List<Card> hand) {
+        return false;
+    }
+
+
     //EFFECTS: returns number of cards in playerCards
     public int getSize() {
-        return 0;
+        return playerCards.size();
     }
 }
