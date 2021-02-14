@@ -11,15 +11,12 @@ public class ChipsDrawer {
     private static final String BLUE = "blue";
     private static final String RED = "red";
     private static final String GOLD = "gold";
-    private static final Chips WHITE_CHIP = new Chips(WHITE);
-    private static final Chips BLUE_CHIP = new Chips(BLUE);
-    private static final Chips RED_CHIP = new Chips(RED);
-    private static final Chips GOLD_CHIP = new Chips(GOLD);
 
     private int numWhiteChips;
     private int numBlueChips;
     private int numRedChips;
     private int numGoldChips;
+    private int balance;
     private List<Chips> drawer;
 
     //EFFECTS: Makes a new drawer for chips for player with an initial state of:
@@ -38,16 +35,24 @@ public class ChipsDrawer {
     //EFFECTS: inserts multiple amounts of each chip colour to begin drawer
     private void insertInitialChipsInDrawer(int numWhiteChips, int numBlueChips, int numRedChips, int numGoldChips) {
         for (int i = 0; i < numWhiteChips; i++) {
-            drawer.add(WHITE_CHIP);
+            Chips whiteChip = new Chips(WHITE);
+            drawer.add(whiteChip);
+            balance += whiteChip.getValue();
         }
         for (int i = 0; i < numBlueChips; i++) {
-            drawer.add(BLUE_CHIP);
+            Chips blueChip = new Chips(BLUE);
+            drawer.add(blueChip);
+            balance += blueChip.getValue();
         }
         for (int i = 0; i < numRedChips; i++) {
-            drawer.add(RED_CHIP);
+            Chips redChip = new Chips(RED);
+            drawer.add(redChip);
+            balance += redChip.getValue();
         }
         for (int i = 0; i < numGoldChips; i++) {
-            drawer.add(GOLD_CHIP);
+            Chips goldChip = new Chips(GOLD);
+            drawer.add(goldChip);
+            balance += goldChip.getValue();
         }
     }
 
@@ -89,15 +94,14 @@ public class ChipsDrawer {
         }
     }
 
-    //EFFECTS: returns the total points in drawer
-    public int getBalance() {
-        return (numWhiteChips * WHITE_CHIP.getValue()) + (numBlueChips * BLUE_CHIP.getValue())
-                + (numRedChips * RED_CHIP.getValue()) + (numGoldChips * GOLD_CHIP.getValue());
-    }
-
     //EFFECTS: returns the number of chips in the drawer
     public int getSize() {
         return drawer.size();
+    }
+
+    //getter
+    public int getBalance() {
+        return balance;
     }
 
     //getters
