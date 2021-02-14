@@ -26,11 +26,17 @@ public class DeckOfCards extends ListOfCards {
         List<Card> cardDealt = new ArrayList<>();
         int numCards = this.getSize();
         if (amount.equals("13 cards")) {
-            numCards = 13;
+            numCards = 26;
         }
-        for (int i = 0; i < numCards; i++) {
-            cardDealt.add(this.getListOfCards().get(i));
-            this.removeCard(i);
+        for (int i = 0; i < numCards; i += 2) {
+            Card cardToBeRemoved = this.getListOfCards().get(i);
+            cardDealt.add(cardToBeRemoved);
+        }
+        for (int i = 0; i < this.getSize(); i++) {
+            if (cardDealt.contains(this.getListOfCards().get(i))) {
+                this.removeCard(i);
+                i--;
+            }
         }
         return new Hand(cardDealt);
     }

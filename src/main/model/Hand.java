@@ -35,7 +35,7 @@ public class Hand extends ListOfCards {
         return super.getListOfCards();
     }
 
-    /**
+        /**
      * EFFECTS: returns true is this is greater than other, false otherwise
      */
     public boolean isValidPlay(Hand other) {
@@ -93,9 +93,9 @@ public class Hand extends ListOfCards {
      * EFFECTS: returns true if hand is a valid straight type hand
      */
     private boolean isValidStraightHand(Hand hand) {
-        int rank = 0;
+        int rank = hand.getListOfCards().get(0).getRank() - 1;
         for (Card card : hand.getHand()) {
-            if (!(rank == 13 && card.getRank() == 1) && !(card.getRank() > rank)) {
+            if (!(rank == 13 && card.getRank() == 1) && !(card.getRank() == rank + 1)) {
                 return false;
             }
             rank = card.getRank();

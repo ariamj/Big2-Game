@@ -63,7 +63,6 @@ public class ChipsDrawer {
      */
     public void removeChipFromDrawer(Chips chip) {
         String colour = chip.getColour();
-//        drawer.remove(chip);
         for (int i = 0; i < drawer.size(); i++) {
             if (drawer.get(i).getColour().equals(colour)) {
                 drawer.remove(i);

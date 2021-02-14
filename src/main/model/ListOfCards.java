@@ -33,8 +33,9 @@ public abstract class ListOfCards {
     }
 
     //EFFECTS: remove card at index i from this
-    protected void removeCard(int i) {
-        listOfCards.remove(i);
+    protected Card removeCard(int i) {
+        Card removed = listOfCards.remove(i);
+        return removed;
     }
 
     //setters
@@ -53,11 +54,11 @@ public abstract class ListOfCards {
     }
 
     //EFFECTS: returns string representation of the hand
-    protected String toString(List<Card> loc) {
+    public String toString() {
         String hand = "[";
-        for (int i = 0; i < loc.size(); i++) {
-            hand += loc.get(i).toString();
-            if (i != loc.size() - 1) {
+        for (int i = 0; i < listOfCards.size(); i++) {
+            hand += listOfCards.get(i).toString();
+            if (i != listOfCards.size() - 1) {
                 hand += ", ";
             }
         }

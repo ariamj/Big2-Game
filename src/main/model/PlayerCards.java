@@ -5,8 +5,6 @@ import java.util.List;
 // Represents the cards that the player has currently
 public class PlayerCards extends ListOfCards {
 
-//    private ListOfCards playerCards;
-
     /**
      * Creates an empty set for a player hand
      */
@@ -22,13 +20,16 @@ public class PlayerCards extends ListOfCards {
      * - return hand
      */
     public Hand playHand(Hand hand) {
-        for (int i = 0; i < this.getSize(); i++) {
-            if (hand.contains(this.getListOfCards().get(i))) {
-                this.getListOfCards().remove(i);
-                i--;
+        if (canPlayHand(hand)) {
+            for (int i = 0; i < this.getSize(); i++) {
+                if (hand.contains(this.getListOfCards().get(i))) {
+                    this.getListOfCards().remove(i);
+                    i--;
+                }
             }
+            return hand;
         }
-        return hand;
+        return new Hand();
     }
 
     /**
