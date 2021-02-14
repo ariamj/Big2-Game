@@ -33,7 +33,8 @@ public abstract class ListOfCards {
         int highestRank = 0;
         int indexOfHighest = 0;
         for (int i = 0; i < listOfCards.size(); i++) {
-            if (listOfCards.get(i).getRank() > highestRank) {
+            int currCardRank = listOfCards.get(i).getRank();
+            if (highestRank != 2 && ((currCardRank == 1 && highestRank == 13) || currCardRank > highestRank)) {
                 highestRank = listOfCards.get(i).getRank();
                 indexOfHighest = i;
             }

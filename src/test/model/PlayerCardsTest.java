@@ -60,15 +60,14 @@ class PlayerCardsTest {
     }
 
     @Test
-    public void testPlayHandCantPlayHand() {
-        Hand hand = new Hand(new ArrayList<>(Arrays.asList(D10,D3)));
-        Hand emptyHand = new Hand();
-        assertEquals(emptyHand.getListOfCards(), playerCards.playHand(hand).getListOfCards());
-    }
-
-    @Test
     public void testToString() {
         String playerCardsString = "[3D, 3C, 3H, 3S, AH, KH, QH, JH, 10H, 9H, 10D]";
         assertEquals(playerCardsString, playerCards.toString());
+    }
+
+    @Test
+    public void testGetCardsList() {
+        List<Card> cardList = new ArrayList<>(Arrays.asList(D3, C3, H3, S3, H1, H13, H12, H11, H10, H9, D10));
+        assertEquals(cardList, playerCards.getCardsList());
     }
 }

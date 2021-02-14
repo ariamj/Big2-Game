@@ -42,23 +42,32 @@ public class Player {
             while (pointsLost >= 5) {
                 while (pointsLost >= 10) {
                     while (pointsLost >= 25) {
-                        drawer.removeChipFromDrawer(GOLD_CHIP);
-                        paidChips.add(GOLD_CHIP);
-                        pointsLost -= 25;
+                        pointsLost = removeChips(GOLD_CHIP, paidChips, pointsLost, 25);
                     }
-                    drawer.removeChipFromDrawer(RED_CHIP);
-                    paidChips.add(RED_CHIP);
-                    pointsLost -= 10;
+                    if (pointsLost < 10) {
+                        break;
+                    }
+                    pointsLost = removeChips(RED_CHIP, paidChips, pointsLost, 10);
                 }
-                drawer.removeChipFromDrawer(BLUE_CHIP);
-                paidChips.add(BLUE_CHIP);
-                pointsLost -= 5;
+                if (pointsLost < 5) {
+                    break;
+                }
+                pointsLost = removeChips(BLUE_CHIP, paidChips, pointsLost, 5);
             }
-            drawer.removeChipFromDrawer(WHITE_CHIP);
-            paidChips.add(WHITE_CHIP);
-            pointsLost -= 1;
+            if (pointsLost < 1) {
+                break;
+            }
+            pointsLost = removeChips(WHITE_CHIP, paidChips, pointsLost, 1);
         }
         return paidChips;
+    }
+
+    //helper
+    private int removeChips(Chips chip, List<Chips> paidChips, int pointsLost, int pointsValue) {
+        drawer.removeChipFromDrawer(chip);
+        paidChips.add(GOLD_CHIP);
+        pointsLost -= pointsValue;
+        return pointsLost;
     }
 
     //getters

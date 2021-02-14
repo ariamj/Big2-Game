@@ -34,84 +34,89 @@ public class Hand extends ListOfCards {
         return super.getListOfCards();
     }
 
-    /**
-     * EFFECTS: returns true is this is greater than other, false otherwise
-     */
+    //EFFECTS: returns true is this is greater than other, false otherwise
     public boolean isValidPlay(Hand other) {
         int otherSize = other.getSize();
-        if (otherSize == 1 && isValidSingleCardHand(this)) {
-            //check single
+        if (this.getSize() > 5 || this.getSize() < 1) {
+            return false;
+        } else if (otherSize == 0) {
+            return true;
+        } else if (otherSize == 1 && isValidSingleCardHand(this)) {
             return canPlaySingleHand(other);
         } else if (otherSize == 2 && isValidPairHand(this)) {
-            //check pair
             return canPlayPairHand(other);
         } else if (otherSize == 3 && isValidThreeOfAKindHand(this)) {
-            //check three of a kind
             return canPlayThreeOfAKindHand(other);
-        } else if (otherSize == 5 && isValidFiveCardHand(this)) {
-            //check five card hands
-            return canPlayFiveCardHand(other);
         } else {
-            return false;
+            return canPlayFiveCardHand(other);
         }
     }
 
     private boolean canPlaySingleHand(Hand other) {
         int otherRank = other.getListOfCards().get(0).getRank();
+        int thisRank = listOfCards.get(0).getRank();
         String otherSuit = other.getListOfCards().get(0).getSuit();
-        if (listOfCards.get(0).getRank() == otherRank) {
+        if (thisRank == otherRank) {
             return SUITS.indexOf(listOfCards.get(0).getSuit()) > SUITS.indexOf(otherSuit);
-        } else if (listOfCards.get(0).getRank() > otherRank) {
-            return true;
+        } else {
+            if (thisRank == 1 || thisRank == 2) {
+                return kingAceBorder(thisRank, otherRank);
+            } else if (otherRank == 1 || otherRank == 2) {
+                return !kingAceBorder(otherRank, thisRank);
+            }
+            return thisRank > otherRank;
         }
-        return false;
     }
 
     private boolean canPlayPairHand(Hand other) {
         int otherRank = other.getListOfCards().get(0).getRank();
-        if (listOfCards.get(0).getRank() == otherRank) {
-            int highestThisSuit = (int) Math.max(SUITS.indexOf(listOfCards.get(0).getSuit()),
+        int thisRank = listOfCards.get(0).getRank();
+        if (thisRank == otherRank) {
+            int highestThisSuit = Math.max(SUITS.indexOf(listOfCards.get(0).getSuit()),
                     SUITS.indexOf(listOfCards.get(1).getSuit()));
-            int highestOtherSuit = (int) Math.max(SUITS.indexOf(other.getListOfCards().get(0).getSuit()),
+            int highestOtherSuit = Math.max(SUITS.indexOf(other.getListOfCards().get(0).getSuit()),
                     SUITS.indexOf(other.getListOfCards().get(1).getSuit()));
             return highestThisSuit > highestOtherSuit;
-        } else if (listOfCards.get(0).getRank() > otherRank) {
-            return true;
+        } else {
+            if (thisRank == 1 || thisRank == 2) {
+                return kingAceBorder(thisRank, otherRank);
+            } else if (otherRank == 1 || otherRank == 2) {
+                return !kingAceBorder(otherRank, thisRank);
+            }
+            return thisRank > otherRank;
         }
-        return false;
     }
 
     private boolean canPlayThreeOfAKindHand(Hand other) {
         int otherRank = other.getListOfCards().get(0).getRank();
         int thisRank = listOfCards.get(0).getRank();
+        if (thisRank == 1 || thisRank == 2) {
+            return kingAceBorder(thisRank, otherRank);
+        } else if (otherRank == 1 || otherRank == 2) {
+            return !kingAceBorder(otherRank, thisRank);
+        }
         return thisRank > otherRank;
     }
 
     private boolean canPlayFiveCardHand(Hand other) {
-        if (isValidStraightHand(other)) {
-            //check >= straight can play
+        if (isValidStraightHand(other) && !isValidStraightFlushHand(other)) {
             return canPlayStraight(other) || isValidFlushHand(this) || isValidFullHouseHand(this)
-                    || isValidFourOfAKindHand(this) || isValidStraightHand(this);
-        } else if (isValidFlushHand(other)) {
-            //check >= flush can play
+                    || isValidFourOfAKindHand(this) || isValidStraightFlushHand(this);
+        } else if (isValidFlushHand(other) && !isValidStraightFlushHand(other)) {
             return !isValidStraightHand(this) && (canPlayFlush(other) || isValidFullHouseHand(this)
                     || isValidFourOfAKindHand(this) || isValidStraightFlushHand(this));
         } else if (isValidFullHouseHand(other)) {
-            //check >= full house can play
-            return !(isValidStraightHand(this) || isValidFlushHand(this)) && (canPLayFullHouse(other)
-                    || isValidFourOfAKindHand(this) || isValidStraightFlushHand(this));
+            return !((isValidStraightHand(this) || isValidFlushHand(this)) && !isValidStraightFlushHand(this))
+                    && (canPLayFullHouse(other) || isValidFourOfAKindHand(this) || isValidStraightFlushHand(this));
         } else if (isValidFourOfAKindHand(other)) {
-            //check >= four of a kind can play
-            return !(isValidStraightHand(this) || isValidFlushHand(this) || isValidFullHouseHand(this))
-                    && (canPLayFourOfAKind(other) || isValidStraightFlushHand(this));
+            return !(((isValidStraightHand(this) || isValidFlushHand(this)) && !isValidStraightFlushHand(this))
+                    || isValidFullHouseHand(this)) && (canPLayFourOfAKind(other) || isValidStraightFlushHand(this));
         } else if (isValidStraightFlushHand(other) && !isValidRoyalStraightFlushHand(other)) {
-            //check >= straight flush can play
-            return !(isValidStraightHand(this) || isValidFlushHand(this) || isValidFullHouseHand(this)
-                    || isValidFourOfAKindHand(this)) && (canPLayStraightFlush(other));
+            return !(((isValidStraightHand(this) || isValidFlushHand(this)) && !isValidStraightFlushHand(this))
+                    || isValidFullHouseHand(this) || isValidFourOfAKindHand(this)) && (canPLayStraightFlush(other));
         } else {
-            //check >= royal straight flush can play
-            return !(isValidStraightHand(this) || isValidFlushHand(this) || isValidFullHouseHand(this)
-                    || isValidFourOfAKindHand(this) || isValidStraightFlushHand(this))
+            return !(((isValidStraightHand(this) || isValidFlushHand(this)) && !isValidStraightFlushHand(this))
+                    || isValidFullHouseHand(this) || isValidFourOfAKindHand(this))
                     && canPLayRoyalStraightFlush(other);
         }
     }
@@ -125,60 +130,78 @@ public class Hand extends ListOfCards {
             int indexOfThisHighestSuit = SUITS.indexOf(thisHighestCard.getSuit());
             int indexOfOtherHighestSuit = SUITS.indexOf(otherHighestCard.getSuit());
             return indexOfThisHighestSuit > indexOfOtherHighestSuit;
-        } else if (thisHighestRank > otherHighestRank) {
-            return true;
+        } else {
+            if (thisHighestRank == 1 || thisHighestRank == 2) {
+                return kingAceBorder(thisHighestRank, otherHighestRank);
+            } else if (otherHighestRank == 1 || otherHighestRank == 2) {
+                return !(kingAceBorder(otherHighestRank, thisHighestRank));
+            }
+            return thisHighestRank > otherHighestRank;
         }
-        return false;
     }
 
     private boolean canPlayFlush(Hand other) {
-        return false;
+        String otherSuit = other.getHand().get(0).getSuit();
+        String thisSuit = this.getHand().get(0).getSuit();
+        int thisRank = this.highestCard().getRank();
+        int otherRank = other.highestCard().getRank();
+        if (thisSuit.equals(otherSuit)) {
+            return kingAceBorder(thisRank, otherRank) || thisRank > otherRank;
+        } else {
+            return SUITS.indexOf(thisSuit) > SUITS.indexOf(otherSuit);
+        }
     }
 
     private boolean canPLayFullHouse(Hand other) {
-        return false;
+        int other3Rank = other.findNumCardRepeatRank(3);
+        int this3Rank = this.findNumCardRepeatRank(3);
+        if (this3Rank == 1 || this3Rank == 2) {
+            return kingAceBorder(this3Rank, other3Rank);
+        } else if (other3Rank == 1 || other3Rank == 2) {
+            return !kingAceBorder(other3Rank, this3Rank);
+        }
+        return this3Rank > other3Rank;
     }
 
     private boolean canPLayFourOfAKind(Hand other) {
-        return false;
+        int other4Rank = other.findNumCardRepeatRank(4);
+        int this4Rank = this.findNumCardRepeatRank(4);
+        if (this4Rank == 1 || this4Rank == 2) {
+            return kingAceBorder(this4Rank, other4Rank);
+        } else if (other4Rank == 1 || other4Rank == 2) {
+            return !kingAceBorder(other4Rank, this4Rank);
+        }
+        return this4Rank > other4Rank;
     }
 
     private boolean canPLayStraightFlush(Hand other) {
-        return false;
+        return canPlayFlush(other);
     }
 
     private boolean canPLayRoyalStraightFlush(Hand other) {
-        return false;
+        return canPLayStraightFlush(other);
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid type hand, false otherwise
-     */
+    //EFFECTS: returns true if hand is a valid type hand, false otherwise
     public boolean isValidTypeHand() {
         return (isValidSingleCardHand(this) || isValidPairHand(this)
                 || isValidThreeOfAKindHand(this) || isValidFiveCardHand(this));
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid single type hand
-     */
+    //EFFECTS: returns true if hand is a valid single type hand
     private boolean isValidSingleCardHand(Hand hand) {
         return hand.getSize() == 1;
     }
 
-    /**
-     * REQUIRES: size of hand is >= 2
-     * EFFECTS: returns true if hand is a valid pair type hand
-     */
+    //REQUIRES: size of hand is >= 2
+    //EFFECTS: returns true if hand is a valid pair type hand
     private boolean isValidPairHand(Hand hand) {
         int firstCardRank = hand.getHand().get(0).getRank();
         int secondCardRank = hand.getHand().get(1).getRank();
         return (hand.getSize() == 2) && (firstCardRank == secondCardRank);
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid three of a kind type hand
-     */
+    //EFFECTS: returns true if hand is a valid three of a kind type hand
     private boolean isValidThreeOfAKindHand(Hand hand) {
         if (hand.getSize() != 3) {
             return false;
@@ -189,18 +212,14 @@ public class Hand extends ListOfCards {
         return firstCardRank == secondCardRank && secondCardRank == thirdCardRank;
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid 5 card hand type
-     */
+    //EFFECTS: returns true if hand is a valid 5 card hand type
     private boolean isValidFiveCardHand(Hand hand) {
         return (hand.getSize() == 5) && (isValidStraightHand(hand) || isValidFlushHand(hand)
                 || isValidFullHouseHand(hand) || isValidFourOfAKindHand(hand) || isValidStraightFlushHand(hand)
                 || isValidRoyalStraightFlushHand(hand));
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid straight type hand
-     */
+    //EFFECTS: returns true if hand is a valid straight type hand
     private boolean isValidStraightHand(Hand hand) {
         int rank = hand.getListOfCards().get(0).getRank() - 1;
         for (Card card : hand.getHand()) {
@@ -212,9 +231,7 @@ public class Hand extends ListOfCards {
         return true;
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid flush type hand
-     */
+    //EFFECTS: returns true if hand is a valid flush type hand
     private boolean isValidFlushHand(Hand hand) {
         String suit = hand.getHand().get(0).getSuit();
         for (Card card : hand.getHand()) {
@@ -225,9 +242,7 @@ public class Hand extends ListOfCards {
         return true;
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid full house type hand
-     */
+    //EFFECTS: returns true if hand is a valid full house type hand
     private boolean isValidFullHouseHand(Hand hand) {
         int numFirstRank = 0;
         int numSecondRank = 0;
@@ -248,9 +263,7 @@ public class Hand extends ListOfCards {
         return (numFirstRank == 3 && numSecondRank == 2) || (numFirstRank == 2 && numSecondRank == 3);
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid four of a kind type hand
-     */
+    //EFFECTS: returns true if hand is a valid four of a kind type hand
     private boolean isValidFourOfAKindHand(Hand hand) {
         int numRank1 = 0;
         int rank1 = hand.getHand().get(0).getRank();
@@ -272,21 +285,43 @@ public class Hand extends ListOfCards {
         return true;
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid straight flush type hand
-     */
+    //EFFECTS: returns true if hand is a valid straight flush type hand
     private boolean isValidStraightFlushHand(Hand hand) {
         return isValidStraightHand(hand) && isValidFlushHand(hand);
     }
 
-    /**
-     * EFFECTS: returns true if hand is a valid royal straight flush type hand
-     */
+    //EFFECTS: returns true if hand is a valid royal straight flush type hand
     private boolean isValidRoyalStraightFlushHand(Hand hand) {
         boolean hasAce = false;
-        for (String suit : SUITS) {
-            hasAce = hasAce || hand.getHand().contains(new Card(1, suit));
+        for (Card card : hand.getListOfCards()) {
+            if (card.getRank() == 1) {
+                hasAce = true;
+                break;
+            }
         }
         return isValidStraightFlushHand(hand) && hasAce;
+    }
+
+    //helper
+    private int findNumCardRepeatRank(int num) {
+        int rank = 0;
+        int numRank = 0;
+        for (int i = 0; i < this.getSize(); i++) {
+            rank = this.listOfCards.get(i).getRank();
+            for (Card card : this.listOfCards) {
+                if (card.getRank() == rank) {
+                    numRank++;
+                }
+            }
+            if (numRank == num) {
+                break;
+            }
+        }
+        return rank;
+    }
+
+    //helper
+    private boolean kingAceBorder(int rank1, int rank2) {
+        return ((rank1 == 1 || rank1 == 2) && (rank2 <= 13 && rank2 >= 3));
     }
 }

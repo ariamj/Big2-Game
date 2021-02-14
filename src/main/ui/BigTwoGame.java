@@ -84,10 +84,11 @@ public class BigTwoGame {
         int index = 0;
         while (!cardInPlay(initRank, SUITS.get(index))) {
             index++;
-            if (index == 4) {
-                initRank++;
-                index = 0;
-            }
+            //for when shuffle deck
+//            if (index == 4) {
+//                initRank++;
+//                index = 0;
+//            }
         }
         return new Card(initRank, SUITS.get(index));
     }
@@ -123,9 +124,22 @@ public class BigTwoGame {
             return;
         }
         Hand handPlayed = playAHand();
+        while (!canPlayHand(handPlayed, table)) {
+            System.out.println("Try again: ");
+            handPlayed = playAHand();
+        }
         player.takeATurn(handPlayed);
         table.playHandInPile(handPlayed);
         System.out.println("Most recent played hand: " + table.toString());
+    }
+
+    /**
+     * EFFECTS: returns true if given hand is a valid hand
+     * ie. ranking of hand is higher or equal to most recent played hand
+     * and is a valid type hand
+     */
+    public boolean canPlayHand(Hand hand, Hand tableHand) {
+        return hand.isValidTypeHand() && hand.isValidPlay(tableHand);
     }
 
     //EFFECTS: pick cards to play
