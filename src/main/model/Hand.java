@@ -146,7 +146,12 @@ public class Hand extends ListOfCards {
         int thisRank = this.highestCard().getRank();
         int otherRank = other.highestCard().getRank();
         if (thisSuit.equals(otherSuit)) {
-            return kingAceBorder(thisRank, otherRank) || thisRank > otherRank;
+            if (thisRank == 1 || thisRank == 2) {
+                return kingAceBorder(thisRank, otherRank);
+            } else if (otherRank == 1 || otherRank == 2) {
+                return !(kingAceBorder(otherRank, thisRank));
+            }
+            return thisRank > otherRank;
         } else {
             return SUITS.indexOf(thisSuit) > SUITS.indexOf(otherSuit);
         }

@@ -14,7 +14,9 @@ public class HandTest {
     private final Card H3 = new Card(3, "heart");
     private final Card S3 = new Card(3, "spade");
     private final Card H8 = new Card(8, "heart");
+    private final Card S8 = new Card(8, "spade");
     private final Card H9 = new Card(9, "heart");
+    private final Card S9 = new Card(9, "spade");
     private final Card D10 = new Card(10, "diamond");
     private final Card H10 = new Card(10, "heart");
     private final Card S10 = new Card(10, "spade");
@@ -33,11 +35,23 @@ public class HandTest {
     private final Card H1 = new Card(1, "heart");
     private final Card S1 = new Card(1, "spade");
 
-    private Hand emptyHand;
+    private Hand startHand;
 
     @BeforeEach
     public void runBefore() {
-        emptyHand = new Hand();
+        startHand = new Hand();
+    }
+
+    @Test
+    public void testSetHand() {
+        ListOfCards newHand = new Hand(new ArrayList<>(Arrays.asList(D3, C3, H3, S3)));
+        startHand.setHand(newHand);
+        assertEquals(4, startHand.getSize());
+        assertTrue(startHand.contains(D3));
+        assertTrue(startHand.contains(C3));
+        assertTrue(startHand.contains(H3));
+        assertTrue(startHand.contains(S3));
+        assertFalse(startHand.contains(S1));
     }
 
     @Test
@@ -58,10 +72,14 @@ public class HandTest {
 
     @Test
     public void testIsValidPlaySingleCard() {
-        Hand singleHand1 = new Hand(new ArrayList<>(Arrays.asList(D13)));
-        Hand singleHand2 = new Hand(new ArrayList<>(Arrays.asList(D1)));
-        Hand singleHand3 = new Hand(new ArrayList<>(Arrays.asList(H1)));
-        Hand singleHand4 = new Hand(new ArrayList<>(Arrays.asList(H12)));
+        Hand singleHand1 = new Hand();
+        singleHand1.addCard(D13);
+        Hand singleHand2 = new Hand();
+        singleHand2.addCard(D1);
+        Hand singleHand3 = new Hand();
+        singleHand3.addCard(H1);
+        Hand singleHand4 = new Hand();
+        singleHand4.addCard(H12);
         assertTrue(singleHand2.isValidPlay(singleHand1));
         assertTrue(singleHand3.isValidPlay(singleHand2));
         assertTrue(singleHand1.isValidPlay(singleHand4));
@@ -107,6 +125,17 @@ public class HandTest {
         assertFalse(straight1.isValidPlay(straight2));
         assertFalse(straight1.isValidPlay(straight3));
         assertFalse(straight4.isValidPlay(straight1));
+    }
+
+    @Test
+    public void testIsValidPlayFlushHand() {
+        Hand flush1 = new Hand(new ArrayList<>(Arrays.asList(H10, H13, H11, H9, H8)));
+        Hand flush2 = new Hand(new ArrayList<>(Arrays.asList(H10, H13, H11, H9, H1)));
+        Hand flush3 = new Hand(new ArrayList<>(Arrays.asList(S10, S13, S11, S9, S8)));
+        assertTrue(flush2.isValidPlay(flush1));
+        assertTrue(flush3.isValidPlay(flush1));
+        assertFalse(flush1.isValidPlay(flush2));
+        assertFalse(flush1.isValidPlay(flush3));
     }
 
     @Test

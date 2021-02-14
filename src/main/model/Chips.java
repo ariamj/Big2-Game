@@ -1,6 +1,8 @@
 package model;
 
-// Represents a chip with a value and colour
+/**
+ * Represents a chip with a value and colour
+ */
 public class Chips {
     private static final int WHITE_CHIP_VALUE = 1;
     private static final int BLUE_CHIP_VALUE = 5;
@@ -9,9 +11,7 @@ public class Chips {
 
     private String colour;
 
-    /**
-     * Creates a chip with the colour colour
-     */
+    //EFFECTS: Makes a chip with the colour colour
     public Chips(String colour) {
         this.colour = colour.toLowerCase();
     }
@@ -34,7 +34,7 @@ public class Chips {
         }
     }
 
-    //EFFECTS: returns the string representation of a chip
+    //EFFECTS: returns the string representation of a chip in form of first letter of colour
     public String toString() {
         if (colour.equals("white")) {
             return "W";
