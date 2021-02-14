@@ -48,9 +48,9 @@ public class DeckOfCardsTest {
             cardsDealt.add(deck.getListOfCards().get(i));
         }
         Hand dealtHand1 = new Hand(cardsDealt);
-        Hand dealtHandTest = deck.dealCards("13 cards");
-        assertEquals(13, dealtHandTest.getSize());
-        assertEquals(dealtHand1.getListOfCards(), dealtHandTest.getListOfCards());
+        List<Card> dealtHandTest = deck.dealCards("13 cards");
+        assertEquals(13, dealtHandTest.size());
+        assertEquals(dealtHand1.getListOfCards(), dealtHandTest);
     }
 
     @Test
@@ -60,8 +60,8 @@ public class DeckOfCardsTest {
             cardsDealt.add(deck.getListOfCards().get(i));
         }
         Hand dealtHand1 = new Hand(cardsDealt);
-        Hand dealtHandTest = deck.dealCards("half deck");
-        assertEquals(26, dealtHandTest.getSize());
-        assertEquals(dealtHand1.getListOfCards(), dealtHandTest.getListOfCards());
+        List<Card> dealtHandTest = deck.dealCards("half deck");
+        assertEquals(26, dealtHandTest.size());
+        assertEquals(dealtHand1.getListOfCards(), dealtHandTest);
     }
 }

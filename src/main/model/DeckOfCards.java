@@ -6,7 +6,6 @@ import java.util.List;
 
 // Represents a deck of cards containing 52 different cards
 public class DeckOfCards extends ListOfCards {
-    private static final List<String> SUITS = new ArrayList<>(Arrays.asList("diamond", "clubs", "heart", "spade"));
 
     /**
      * Creates a new deck of 52 cards.
@@ -22,7 +21,7 @@ public class DeckOfCards extends ListOfCards {
     }
 
     //EFFECTS: deals out numCards amount of cards
-    public Hand dealCards(String amount) {
+    public List<Card> dealCards(String amount) {
         List<Card> cardDealt = new ArrayList<>();
         int numCards = this.getSize();
         if (amount.equals("13 cards")) {
@@ -38,7 +37,8 @@ public class DeckOfCards extends ListOfCards {
                 i--;
             }
         }
-        return new Hand(cardDealt);
+//        return new Hand(cardDealt);
+        return cardDealt;
     }
 
 //    //MODIFIES: this

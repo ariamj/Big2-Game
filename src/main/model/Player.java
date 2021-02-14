@@ -9,16 +9,21 @@ public class Player {
     private static final Chips RED_CHIP = new Chips("red");
     private static final Chips GOLD_CHIP = new Chips("gold");
 
+    private String name;
     private PlayerCards cards;
     private ChipsDrawer drawer;
 
-    public Player(ListOfCards startCards, int numWhiteChips, int numBlueChips, int numRedChips, int numGoldChips) {
+    public Player(String name, List<Card> startCards, int numWhiteChips, int numBlueChips,
+                  int numRedChips, int numGoldChips) {
+        this.name = name;
         cards = new PlayerCards(startCards);
         drawer = new ChipsDrawer(numWhiteChips, numBlueChips, numRedChips, numGoldChips);
     }
 
-    public void takeATurn() {
-
+    //MODIFIES: this
+    //EFFECTS: play hand by removing cards in hand from cards
+    public void takeATurn(Hand hand) {
+        cards.playHand(hand);
     }
 
     //MODIFIES: this
@@ -54,5 +59,25 @@ public class Player {
             pointsLost -= 1;
         }
         return paidChips;
+    }
+
+    //getters
+    public String getName() {
+        return name;
+    }
+
+    //getters
+    public PlayerCards getCards() {
+        return cards;
+    }
+
+    //getters
+    public ChipsDrawer getDrawer() {
+        return drawer;
+    }
+
+    //getters
+    public int getNumCards() {
+        return cards.getSize();
     }
 }

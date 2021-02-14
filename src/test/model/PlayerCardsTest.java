@@ -28,8 +28,7 @@ class PlayerCardsTest {
     public void runBefore() {
         List<Card> initialCards = new ArrayList<>();
         initialCards.addAll(new ArrayList<>(Arrays.asList(D3, C3, H3, S3, H1, H13, H12, H11, H10, H9, D10)));
-        ListOfCards cards = new Hand(initialCards);
-        playerCards = new PlayerCards(cards);
+        playerCards = new PlayerCards(initialCards);
     }
 
     @Test

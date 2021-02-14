@@ -8,8 +8,8 @@ public class PlayerCards extends ListOfCards {
     /**
      * Creates an empty set for a player hand
      */
-    public PlayerCards(ListOfCards cards) {
-        super(cards.getListOfCards());
+    public PlayerCards(List<Card> cards) {
+        super(cards);
     }
 
     /**
@@ -42,5 +42,10 @@ public class PlayerCards extends ListOfCards {
             return true;
         }
         return false;
+    }
+
+    //getters
+    public List<Card> getCardsList() {
+        return listOfCards;
     }
 }

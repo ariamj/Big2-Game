@@ -1,9 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class ListOfCards {
+    protected static final List<String> SUITS = new ArrayList<>(Arrays.asList("diamond", "clubs", "heart", "spade"));
 
     protected List<Card> listOfCards;
 
@@ -25,6 +27,18 @@ public abstract class ListOfCards {
             }
         }
         return false;
+    }
+
+    protected Card highestCard() {
+        int highestRank = 0;
+        int indexOfHighest = 0;
+        for (int i = 0; i < listOfCards.size(); i++) {
+            if (listOfCards.get(i).getRank() > highestRank) {
+                highestRank = listOfCards.get(i).getRank();
+                indexOfHighest = i;
+            }
+        }
+        return listOfCards.get(indexOfHighest);
     }
 
     //EFFECTS: adds a Card into this
