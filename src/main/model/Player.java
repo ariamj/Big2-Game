@@ -3,6 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a player of the game of Big 2 with a name, cards, and chips
+ */
 public class Player {
     private static final Chips WHITE_CHIP = new Chips("white");
     private static final Chips BLUE_CHIP = new Chips("blue");
@@ -13,6 +16,7 @@ public class Player {
     private PlayerCards cards;
     private ChipsDrawer drawer;
 
+    //EFFECTS: makes a new player with a name, initial cards, and starting amount of chips
     public Player(String name, List<Card> startCards, int numWhiteChips, int numBlueChips,
                   int numRedChips, int numGoldChips) {
         this.name = name;
@@ -20,6 +24,7 @@ public class Player {
         drawer = new ChipsDrawer(numWhiteChips, numBlueChips, numRedChips, numGoldChips);
     }
 
+    //REQUIRES: cards is not empty
     //MODIFIES: this
     //EFFECTS: play hand by removing cards in hand from cards
     public void takeATurn(Hand hand) {
@@ -34,8 +39,9 @@ public class Player {
         }
     }
 
+    //REQUIRES: drawer is not empty
     //MODIFIES: this
-    //EFFECTS: removes the amount of chips corresponding to pointsLost form drawer
+    //EFFECTS: removes the amount of chips corresponding to pointsLost form drawer starting with gold chips
     public List<Chips> payChips(int pointsLost) {
         List<Chips> paidChips = new ArrayList<>();
         while (pointsLost >= 1) {
@@ -62,12 +68,19 @@ public class Player {
         return paidChips;
     }
 
-    //helper
+    //REQUIRES: drawer is not empty
+    //MODIFIES: this
+    //EFFECTS: removes chip from drawer and update points lost
     private int removeChips(Chips chip, List<Chips> paidChips, int pointsLost, int pointsValue) {
         drawer.removeChipFromDrawer(chip);
         paidChips.add(GOLD_CHIP);
         pointsLost -= pointsValue;
         return pointsLost;
+    }
+
+    //EFFECTS: returns the numberof cards in cards
+    public int getNumCards() {
+        return cards.getSize();
     }
 
     //getters
@@ -83,10 +96,5 @@ public class Player {
     //getters
     public ChipsDrawer getDrawer() {
         return drawer;
-    }
-
-    //getters
-    public int getNumCards() {
-        return cards.getSize();
     }
 }

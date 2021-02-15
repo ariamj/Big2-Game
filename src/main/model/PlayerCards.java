@@ -2,12 +2,12 @@ package model;
 
 import java.util.List;
 
-// Represents the cards that the player has currently
+/**
+ * Represents the cards that the player has currently
+ */
 public class PlayerCards extends ListOfCards {
 
-    /**
-     * Creates an empty set for a player hand
-     */
+    //Creates an empty set for a player hand
     public PlayerCards(List<Card> cards) {
         super(cards);
     }

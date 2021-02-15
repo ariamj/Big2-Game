@@ -51,13 +51,13 @@ public abstract class ListOfCards {
     //MODIFIES: this
     //EFFECTS: adds a Card into this
     protected void addCard(Card card) {
-        listOfCards.add(card);
+        this.listOfCards.add(card);
     }
 
     //MODIFIES: this
     //EFFECTS: remove card at index i from this
     protected void removeCard(int i) {
-        listOfCards.remove(i);
+        this.listOfCards.remove(i);
     }
 
     //setters

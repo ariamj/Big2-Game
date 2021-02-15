@@ -1,14 +1,11 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-// Represents the pile of cards on the table
+/**
+ * Represents the pile of cards on the table
+ */
 public class TablePile extends Hand {
 
-    /**
-     * Creates a new empty table pile
-     */
+    //Creates a new empty table pile
     public TablePile() {
         super();
     }
