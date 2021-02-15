@@ -34,6 +34,7 @@ public class HandTest {
     private final Card C1 = new Card(1, "clubs");
     private final Card H1 = new Card(1, "heart");
     private final Card S1 = new Card(1, "spade");
+    private final Card S2 = new Card(2, "spade");
 
     private Hand startHand;
 
@@ -55,12 +56,13 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidPlayFalse() {
+    public void testIsValidPlaySizeFalse() {
         Hand emptyHand = new Hand();
         Hand hand = new Hand(new ArrayList<>(Arrays.asList(H1, D13, C13, H13, S13)));
         Hand falseHand = new Hand(new ArrayList<>(Arrays.asList(H1, D13, C13, H13, S13, S1)));
         assertFalse(falseHand.isValidPlay(emptyHand));
         assertFalse(falseHand.isValidPlay(hand));
+        assertFalse(emptyHand.isValidPlay(hand));
     }
 
     @Test
@@ -72,21 +74,42 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidPlaySingleCard() {
+    public void testIsValidPlayFalseType() {
         Hand singleHand1 = new Hand();
         singleHand1.addCard(D13);
+        Hand pairHand1 = new Hand(new ArrayList<>(Arrays.asList(D13, H13)));
+        Hand threeHand1 = new Hand(new ArrayList<>(Arrays.asList(D13, H13, S13)));
+        Hand straight1 = new Hand(new ArrayList<>(Arrays.asList(H9, D10, H11, H12, D13)));
+        assertFalse(pairHand1.isValidPlay(singleHand1));
+        assertFalse(singleHand1.isValidPlay(pairHand1));
+        assertFalse(singleHand1.isValidPlay(threeHand1));
+        assertFalse(singleHand1.isValidPlay(straight1));
+    }
+
+    @Test
+    public void testIsValidPlaySingleCard() {
+        Hand singleHand13 = new Hand();
+        singleHand13.addCard(D13);
+        Hand singleHandD1 = new Hand();
+        singleHandD1.addCard(D1);
+        Hand singleHandH1 = new Hand();
+        singleHandH1.addCard(H1);
+        Hand singleHand12 = new Hand();
+        singleHand12.addCard(H12);
         Hand singleHand2 = new Hand();
-        singleHand2.addCard(D1);
-        Hand singleHand3 = new Hand();
-        singleHand3.addCard(H1);
-        Hand singleHand4 = new Hand();
-        singleHand4.addCard(H12);
-        assertTrue(singleHand2.isValidPlay(singleHand1));
-        assertTrue(singleHand3.isValidPlay(singleHand2));
-        assertTrue(singleHand1.isValidPlay(singleHand4));
-        assertFalse(singleHand1.isValidPlay(singleHand2));
-        assertFalse(singleHand2.isValidPlay(singleHand3));
-        assertFalse(singleHand4.isValidPlay(singleHand1));
+        singleHand2.addCard(S2);
+        assertTrue(singleHandD1.isValidPlay(singleHand13));
+        assertTrue(singleHandD1.isValidPlay(singleHand12));
+        assertTrue(singleHand2.isValidPlay(singleHandD1));
+        assertTrue(singleHandH1.isValidPlay(singleHandD1));
+        assertTrue(singleHand13.isValidPlay(singleHand12));
+        assertTrue(singleHand2.isValidPlay(singleHand12));
+        assertTrue(singleHand2.isValidPlay(singleHandD1));
+        assertFalse(singleHand13.isValidPlay(singleHandD1));
+        assertFalse(singleHandD1.isValidPlay(singleHandH1));
+        assertFalse(singleHand12.isValidPlay(singleHand13));
+        assertFalse(singleHandD1.isValidPlay(singleHand2));
+        assertFalse(singleHandD1.isValidPlay(singleHand2));
     }
 
     @Test

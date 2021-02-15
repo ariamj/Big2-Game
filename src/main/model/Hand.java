@@ -52,9 +52,10 @@ public class Hand extends ListOfCards {
             return canPlayPairHand(other);
         } else if (otherSize == 3 && isValidThreeOfAKindHand(this)) {
             return canPlayThreeOfAKindHand(other);
-        } else {
+        } else if (otherSize == 5 && isValidFiveCardHand(this)) {
             return canPlayFiveCardHand(other);
         }
+        return false;
     }
 
     /**
@@ -69,14 +70,12 @@ public class Hand extends ListOfCards {
         String otherSuit = other.getListOfCards().get(0).getSuit();
         if (thisRank == otherRank) {
             return SUITS.indexOf(listOfCards.get(0).getSuit()) > SUITS.indexOf(otherSuit);
-        } else {
-            if (thisRank == 1 || thisRank == 2) {
-                return kingAceBorder(thisRank, otherRank);
-            } else if (otherRank == 1 || otherRank == 2) {
-                return !kingAceBorder(otherRank, thisRank);
-            }
-            return thisRank > otherRank;
+        } else if (thisRank == 1 || thisRank == 2) {
+            return kingAceBorder(thisRank, otherRank);
+        } else if (otherRank == 1 || otherRank == 2) {
+            return !kingAceBorder(otherRank, thisRank);
         }
+        return thisRank > otherRank;
     }
 
     /**
@@ -94,14 +93,12 @@ public class Hand extends ListOfCards {
             int highestOtherSuit = Math.max(SUITS.indexOf(other.getListOfCards().get(0).getSuit()),
                     SUITS.indexOf(other.getListOfCards().get(1).getSuit()));
             return highestThisSuit > highestOtherSuit;
-        } else {
-            if (thisRank == 1 || thisRank == 2) {
-                return kingAceBorder(thisRank, otherRank);
-            } else if (otherRank == 1 || otherRank == 2) {
-                return !kingAceBorder(otherRank, thisRank);
-            }
-            return thisRank > otherRank;
+        } else if (thisRank == 1 || thisRank == 2) {
+            return kingAceBorder(thisRank, otherRank);
+        } else if (otherRank == 1 || otherRank == 2) {
+            return !kingAceBorder(otherRank, thisRank);
         }
+        return thisRank > otherRank;
     }
 
     /**
@@ -172,14 +169,12 @@ public class Hand extends ListOfCards {
             int indexOfThisHighestSuit = SUITS.indexOf(thisHighestCard.getSuit());
             int indexOfOtherHighestSuit = SUITS.indexOf(otherHighestCard.getSuit());
             return indexOfThisHighestSuit > indexOfOtherHighestSuit;
-        } else {
-            if (thisHighestRank == 1 || thisHighestRank == 2) {
-                return kingAceBorder(thisHighestRank, otherHighestRank);
-            } else if (otherHighestRank == 1 || otherHighestRank == 2) {
-                return !(kingAceBorder(otherHighestRank, thisHighestRank));
-            }
-            return thisHighestRank > otherHighestRank;
+        } else if (thisHighestRank == 1 || thisHighestRank == 2) {
+            return kingAceBorder(thisHighestRank, otherHighestRank);
+        } else if (otherHighestRank == 1 || otherHighestRank == 2) {
+            return !(kingAceBorder(otherHighestRank, thisHighestRank));
         }
+        return thisHighestRank > otherHighestRank;
     }
 
     /*
@@ -277,9 +272,12 @@ public class Hand extends ListOfCards {
               - rank of both cards are equal
      */
     private boolean isValidPairHand(Hand hand) {
+        if (hand.getSize() != 2) {
+            return false;
+        }
         int firstCardRank = hand.getHand().get(0).getRank();
         int secondCardRank = hand.getHand().get(1).getRank();
-        return (hand.getSize() == 2) && (firstCardRank == secondCardRank);
+        return firstCardRank == secondCardRank;
     }
 
     /*
@@ -431,6 +429,7 @@ public class Hand extends ListOfCards {
                   - 2 is higher than ace and ace is higher than king
      */
     private boolean kingAceBorder(int rank1, int rank2) {
-        return ((rank1 == 1 || rank1 == 2) && (rank2 <= 13 && rank2 >= 3));
+        return ((rank1 == 1 || rank1 == 2) && (rank2 <= 13 && rank2 >= 3))
+                || (rank1 == 2 && rank2 == 1);
     }
 }
