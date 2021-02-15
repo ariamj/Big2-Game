@@ -429,7 +429,6 @@ public class Hand extends ListOfCards {
                   - 2 is higher than ace and ace is higher than king
      */
     private boolean kingAceBorder(int rank1, int rank2) {
-        return ((rank1 == 1 || rank1 == 2) && (rank2 <= 13 && rank2 >= 3))
-                || (rank1 == 2 && rank2 == 1);
+        return (rank2 <= 13 && rank2 >= 3) || (rank1 == 2 && rank2 == 1);
     }
 }

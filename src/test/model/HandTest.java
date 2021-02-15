@@ -34,6 +34,7 @@ public class HandTest {
     private final Card C1 = new Card(1, "clubs");
     private final Card H1 = new Card(1, "heart");
     private final Card S1 = new Card(1, "spade");
+    private final Card H2 = new Card(2, "heart");
     private final Card S2 = new Card(2, "spade");
 
     private Hand startHand;
@@ -87,43 +88,81 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidPlaySingleCard() {
+    public void testIsValidPlaySingleCardOtherIsAceTwo() {
+        Hand singleHand13 = new Hand();
+        singleHand13.addCard(D13);
+        Hand singleHandD1 = new Hand();
+        singleHandD1.addCard(D1);
+        Hand singleHand2 = new Hand();
+        singleHand2.addCard(S2);
+        assertFalse(singleHand13.isValidPlay(singleHandD1));
+        assertFalse(singleHandD1.isValidPlay(singleHand2));
+        assertFalse(singleHand13.isValidPlay(singleHand2));
+        assertTrue(singleHand2.isValidPlay(singleHandD1));
+    }
+
+    @Test
+    public void testIsValidPlaySingleCardThisIsAceTwo() {
+        Hand singleHandD1 = new Hand();
+        singleHandD1.addCard(D1);
+        Hand singleHand2 = new Hand();
+        singleHand2.addCard(S2);
+        Hand singleHand13 = new Hand();
+        singleHand13.addCard(D13);
+        assertTrue(singleHandD1.isValidPlay(singleHand13));
+        assertTrue(singleHand2.isValidPlay(singleHandD1));
+        assertTrue(singleHand2.isValidPlay(singleHand13));
+        assertFalse(singleHandD1.isValidPlay(singleHand2));
+    }
+
+    @Test
+    public void testIsValidPlaySingleCardSameAndNonAceTwoRank() {
+        Hand singleHand12 = new Hand();
+        singleHand12.addCard(H12);
         Hand singleHand13 = new Hand();
         singleHand13.addCard(D13);
         Hand singleHandD1 = new Hand();
         singleHandD1.addCard(D1);
         Hand singleHandH1 = new Hand();
         singleHandH1.addCard(H1);
-        Hand singleHand12 = new Hand();
-        singleHand12.addCard(H12);
-        Hand singleHand2 = new Hand();
-        singleHand2.addCard(S2);
-        assertTrue(singleHandD1.isValidPlay(singleHand13));
-        assertTrue(singleHandD1.isValidPlay(singleHand12));
-        assertTrue(singleHand2.isValidPlay(singleHandD1));
         assertTrue(singleHandH1.isValidPlay(singleHandD1));
         assertTrue(singleHand13.isValidPlay(singleHand12));
-        assertTrue(singleHand2.isValidPlay(singleHand12));
-        assertTrue(singleHand2.isValidPlay(singleHandD1));
-        assertFalse(singleHand13.isValidPlay(singleHandD1));
         assertFalse(singleHandD1.isValidPlay(singleHandH1));
         assertFalse(singleHand12.isValidPlay(singleHand13));
-        assertFalse(singleHandD1.isValidPlay(singleHand2));
-        assertFalse(singleHandD1.isValidPlay(singleHand2));
     }
 
     @Test
-    public void testIsValidPlayPair() {
-        Hand pairHand1 = new Hand(new ArrayList<>(Arrays.asList(D13, H13)));
-        Hand pairHand2 = new Hand(new ArrayList<>(Arrays.asList(D1, H1)));
-        Hand pairHand3 = new Hand(new ArrayList<>(Arrays.asList(S1, C1)));
-        Hand pairHand4 = new Hand(new ArrayList<>(Arrays.asList(S12, H12)));
-        assertTrue(pairHand2.isValidPlay(pairHand1));
-        assertTrue(pairHand3.isValidPlay(pairHand2));
-        assertTrue(pairHand1.isValidPlay(pairHand4));
+    public void testIsValidPlayPairOtherIsAceTwo() {
+        Hand pairHand13 = new Hand(new ArrayList<>(Arrays.asList(D13, H13)));
+        Hand pairHand1 = new Hand(new ArrayList<>(Arrays.asList(D1, H1)));
+        Hand pairHand2 = new Hand(new ArrayList<>(Arrays.asList(S2, H2)));
+        assertFalse(pairHand13.isValidPlay(pairHand1));
         assertFalse(pairHand1.isValidPlay(pairHand2));
-        assertFalse(pairHand2.isValidPlay(pairHand3));
-        assertFalse(pairHand4.isValidPlay(pairHand1));
+        assertFalse(pairHand13.isValidPlay(pairHand2));
+        assertTrue(pairHand2.isValidPlay(pairHand1));
+    }
+
+    @Test
+    public void testIsValidPlayPairThisIsAceTwo() {
+        Hand pairHand13 = new Hand(new ArrayList<>(Arrays.asList(D13, H13)));
+        Hand pairHand1 = new Hand(new ArrayList<>(Arrays.asList(D1, H1)));
+        Hand pairHand2 = new Hand(new ArrayList<>(Arrays.asList(S2, H2)));
+        assertTrue(pairHand1.isValidPlay(pairHand13));
+        assertTrue(pairHand2.isValidPlay(pairHand1));
+        assertTrue(pairHand2.isValidPlay(pairHand13));
+        assertFalse(pairHand1.isValidPlay(pairHand2));
+    }
+
+    @Test
+    public void testIsValidPlayPairSameAndNonAceTwoRank() {
+        Hand pairHand13 = new Hand(new ArrayList<>(Arrays.asList(D13, H13)));
+        Hand pairHand1 = new Hand(new ArrayList<>(Arrays.asList(D1, H1)));
+        Hand pairHand1b = new Hand(new ArrayList<>(Arrays.asList(S1, C1)));
+        Hand pairHand12 = new Hand(new ArrayList<>(Arrays.asList(S12, H12)));
+        assertTrue(pairHand1b.isValidPlay(pairHand1));
+        assertTrue(pairHand13.isValidPlay(pairHand12));
+        assertFalse(pairHand1.isValidPlay(pairHand1b));
+        assertFalse(pairHand12.isValidPlay(pairHand13));
     }
 
     @Test
