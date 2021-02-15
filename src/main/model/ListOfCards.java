@@ -4,20 +4,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents a list of Card
+ */
 public abstract class ListOfCards {
     protected static final List<String> SUITS = new ArrayList<>(Arrays.asList("diamond", "clubs", "heart", "spade"));
 
     protected List<Card> listOfCards;
 
+    //EFFECTS: Makes a new empty list of cards
     public ListOfCards() {
         listOfCards = new ArrayList<>();
     }
 
+    //EFFECTS: Makes a new list of cards with initial cards
     public ListOfCards(List<Card> loc) {
         setListOfCards(loc);
     }
 
-    //EFFECTS: returns true if list of cards contain a card with rank rank
+    //EFFECTS: returns true if list of cards contain card
     protected boolean contains(Card card) {
         int rank = card.getRank();
         String suit = card.getSuit();
@@ -29,6 +34,7 @@ public abstract class ListOfCards {
         return false;
     }
 
+    //EFFECTS: Returns the highest card in this list of cards
     protected Card highestCard() {
         int highestRank = 0;
         int indexOfHighest = 0;
@@ -42,15 +48,16 @@ public abstract class ListOfCards {
         return listOfCards.get(indexOfHighest);
     }
 
+    //MODIFIES: this
     //EFFECTS: adds a Card into this
     protected void addCard(Card card) {
         listOfCards.add(card);
     }
 
+    //MODIFIES: this
     //EFFECTS: remove card at index i from this
-    protected Card removeCard(int i) {
-        Card removed = listOfCards.remove(i);
-        return removed;
+    protected void removeCard(int i) {
+        listOfCards.remove(i);
     }
 
     //setters
@@ -63,18 +70,18 @@ public abstract class ListOfCards {
         return listOfCards;
     }
 
-    //EFFECTS: returns the number of cards in the deck
+    //EFFECTS: returns the number of cards in this list of cards
     protected int getSize() {
         return listOfCards.size();
     }
 
-    //EFFECTS: returns string representation of the hand
+    //EFFECTS: returns string representation of this list of cards
     public String toString() {
-        String hand = "[";
+        StringBuilder hand = new StringBuilder("[");
         for (int i = 0; i < listOfCards.size(); i++) {
-            hand += listOfCards.get(i).toString();
+            hand.append(listOfCards.get(i).toString());
             if (i != listOfCards.size() - 1) {
-                hand += ", ";
+                hand.append(", ");
             }
         }
         return hand + "]";
