@@ -35,6 +35,7 @@ public class HandTest {
     private final Card H1 = new Card(1, "heart");
     private final Card S1 = new Card(1, "spade");
     private final Card H2 = new Card(2, "heart");
+    private final Card C2 = new Card(2, "clubs");
     private final Card S2 = new Card(2, "spade");
 
     private Hand startHand;
@@ -166,14 +167,33 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidPlayThreeOfAKind() {
-        Hand threeHand1 = new Hand(new ArrayList<>(Arrays.asList(D13, H13, S13)));
-        Hand threeHand2 = new Hand(new ArrayList<>(Arrays.asList(D1, H1, S1)));
-        Hand threeHand3 = new Hand(new ArrayList<>(Arrays.asList(C12, H12, S12)));
-        assertTrue(threeHand2.isValidPlay(threeHand1));
-        assertTrue(threeHand1.isValidPlay(threeHand3));
+    public void testIsValidPlayThreeOfAKindOtherIsAceTwo() {
+        Hand threeHand13 = new Hand(new ArrayList<>(Arrays.asList(D13, H13, S13)));
+        Hand threeHand1 = new Hand(new ArrayList<>(Arrays.asList(D1, H1, S1)));
+        Hand threeHand2 = new Hand(new ArrayList<>(Arrays.asList(C2, H2, S2)));
+        assertFalse(threeHand13.isValidPlay(threeHand1));
         assertFalse(threeHand1.isValidPlay(threeHand2));
-        assertFalse(threeHand3.isValidPlay(threeHand1));
+        assertFalse(threeHand13.isValidPlay(threeHand2));
+        assertTrue(threeHand2.isValidPlay(threeHand1));
+    }
+
+    @Test
+    public void testIsValidPlayThreeOfAKindThisIsAceTwo() {
+        Hand threeHand13 = new Hand(new ArrayList<>(Arrays.asList(D13, H13, S13)));
+        Hand threeHand1 = new Hand(new ArrayList<>(Arrays.asList(D1, H1, S1)));
+        Hand threeHand2 = new Hand(new ArrayList<>(Arrays.asList(C2, H2, S2)));
+        assertTrue(threeHand1.isValidPlay(threeHand13));
+        assertTrue(threeHand2.isValidPlay(threeHand1));
+        assertTrue(threeHand2.isValidPlay(threeHand13));
+        assertFalse(threeHand1.isValidPlay(threeHand2));
+    }
+
+    @Test
+    public void testIsValidPlayThreeOfAKindSameAndNonAceTwoRank() {
+        Hand threeHand13 = new Hand(new ArrayList<>(Arrays.asList(D13, H13, S13)));
+        Hand threeHand12 = new Hand(new ArrayList<>(Arrays.asList(C12, H12, S12)));
+        assertTrue(threeHand13.isValidPlay(threeHand12));
+        assertFalse(threeHand12.isValidPlay(threeHand13));
     }
 
     @Test
