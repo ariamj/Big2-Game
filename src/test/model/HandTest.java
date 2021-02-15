@@ -66,7 +66,8 @@ public class HandTest {
     @Test
     public void testIsValidPlayOnEmptyHand() {
         Hand emptyHand1 = new Hand();
-        Hand singleOnEmptyHand2 = new Hand(new ArrayList<>(Arrays.asList(D1)));
+        Hand singleOnEmptyHand2 = new Hand();
+        singleOnEmptyHand2.addCard(D1);
         assertTrue(singleOnEmptyHand2.isValidPlay(emptyHand1));
     }
 
@@ -190,14 +191,6 @@ public class HandTest {
         assertFalse(falseThreeOfAKind.isValidTypeHand());
     }
 
-//    @Test
-//    public void testIsValidTypeHandFiveCards() {
-//        Hand flush = new Hand(new ArrayList<>(Arrays.asList(H9, H3, H11, H12, H13)));
-//        assertTrue(flush.isValidTypeHand());
-//        Hand falseFlush = new Hand(new ArrayList<>(Arrays.asList(D10, C3, H9, H10, H3)));
-//        assertFalse(falseFlush.isValidTypeHand());
-//    }
-
     @Test
     public void testIsValidTypeHandStraightHand() {
         Hand straight = new Hand(new ArrayList<>(Arrays.asList(H9, D10, H11, H12, H13)));
@@ -238,12 +231,5 @@ public class HandTest {
         assertTrue(royalStraightFlush.isValidTypeHand());
         Hand falseRoyalStraightFlush = new Hand(new ArrayList<>(Arrays.asList(H10, H11, H12, H13, D3)));
         assertFalse(falseRoyalStraightFlush.isValidTypeHand());
-    }
-
-    @Test
-    public void testToString() {
-        Hand firstHand = new Hand(new ArrayList<>(Arrays.asList(D3, H9, H1, H13, C3, H11)));
-        String firstHandString = "[3D, 9H, AH, KH, 3C, JH]";
-        assertEquals(firstHandString, firstHand.toString());
     }
 }

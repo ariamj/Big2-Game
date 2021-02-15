@@ -40,7 +40,13 @@ public abstract class ListOfCards {
         int indexOfHighest = 0;
         for (int i = 0; i < listOfCards.size(); i++) {
             int currCardRank = listOfCards.get(i).getRank();
-            if (highestRank != 2 && ((currCardRank == 1 && highestRank == 13) || currCardRank > highestRank)) {
+            if (currCardRank == 1 && highestRank <= 13 && highestRank >= 3) {
+                highestRank = listOfCards.get(i).getRank();
+                indexOfHighest = i;
+            } else if (currCardRank == 2) {
+                highestRank = listOfCards.get(i).getRank();
+                indexOfHighest = i;
+            } else if (!(highestRank == 2 || highestRank == 1) && currCardRank > highestRank) {
                 highestRank = listOfCards.get(i).getRank();
                 indexOfHighest = i;
             }
