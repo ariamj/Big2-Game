@@ -25,6 +25,7 @@ public class BigTwoGame {
     private Player user2;
     private DeckOfCards deck;
     private TablePile table;
+    private boolean firstTurn = true;
     private Scanner input;
 
     //EFFECTS: runs the Big 2 game
@@ -42,6 +43,7 @@ public class BigTwoGame {
         int playerIndex = 1;
         if (user1HasStartCard()) {
             playATurn(user1);
+            firstTurn = false;
         }
         while (!gameOver()) {
             playATurn(playerList.get(playerIndex));
@@ -50,14 +52,11 @@ public class BigTwoGame {
             } else {
                 playerIndex--;
             }
+            if (firstTurn) {
+                firstTurn = false;
+            }
         }
-        if (isWinner(user1)) {
-            user1.collectChips(user2.payChips(pointsLost(user2)));
-        } else {
-            user2.collectChips(user1.payChips(pointsLost(user1)));
-        }
-        System.out.println("Chips for " + user1.getName() + ": " + user1.getDrawer().toString());
-        System.out.println("Chips for " + user2.getName() + ": " + user2.getDrawer().toString());
+        distributeWinning();
     }
 
     //EFFECTS: initializes fields and deals the deck
@@ -65,6 +64,7 @@ public class BigTwoGame {
         input = new Scanner(System.in);
         table = new TablePile();
         deck = new DeckOfCards();
+        deck.shuffleDeck();
         String cardsAmount = chooseAmountOfInitialCards();
         List<Card> startCards = deck.dealCards(cardsAmount);
         user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
@@ -95,6 +95,10 @@ public class BigTwoGame {
         int index = 0;
         while (!cardInPlay(initRank, SUITS.get(index))) {
             index++;
+            if (index == 4) {
+                initRank++;
+                index = 0;
+            }
         }
         return new Card(initRank, SUITS.get(index));
     }
@@ -121,31 +125,57 @@ public class BigTwoGame {
     private void playATurn(Player player) {
         System.out.print("Hit enter to confirm you are " + player.getName() + ": ");
         input.nextLine();
-        System.out.println("Your cards: " + player.getCards().toString());
+        displayCards(player);
         System.out.println("Would you like to pass or play?");
         System.out.println("Type 'pass' to pass and 'play' to play: ");
         String command = input.nextLine();
-        while (!command.equalsIgnoreCase("pass") && !command.equalsIgnoreCase("play")) {
+        if (!wantToPass(command, "pass", "play")) {
+            Hand handPlayed = playAHand();
+            while (!canPlayHand(handPlayed, table)) {
+                System.out.println("You can't play that hand... ");
+                displayCards(player);
+                System.out.println("Want to pass after all? 'Y' for yes, 'N' for no: ");
+                String newCommand = input.nextLine();
+                if (wantToPass(newCommand, "Y", "N")) {
+                    return;
+                }
+                handPlayed = playAHand();
+            }
+            player.takeATurn(handPlayed);
+            table.playHandInPile(handPlayed);
+        }
+    }
+
+    //EFFECTS: returns true if player wants to pass their turn
+    private boolean wantToPass(String command, String pass, String play) {
+        while ((firstTurn && command.equalsIgnoreCase(pass))
+                || (!command.equalsIgnoreCase(pass) && !command.equalsIgnoreCase(play))) {
+            if (firstTurn && command.equalsIgnoreCase(pass)) {
+                System.out.println("You cannot pass as the starting player...");
+            }
             System.out.print("Try again: ");
             command = input.nextLine();
         }
-        if (command.equalsIgnoreCase("pass")) {
-            return;
+        if (command.equalsIgnoreCase(pass)) {
+            table.setHand(new Hand());
+            return true;
         }
-        Hand handPlayed = playAHand();
-        while (!canPlayHand(handPlayed, table)) {
-            System.out.println("Try again: ");
-            handPlayed = playAHand();
-        }
-        player.takeATurn(handPlayed);
-        table.playHandInPile(handPlayed);
+        return false;
+    }
+
+    //EFFECTS: print out the table cards and player's cards
+    private void displayCards(Player player) {
         System.out.println("Most recent played hand: " + table.toString());
+        System.out.println("Your cards: " + player.getCards().toString());
     }
 
     //EFFECTS: returns true if given hand is a valid hand to be played
     // ie. ranking of hand is higher or equal to most recent played hand
     // and is a valid type hand
     private boolean canPlayHand(Hand hand, Hand tableHand) {
+        if (firstTurn && !hand.contains(findStartingCard())) {
+            return false;
+        }
         return hand.isValidTypeHand() && hand.isValidPlay(tableHand);
     }
 
@@ -157,9 +187,9 @@ public class BigTwoGame {
         String card = "";
         while (!card.equalsIgnoreCase("p")) {
             card = input.nextLine();
-            if (card.length() > 3 && RANK_VALUES.contains(card.substring(0, 2).trim())
+            if (card.length() > 3 && RANK_VALUES.contains(card.substring(0, 2).trim().toUpperCase())
                     && SUITS.contains(card.substring(2).trim().toLowerCase())) {
-                int rank = RANK_VALUES.indexOf(card.substring(0, 2).trim());
+                int rank = RANK_VALUES.indexOf(card.substring(0, 2).trim().toUpperCase());
                 cardsToPlay.add(new Card(rank, card.substring(2).trim().toLowerCase()));
             } else if (!card.equalsIgnoreCase("p")) {
                 System.out.print("Try again: ");
@@ -172,6 +202,17 @@ public class BigTwoGame {
     // game is over when either player has played all their cards (ie. has no more cards left)
     private boolean gameOver() {
         return user1.getNumCards() == 0 || user2.getNumCards() == 0;
+    }
+
+    //EFFECTS: loser gives amount chips lost to winner and displays play's chips
+    private void distributeWinning() {
+        if (isWinner(user1)) {
+            user1.collectChips(user2.payChips(pointsLost(user2)));
+        } else {
+            user2.collectChips(user1.payChips(pointsLost(user1)));
+        }
+        System.out.println("Chips for " + user1.getName() + ": " + user1.getDrawer().toString());
+        System.out.println("Chips for " + user2.getName() + ": " + user2.getDrawer().toString());
     }
 
     //EFFECTS: returns true if player is the winner (the one with no more cards left)

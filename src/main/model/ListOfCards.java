@@ -23,7 +23,7 @@ public abstract class ListOfCards {
     }
 
     //EFFECTS: returns true if list of cards contain card
-    protected boolean contains(Card card) {
+    public boolean contains(Card card) {
         int rank = card.getRank();
         String suit = card.getSuit();
         for (Card cd : listOfCards) {
@@ -68,6 +68,11 @@ public abstract class ListOfCards {
     //getters
     protected List<Card> getListOfCards() {
         return listOfCards;
+    }
+
+    //EFFECTS: returns the card in listOfCards at index i
+    protected Card getCard(int i) {
+        return listOfCards.get(i);
     }
 
     //EFFECTS: returns the number of cards in this list of cards

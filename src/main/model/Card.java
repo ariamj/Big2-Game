@@ -18,6 +18,11 @@ public class Card {
         this.suit = suit.toLowerCase();
     }
 
+    //EFFECTS: returns true if this and card are equal (same rank & same suit)
+    public boolean equalCards(Card card) {
+        return (this.rank == card.rank) && (this.suit.equals(card.suit));
+    }
+
     //getters
     public int getRank() {
         return this.rank;

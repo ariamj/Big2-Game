@@ -21,7 +21,7 @@ public class PlayerCards extends ListOfCards {
      */
     public Hand playHand(Hand hand) {
         for (int i = 0; i < this.getSize(); i++) {
-            if (hand.contains(this.getListOfCards().get(i))) {
+            if (hand.contains(this.getCard(i))) {
                 this.getListOfCards().remove(i);
                 i--;
             }

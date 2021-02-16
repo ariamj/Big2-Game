@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckOfCardsTest {
 
@@ -45,7 +45,7 @@ public class DeckOfCardsTest {
     public void testDealCards13Cards() {
         List<Card> cardsDealt = new ArrayList<>();
         for (int i = 0; i < 26; i += 2) {
-            cardsDealt.add(deck.getListOfCards().get(i));
+            cardsDealt.add(deck.getCard(i));
         }
         Hand dealtHand1 = new Hand(cardsDealt);
         List<Card> dealtHandTest = deck.dealCards("13 cards");
@@ -57,11 +57,24 @@ public class DeckOfCardsTest {
     public void testDealCardsHalfDeck() {
         List<Card> cardsDealt = new ArrayList<>();
         for (int i = 0; i < deck.getSize(); i += 2) {
-            cardsDealt.add(deck.getListOfCards().get(i));
+            cardsDealt.add(deck.getCard(i));
         }
         Hand dealtHand1 = new Hand(cardsDealt);
         List<Card> dealtHandTest = deck.dealCards("half deck");
         assertEquals(26, dealtHandTest.size());
         assertEquals(dealtHand1.getListOfCards(), dealtHandTest);
+    }
+
+    @Test
+    public void testShuffleDeck() {
+        DeckOfCards originalDeck = new DeckOfCards();
+        deck.shuffleDeck();
+        boolean allCardsInSamePositions = true;
+        int index = 0;
+        for (Card card : deck.getListOfCards()) {
+            allCardsInSamePositions = allCardsInSamePositions && card.equalCards(originalDeck.getCard(index));
+            index++;
+        }
+        assertFalse(allCardsInSamePositions);
     }
 }

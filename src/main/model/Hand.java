@@ -65,11 +65,11 @@ public class Hand extends ListOfCards {
      * - if this rank is > other rank: is valid
      */
     private boolean canPlaySingleHand(Hand other) {
-        int otherRank = other.getListOfCards().get(0).getRank();
-        int thisRank = listOfCards.get(0).getRank();
-        String otherSuit = other.getListOfCards().get(0).getSuit();
+        int otherRank = other.getCard(0).getRank();
+        int thisRank = getCard(0).getRank();
+        String otherSuit = other.getCard(0).getSuit();
         if (thisRank == otherRank) {
-            return SUITS.indexOf(listOfCards.get(0).getSuit()) > SUITS.indexOf(otherSuit);
+            return SUITS.indexOf(getCard(0).getSuit()) > SUITS.indexOf(otherSuit);
         } else if (thisRank == 1 || thisRank == 2) {
             return kingAceBorder(thisRank, otherRank);
         } else if (otherRank == 1 || otherRank == 2) {
@@ -85,13 +85,13 @@ public class Hand extends ListOfCards {
      * - if this rank is > other rank: is valid
      */
     private boolean canPlayPairHand(Hand other) {
-        int otherRank = other.getListOfCards().get(0).getRank();
-        int thisRank = listOfCards.get(0).getRank();
+        int otherRank = other.getCard(0).getRank();
+        int thisRank = getCard(0).getRank();
         if (thisRank == otherRank) {
-            int highestThisSuit = Math.max(SUITS.indexOf(listOfCards.get(0).getSuit()),
-                    SUITS.indexOf(listOfCards.get(1).getSuit()));
-            int highestOtherSuit = Math.max(SUITS.indexOf(other.getListOfCards().get(0).getSuit()),
-                    SUITS.indexOf(other.getListOfCards().get(1).getSuit()));
+            int highestThisSuit = Math.max(SUITS.indexOf(getCard(0).getSuit()),
+                    SUITS.indexOf(getCard(1).getSuit()));
+            int highestOtherSuit = Math.max(SUITS.indexOf(other.getCard(0).getSuit()),
+                    SUITS.indexOf(other.getCard(1).getSuit()));
             return highestThisSuit > highestOtherSuit;
         } else if (thisRank == 1 || thisRank == 2) {
             return kingAceBorder(thisRank, otherRank);
@@ -107,8 +107,8 @@ public class Hand extends ListOfCards {
      * - this rank must be > other rank
      */
     private boolean canPlayThreeOfAKindHand(Hand other) {
-        int otherRank = other.getListOfCards().get(0).getRank();
-        int thisRank = listOfCards.get(0).getRank();
+        int otherRank = other.getCard(0).getRank();
+        int thisRank = getCard(0).getRank();
         if (thisRank == 1 || thisRank == 2) {
             return kingAceBorder(thisRank, otherRank);
         } else if (otherRank == 1 || otherRank == 2) {
@@ -310,7 +310,7 @@ public class Hand extends ListOfCards {
               - rank of cards are in a sequence
      */
     private boolean isValidStraightHand(Hand hand) {
-        int rank = hand.getListOfCards().get(0).getRank() - 1;
+        int rank = hand.getCard(0).getRank() - 1;
         for (Card card : hand.getHand()) {
             if (!(rank == 13 && card.getRank() == 1) && !(card.getRank() == rank + 1)) {
                 return false;
@@ -411,7 +411,7 @@ public class Hand extends ListOfCards {
         int rank = 0;
         int numRank = 0;
         for (int i = 0; i < this.getSize(); i++) {
-            rank = this.listOfCards.get(i).getRank();
+            rank = this.getCard(i).getRank();
             for (Card card : this.listOfCards) {
                 if (card.getRank() == rank) {
                     numRank++;

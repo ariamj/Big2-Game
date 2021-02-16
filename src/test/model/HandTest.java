@@ -37,6 +37,7 @@ public class HandTest {
     private final Card H2 = new Card(2, "heart");
     private final Card C2 = new Card(2, "clubs");
     private final Card S2 = new Card(2, "spade");
+    private final Card D11 = new Card(11, "diamond");
 
     private Hand startHand;
 
@@ -189,7 +190,7 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidPlayThreeOfAKindSameAndNonAceTwoRank() {
+    public void testIsValidPlayThreeOfAKindNonAceTwoRank() {
         Hand threeHand13 = new Hand(new ArrayList<>(Arrays.asList(D13, H13, S13)));
         Hand threeHand12 = new Hand(new ArrayList<>(Arrays.asList(C12, H12, S12)));
         assertTrue(threeHand13.isValidPlay(threeHand12));
@@ -300,7 +301,7 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidTypeHandStriaghtFlushHand() {
+    public void testIsValidTypeHandStraightFlushHand() {
         Hand straightFlush = new Hand(new ArrayList<>(Arrays.asList(H9, H10, H11, H12, H13)));
         assertTrue(straightFlush.isValidTypeHand());
         Hand falseStraightFlush = new Hand(new ArrayList<>(Arrays.asList(C3, H10, H11, H12, H13)));
@@ -308,7 +309,7 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidTypeHandRoyalStriaghtFlushHand() {
+    public void testIsValidTypeHandRoyalStraightFlushHand() {
         Hand royalStraightFlush = new Hand(new ArrayList<>(Arrays.asList(H10, H11, H12, H13, H1)));
         assertTrue(royalStraightFlush.isValidTypeHand());
         Hand falseRoyalStraightFlush = new Hand(new ArrayList<>(Arrays.asList(H10, H11, H12, H13, D3)));

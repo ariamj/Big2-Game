@@ -28,15 +28,29 @@ public class DeckOfCards extends ListOfCards {
             numCards = 26;
         }
         for (int i = 0; i < numCards; i += 2) {
-            Card cardToBeRemoved = this.getListOfCards().get(i);
+            Card cardToBeRemoved = this.getCard(i);
             cardDealt.add(cardToBeRemoved);
         }
         for (int i = 0; i < this.getSize(); i++) {
-            if (cardDealt.contains(this.getListOfCards().get(i))) {
+            if (cardDealt.contains(this.getCard(i))) {
                 this.removeCard(i);
                 i--;
             }
         }
         return cardDealt;
     }
+
+    //MODIFIES: this
+    //EFFECTS: shuffles DeckOfCards (ie. place cards in random orders)
+    public void shuffleDeck() {
+        int newIndex;
+        Card shuffleCard;
+        for (int i = 0; i < 52; i++) {
+            newIndex = (int) (Math.random() * (51 + 1));
+            shuffleCard = this.getCard(0);
+            this.removeCard(0);
+            this.getListOfCards().add(newIndex, shuffleCard);
+        }
+    }
+
 }

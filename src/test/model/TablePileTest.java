@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TablePileTest {
     private TablePile pile;
@@ -25,8 +26,7 @@ public class TablePileTest {
         List<Card> cardsInPile = new ArrayList<>();
         cardsInPile.add(card);
         assertEquals(1, cardsInPile.size(), pile.getSize());
-
-        //tests for is correct card in pile....
+        assertTrue(pile.getCard(0).equalCards(new Card(3, "diamond")));
     }
 
     @Test
@@ -35,7 +35,7 @@ public class TablePileTest {
                 new Card(3,"spade"))));
         pile.playHandInPile(hand);
         assertEquals(2, pile.getSize());
-
-        //tests for is correct card in pile....
+        assertTrue(pile.getCard(0).equalCards(new Card(3, "diamond")));
+        assertTrue(pile.getCard(1).equalCards(new Card(3, "spade")));
     }
 }

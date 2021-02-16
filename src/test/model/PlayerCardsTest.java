@@ -36,8 +36,7 @@ class PlayerCardsTest {
         Hand hand = new Hand(new ArrayList<>(Arrays.asList(D3)));
         Hand played = playerCards.playHand(hand);
         assertEquals(1, played.getSize());
-        assertEquals(3, played.getHand().get(0).getRank());
-        assertEquals("diamond", played.getHand().get(0).getSuit());
+        assertTrue(played.getCard(0).equalCards(new Card(3, "diamond")));
         assertEquals(10, playerCards.getSize());
     }
 
@@ -46,16 +45,11 @@ class PlayerCardsTest {
         Hand hand = new Hand(new ArrayList<>(Arrays.asList(D3, S3, H3, C3, D10)));
         Hand played = playerCards.playHand(hand);
         assertEquals(5, played.getSize());
-        assertEquals(3, played.getHand().get(0).getRank());
-        assertEquals("diamond", played.getHand().get(0).getSuit());
-        assertEquals(3, played.getHand().get(1).getRank());
-        assertEquals("spade", played.getHand().get(1).getSuit());
-        assertEquals(3, played.getHand().get(2).getRank());
-        assertEquals("heart", played.getHand().get(2).getSuit());
-        assertEquals(3, played.getHand().get(3).getRank());
-        assertEquals("clubs", played.getHand().get(3).getSuit());
-        assertEquals(10, played.getHand().get(4).getRank());
-        assertEquals("diamond", played.getHand().get(4).getSuit());
+        assertTrue(played.getCard(0).equalCards(new Card(3, "diamond")));
+        assertTrue(played.getCard(1).equalCards(new Card(3, "spade")));
+        assertTrue(played.getCard(2).equalCards(new Card(3, "heart")));
+        assertTrue(played.getCard(3).equalCards(new Card(3, "clubs")));
+        assertTrue(played.getCard(4).equalCards(new Card(10, "diamond")));
         assertEquals(6, playerCards.getSize());
     }
 

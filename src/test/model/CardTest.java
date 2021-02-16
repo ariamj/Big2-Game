@@ -3,7 +3,7 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CardTest {
     private Card card;
@@ -19,6 +19,15 @@ public class CardTest {
         queenCard = new Card(12, "Heart");
         kingCard = new Card(13, "Spade");
         aceCard = new Card(1, "Clubs");
+    }
+
+    @Test
+    public void testCardEquals() {
+        assertTrue(card.equalCards(new Card(3, "diamond")));
+        assertTrue(aceCard.equalCards(new Card(1, "clubs")));
+        assertFalse(card.equalCards(new Card(3, "clubs")));
+        assertFalse(card.equalCards(new Card(11, "diamond")));
+        assertFalse(card.equalCards(queenCard));
     }
 
     @Test
