@@ -58,7 +58,7 @@ public class ChipsDrawer {
 
     //REQUIRES: drawer is not empty and drawer contains chip
     //MODIFIES: this
-    //EFFECTS: removes the chip from drawer
+    //EFFECTS: removes chip from drawer
     public void removeChipFromDrawer(Chips chip) {
         String colour = chip.getColour();
         for (int i = 0; i < drawer.size(); i++) {
