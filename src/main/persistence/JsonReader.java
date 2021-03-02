@@ -95,10 +95,10 @@ public class JsonReader {
     //EFFECTS: parses chips from JSONObject and adds them to the game status as a ChipsDrawer
     //          playerNumber determines where to add cards; 1 = player1, 2 = player2
     private void addChips(GameStatus gs, JSONObject jsonObject, int playerNumber) {
-        int numWhite = jsonObject.getInt("number of white chips");
-        int numBlue = jsonObject.getInt("number of blue chips");
-        int numRed = jsonObject.getInt("number of red chips");
-        int numGold = jsonObject.getInt("number of gold chips");
+        int numWhite = jsonObject.getInt("white chips");
+        int numBlue = jsonObject.getInt("blue chips");
+        int numRed = jsonObject.getInt("red chips");
+        int numGold = jsonObject.getInt("gold chips");
         ChipsDrawer drawer = new ChipsDrawer(numWhite, numBlue, numRed, numGold);
         gs.setDrawer(drawer, playerNumber);
     }

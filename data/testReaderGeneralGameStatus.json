@@ -1,0 +1,58 @@
+{
+  "player turn" : 1,
+  "table pile" : [
+    {
+      "rank" : 3,
+      "suit" : "diamond"
+    },
+    {
+      "rank" : 3,
+      "suit" : "heart"
+    }
+  ],
+  "player 2 chips" : [
+    {
+      "white chips" : 20,
+      "blue chips" : 10,
+      "red chips" : 5,
+      "gold chips" : 1
+    }
+  ],
+  "player 2 cards" : [
+    {
+      "rank" : 3,
+      "suit" : "diamond"
+    },
+    {
+      "rank" : 3,
+      "suit" : "heart"
+    },
+    {
+      "rank" : 4,
+      "suit" : "spade"
+    }
+  ],
+  "player 1 chips" : [
+    {
+      "white chips" : 20,
+      "blue chips" : 10,
+      "red chips" : 5,
+      "gold chips" : 1
+    }
+  ],
+  "player 1 cards" : [
+    {
+      "rank" : 4,
+      "suit" : "diamond"
+    },
+    {
+      "rank" : 2,
+      "suit" : "heart"
+    },
+    {
+      "rank" : 4,
+      "suit" : "spade"
+    }
+  ],
+  "name" : "Game number 1"
+}

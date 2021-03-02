@@ -102,6 +102,7 @@ public class GameStatus implements Writable {
     }
 
     //EFFECTS: returns cards as a JSON array
+    // based on code from JsonSerializationDemo.WorkRoom.thingiesToJson()
     private JSONArray cardsToJson(List<Card> cards) {
         JSONArray jsonArray = new JSONArray();
         for (Card c : cards) {

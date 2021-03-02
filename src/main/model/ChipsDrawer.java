@@ -147,10 +147,10 @@ public class ChipsDrawer implements Writable{
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("number of white chips", numWhiteChips);
-        json.put("number of blue chips", numBlueChips);
-        json.put("number of red chips", numRedChips);
-        json.put("number of gold chips", numGoldChips);
+        json.put("white chips", numWhiteChips);
+        json.put("blue chips", numBlueChips);
+        json.put("red chips", numRedChips);
+        json.put("gold chips", numGoldChips);
         return json;
     }
 }
