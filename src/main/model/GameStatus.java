@@ -4,39 +4,40 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameStatus implements Writable {
     private String name;
-    private PlayerCards player1Cards;
-    private PlayerCards player2Cards;
+    private List<Card> player1Cards;
+    private List<Card> player2Cards;
     private ChipsDrawer drawer1;
     private ChipsDrawer drawer2;
-    private TablePile tableHand;
+    private List<Card> tableHand;
     private int playerTurn;
 
-    //EFFECTS: constructs gameStatus with a name, initial list of cards for both players,
-    // empty list of cards for the table pile, and default player 1 turn
-    public GameStatus(String name, PlayerCards cards1, PlayerCards cards2, ChipsDrawer drawer1, ChipsDrawer drawer2) {
+    //EFFECTS: constructs gameStatus with a name, empty list of cards for both players,
+    // empty list of cards for the table pile, and player turn
+//    public GameStatus(String name, PlayerCards cards1, PlayerCards cards2, ChipsDrawer drawer1, ChipsDrawer drawer2) {
+    public GameStatus(String name, int playerTurn) {
         this.name = name;
-        this.player1Cards = cards1;
-        this.player2Cards = cards2;
-        this.drawer1 = drawer1;
-        this.drawer2 = drawer2;
-        this.tableHand = new TablePile();
-        this.playerTurn = 0;
+        this.player1Cards = new ArrayList<>();
+        this.player2Cards = new ArrayList<>();
+        this.tableHand = new ArrayList<>();
+        this.playerTurn = playerTurn;
+    }
+
+    public void setDrawer(ChipsDrawer drawer, int playerNumber) {
+        if (playerNumber == 1) {
+            drawer1 = drawer;
+        } else {
+            drawer2 = drawer;
+        }
     }
 
     //getters
     public String getName() {
         return this.name;
-    }
-
-    //getters
-    public PlayerCards getPlayerCards(int playerNumber) {
-        if (playerNumber == 1) {
-            return player1Cards;
-        } else {
-            return player2Cards;
-        }
     }
 
     //getters
@@ -46,11 +47,6 @@ public class GameStatus implements Writable {
         } else {
             return drawer2;
         }
-    }
-
-    //getters
-    public TablePile getTableHand() {
-        return tableHand;
     }
 
     //getters
@@ -68,18 +64,27 @@ public class GameStatus implements Writable {
     //MODIFIES: this
     //EFFECTS: updates the current hand on the table
     public void updateTableHand(TablePile tablePile) {
-        tableHand = tablePile;
+        tableHand = tablePile.getListOfCards();
+    }
+
+    public void addCardToCardList(Card card, int playerNumber) {
+        getCardList(playerNumber).add(card);
     }
 
     //MODIFIES: this
     //EFFECTS: remove card from the players hand, player depends on playerNumber
     public void removeCardFromPlayer(Card card, int playerNumber) {
-        if (playerNumber == 1) {
-            int index = player1Cards.getCardsList().indexOf(card);
-            player1Cards.removeCard(index);
+        getCardList(playerNumber).remove(card);
+    }
+
+    //EFFECTS: determines whose list of cards to modify/retrieve and returns it
+    private List<Card> getCardList(int playerNumber) {
+        if (playerNumber == 0) {
+            return tableHand;
+        } else if (playerNumber == 1) {
+            return player1Cards;
         } else {
-            int index = player2Cards.getCardsList().indexOf(card);
-            player2Cards.removeCard(index);
+            return player2Cards;
         }
     }
 
@@ -88,18 +93,18 @@ public class GameStatus implements Writable {
         JSONObject json = new JSONObject();
         json.put("name", name);
         json.put("player 1 cards", cardsToJson(player1Cards));
-        json.put("player 1 chips", drawer1);
+        json.put("player 1 chips", chipsToJson(drawer1));
         json.put("player 2 cards", cardsToJson(player2Cards));
-        json.put("player 2 chips", drawer2);
+        json.put("player 2 chips", chipsToJson(drawer2));
         json.put("table pile", cardsToJson(tableHand));
         json.put("player turn", playerTurn);
         return json;
     }
 
     //EFFECTS: returns cards as a JSON array
-    private JSONArray cardsToJson(ListOfCards cards) {
+    private JSONArray cardsToJson(List<Card> cards) {
         JSONArray jsonArray = new JSONArray();
-        for (Card c : cards.getListOfCards()) {
+        for (Card c : cards) {
             jsonArray.put(c.toJson());
         }
         return jsonArray;
