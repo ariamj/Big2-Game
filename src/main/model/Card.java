@@ -1,11 +1,14 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
 /**
  * Represents a card with a rank number and suit
  */
-public class Card {
+public class Card implements Writable {
 
     private int rank;
     private String suit;
@@ -57,5 +60,13 @@ public class Card {
             cardString += "S";
         }
         return cardString;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("rank", rank);
+        json.put("suit", suit);
+        return json;
     }
 }

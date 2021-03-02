@@ -85,44 +85,6 @@ public class BigTwoGame {
         return input.nextLine();
     }
 
-    //EFFECTS: returns true if user1 has the starting card
-    // 3 diamond or increasing suits if 3 diamond is not in play
-    private boolean user1HasStartCard() {
-        Card startCard = findStartingCard();
-        return hasCard(user1, startCard.getRank(), startCard.getSuit());
-    }
-
-    //EFFECTS: determine what the first card is
-    // starts from 3 of diamond then increase suits
-    private Card findStartingCard() {
-        int initRank = 3;
-        int index = 0;
-        while (!cardInPlay(initRank, ListOfCards.SUITS.get(index))) {
-            index++;
-            if (index == 4) {
-                initRank++;
-                index = 0;
-            }
-        }
-        return new Card(initRank, ListOfCards.SUITS.get(index));
-    }
-
-    //EFFECTS: returns true if the desired starting card with rank rank and suit suit
-    // is in play (ie. either user has it)
-    private boolean cardInPlay(int rank, String suit) {
-        return hasCard(user1, rank, suit) || hasCard(user2, rank, suit);
-    }
-
-    //EFFECTS: returns true if player has the desired starting card
-    private boolean hasCard(Player player, int rank, String suit) {
-        for (Card card : player.getCards().getCardsList()) {
-            if (card.getRank() == rank && card.getSuit().equals(suit)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     //EFFECTS: player gets to play a turn whether that be to pass or to play or quit
     // pass = do nothing and next player goes
     // play = play a valid hand onto the table
@@ -185,22 +147,6 @@ public class BigTwoGame {
         return PLAY;
     }
 
-    //EFFECTS: print out the table cards and player's cards
-    private void displayCards(Player player) {
-        System.out.println("Most recent played hand: " + table.toString());
-        System.out.println("Your cards: " + player.getCards().toString());
-    }
-
-    //EFFECTS: returns true if given hand is a valid hand to be played
-    // ie. ranking of hand is higher or equal to most recent played hand
-    // and is a valid type hand
-    private boolean canPlayHand(Hand hand, Hand tableHand) {
-        if (firstTurn && !hand.contains(findStartingCard())) {
-            return false;
-        }
-        return hand.isValidTypeHand() && hand.isValidPlay(tableHand);
-    }
-
     //EFFECTS: returns cards that user has picked to play as a hand
     private Hand playAHand() {
         List<Card> cardsToPlay = new ArrayList<>();
@@ -220,15 +166,52 @@ public class BigTwoGame {
         return new Hand(cardsToPlay);
     }
 
-    //EFFECTS: sets quitting to be true (user has quit the game)
-    private void hasQuit() {
-        quitting = true;
+    //EFFECTS: returns true if given hand is a valid hand to be played
+    // ie. ranking of hand is higher or equal to most recent played hand
+    // and is a valid type hand
+    private boolean canPlayHand(Hand hand, Hand tableHand) {
+        if (firstTurn && !hand.contains(findStartingCard())) {
+            return false;
+        }
+        return hand.isValidTypeHand() && hand.isValidPlay(tableHand);
     }
 
-    //EFFECTS: returns true if game is over
-    // game is over when either player has played all their cards (ie. has no more cards left)
-    private boolean gameOver() {
-        return user1.getNumCards() == 0 || user2.getNumCards() == 0;
+    //EFFECTS: returns true if user1 has the starting card
+    // 3 diamond or increasing suits if 3 diamond is not in play
+    private boolean user1HasStartCard() {
+        Card startCard = findStartingCard();
+        return hasCard(user1, startCard.getRank(), startCard.getSuit());
+    }
+
+    //EFFECTS: determine what the first card is
+    // starts from 3 of diamond then increase suits
+    private Card findStartingCard() {
+        int initRank = 3;
+        int index = 0;
+        while (!cardInPlay(initRank, ListOfCards.SUITS.get(index))) {
+            index++;
+            if (index == 4) {
+                initRank++;
+                index = 0;
+            }
+        }
+        return new Card(initRank, ListOfCards.SUITS.get(index));
+    }
+
+    //EFFECTS: returns true if the desired starting card with rank rank and suit suit
+    // is in play (ie. either user has it)
+    private boolean cardInPlay(int rank, String suit) {
+        return hasCard(user1, rank, suit) || hasCard(user2, rank, suit);
+    }
+
+    //EFFECTS: returns true if player has the desired starting card
+    private boolean hasCard(Player player, int rank, String suit) {
+        for (Card card : player.getCards().getCardsList()) {
+            if (card.getRank() == rank && card.getSuit().equals(suit)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //EFFECTS: loser gives amount chips lost to winner and displays play's chips
@@ -244,17 +227,6 @@ public class BigTwoGame {
         displayChips();
     }
 
-    //EFFECTS: displays all users' chips
-    private void displayChips() {
-        System.out.println("Chips for " + user1.getName() + ": " + user1.getDrawer().toString());
-        System.out.println("Chips for " + user2.getName() + ": " + user2.getDrawer().toString());
-    }
-
-    //EFFECTS: returns true if player is the winner (the one with no more cards left)
-    private boolean isWinner(Player player) {
-        return player.getNumCards() == 0;
-    }
-
     //EFFECTS: returns the amount of points player has lost based on number of cards and what cards play still has
     private int pointsLost(Player player) {
         int pointsLost = 0;
@@ -266,5 +238,33 @@ public class BigTwoGame {
             }
         }
         return pointsLost;
+    }
+
+    //EFFECTS: returns true if player is the winner (the one with no more cards left)
+    private boolean isWinner(Player player) {
+        return player.getNumCards() == 0;
+    }
+
+    //EFFECTS: sets quitting to be true (user has quit the game)
+    private void hasQuit() {
+        quitting = true;
+    }
+
+    //EFFECTS: returns true if game is over
+    // game is over when either player has played all their cards (ie. has no more cards left)
+    private boolean gameOver() {
+        return user1.getNumCards() == 0 || user2.getNumCards() == 0;
+    }
+
+    //EFFECTS: print out the table cards and player's cards
+    private void displayCards(Player player) {
+        System.out.println("Most recent played hand: " + table.toString());
+        System.out.println("Your cards: " + player.getCards().toString());
+    }
+
+    //EFFECTS: displays all users' chips
+    private void displayChips() {
+        System.out.println("Chips for " + user1.getName() + ": " + user1.getDrawer().toString());
+        System.out.println("Chips for " + user2.getName() + ": " + user2.getDrawer().toString());
     }
 }

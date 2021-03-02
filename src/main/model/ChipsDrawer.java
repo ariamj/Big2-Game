@@ -1,12 +1,15 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents the chips that player is in possession of
  */
-public class ChipsDrawer {
+public class ChipsDrawer implements Writable{
     private static final String WHITE = "white";
     private static final String BLUE = "blue";
     private static final String RED = "red";
@@ -124,6 +127,11 @@ public class ChipsDrawer {
         return numGoldChips;
     }
 
+    //getters
+    public List<Chips> getDrawer() {
+        return this.drawer;
+    }
+
     //EFFECTS: returns a string representation of the chip drawer
     public String toString() {
         String drawerString = "[";
@@ -134,5 +142,15 @@ public class ChipsDrawer {
             }
         }
         return drawerString + "]";
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("number of white chips", numWhiteChips);
+        json.put("number of blue chips", numBlueChips);
+        json.put("number of red chips", numRedChips);
+        json.put("number of gold chips", numGoldChips);
+        return json;
     }
 }
