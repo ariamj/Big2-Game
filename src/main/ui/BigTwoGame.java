@@ -11,7 +11,6 @@ import java.util.Scanner;
  * Represents the game of Big 2
  */
 public class BigTwoGame {
-    private static final List<String> SUITS = new ArrayList<>(Arrays.asList("diamond", "clubs", "heart", "spade"));
     private static final List<String> RANK_VALUES = new ArrayList<>(Arrays.asList("X", "A", "2", "3", "4", "5", "6",
             "7", "8", "9", "10", "J", "Q", "K"));
     private static final int NUM_INITIAL_WHITE_CHIPS = 20;
@@ -20,12 +19,16 @@ public class BigTwoGame {
     private static final int NUM_INITIAL_GOLD_CHIPS = 1;
     private static final int ANY_CARD_POINT_VALUE = 1;
     private static final int TWO_CARD_POINT_VALUE = 5;
+    private static final int PASS = 0;
+    private static final int PLAY = 1;
+    private static final int QUIT = 2;
 
     private Player user1;
     private Player user2;
     private DeckOfCards deck;
     private TablePile table;
     private boolean firstTurn = true;
+    private boolean quitting = false;
     private Scanner input;
 
     //EFFECTS: runs the Big 2 game
@@ -39,13 +42,14 @@ public class BigTwoGame {
     // game is over when one player has played all their cards, pay/collect chips accordingly
     private void runBigTwoGame() {
         initializeGame();
+        displayChips();
         List<Player> playerList = new ArrayList<>(Arrays.asList(user1, user2));
         int playerIndex = 1;
         if (user1HasStartCard()) {
             playATurn(user1);
             firstTurn = false;
         }
-        while (!gameOver()) {
+        while (!gameOver() && !quitting) {
             playATurn(playerList.get(playerIndex));
             if (playerIndex == 0) {
                 playerIndex++;
@@ -93,14 +97,14 @@ public class BigTwoGame {
     private Card findStartingCard() {
         int initRank = 3;
         int index = 0;
-        while (!cardInPlay(initRank, SUITS.get(index))) {
+        while (!cardInPlay(initRank, ListOfCards.SUITS.get(index))) {
             index++;
             if (index == 4) {
                 initRank++;
                 index = 0;
             }
         }
-        return new Card(initRank, SUITS.get(index));
+        return new Card(initRank, ListOfCards.SUITS.get(index));
     }
 
     //EFFECTS: returns true if the desired starting card with rank rank and suit suit
@@ -119,24 +123,27 @@ public class BigTwoGame {
         return false;
     }
 
-    //EFFECTS: player gets to play a turn whether that be to pass or to play
+    //EFFECTS: player gets to play a turn whether that be to pass or to play or quit
     // pass = do nothing and next player goes
     // play = play a valid hand onto the table
+    // quit = quit game
     private void playATurn(Player player) {
         System.out.print("Hit enter to confirm you are " + player.getName() + ": ");
         input.nextLine();
-        displayCards(player);
-        System.out.println("Would you like to pass or play?");
-        System.out.println("Type 'pass' to pass and 'play' to play: ");
-        String command = input.nextLine();
-        if (!wantToPass(command, "pass", "play")) {
+        int nextTask = processCommand(getCommand(player, 1), "pass", "play");
+        if (nextTask == QUIT) {
+            hasQuit();
+            return;
+        }
+        if (nextTask == PLAY) {
             Hand handPlayed = playAHand();
             while (!canPlayHand(handPlayed, table)) {
                 System.out.println("You can't play that hand... ");
-                displayCards(player);
-                System.out.println("Want to pass after all? 'Y' for yes, 'N' for no: ");
-                String newCommand = input.nextLine();
-                if (wantToPass(newCommand, "Y", "N")) {
+                int newNextTask = processCommand(getCommand(player, 2), "Y", "N");
+                if (newNextTask == PASS || newNextTask == QUIT) {
+                    if (newNextTask == QUIT) {
+                        hasQuit();
+                    }
                     return;
                 }
                 handPlayed = playAHand();
@@ -146,21 +153,36 @@ public class BigTwoGame {
         }
     }
 
-    //EFFECTS: returns true if player wants to pass their turn
-    private boolean wantToPass(String command, String pass, String play) {
+    //EFFECTS: get user input on what they would like to do next (pass, play, or quit)
+    private String getCommand(Player player, int msgNumber) {
+        displayCards(player);
+        if (msgNumber == 1) {
+            System.out.println("Would you like to pass or play? \n Type 'pass' to pass, 'play' to play, 'q' to quit: ");
+        } else if (msgNumber == 2) {
+            System.out.println("Want to pass after all? 'Y' for yes, 'N' for no, 'q' to quit: ");
+        }
+        return input.nextLine();
+    }
+
+    //EFFECTS: return what user would like to do for their turn
+    // returns PASS if user wants to pass, PLAY if user wants to play, QUIT id user wants to quit
+    private int processCommand(String command, String pass, String play) {
         while ((firstTurn && command.equalsIgnoreCase(pass))
-                || (!command.equalsIgnoreCase(pass) && !command.equalsIgnoreCase(play))) {
+                || (!command.equalsIgnoreCase(pass) && !command.equalsIgnoreCase(play)
+                && !command.equalsIgnoreCase("q"))) {
             if (firstTurn && command.equalsIgnoreCase(pass)) {
                 System.out.println("You cannot pass as the starting player...");
             }
             System.out.print("Try again: ");
             command = input.nextLine();
         }
-        if (command.equalsIgnoreCase(pass)) {
+        if (command.equalsIgnoreCase("q")) {
+            return QUIT;
+        } else if (command.equalsIgnoreCase(pass)) {
             table.setHand(new Hand());
-            return true;
+            return PASS;
         }
-        return false;
+        return PLAY;
     }
 
     //EFFECTS: print out the table cards and player's cards
@@ -188,7 +210,7 @@ public class BigTwoGame {
         while (!card.equalsIgnoreCase("p")) {
             card = input.nextLine();
             if (card.length() > 3 && RANK_VALUES.contains(card.substring(0, 2).trim().toUpperCase())
-                    && SUITS.contains(card.substring(2).trim().toLowerCase())) {
+                    && ListOfCards.SUITS.contains(card.substring(2).trim().toLowerCase())) {
                 int rank = RANK_VALUES.indexOf(card.substring(0, 2).trim().toUpperCase());
                 cardsToPlay.add(new Card(rank, card.substring(2).trim().toLowerCase()));
             } else if (!card.equalsIgnoreCase("p")) {
@@ -198,6 +220,11 @@ public class BigTwoGame {
         return new Hand(cardsToPlay);
     }
 
+    //EFFECTS: sets quitting to be true (user has quit the game)
+    private void hasQuit() {
+        quitting = true;
+    }
+
     //EFFECTS: returns true if game is over
     // game is over when either player has played all their cards (ie. has no more cards left)
     private boolean gameOver() {
@@ -205,12 +232,20 @@ public class BigTwoGame {
     }
 
     //EFFECTS: loser gives amount chips lost to winner and displays play's chips
+    //          if game is over due to user quitting, no distribution is done
     private void distributeWinning() {
-        if (isWinner(user1)) {
-            user1.collectChips(user2.payChips(pointsLost(user2)));
-        } else {
-            user2.collectChips(user1.payChips(pointsLost(user1)));
+        if (!quitting) {
+            if (isWinner(user1)) {
+                user1.collectChips(user2.payChips(pointsLost(user2)));
+            } else {
+                user2.collectChips(user1.payChips(pointsLost(user1)));
+            }
         }
+        displayChips();
+    }
+
+    //EFFECTS: displays all users' chips
+    private void displayChips() {
         System.out.println("Chips for " + user1.getName() + ": " + user1.getDrawer().toString());
         System.out.println("Chips for " + user2.getName() + ": " + user2.getDrawer().toString());
     }

@@ -8,7 +8,7 @@ import java.util.List;
  * Represents a list of Card
  */
 public abstract class ListOfCards {
-    protected static final List<String> SUITS = new ArrayList<>(Arrays.asList("diamond", "clubs", "heart", "spade"));
+    public static final List<String> SUITS = new ArrayList<>(Arrays.asList("diamond", "clubs", "heart", "spade"));
 
     protected List<Card> listOfCards;
 
