@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Represents the chips that player is in possession of
  */
-public class ChipsDrawer implements Writable{
+public class ChipsDrawer implements Writable {
     private static final String WHITE = "white";
     private static final String BLUE = "blue";
     private static final String RED = "red";
@@ -22,11 +22,19 @@ public class ChipsDrawer implements Writable{
     private int balance;
     private List<Chips> drawer;
 
+    public ChipsDrawer() {
+        drawer = new ArrayList<>();
+        this.numWhiteChips = 0;
+        this.numBlueChips = 0;
+        this.numRedChips = 0;
+        this.numGoldChips = 0;
+    }
+
     //EFFECTS: Makes a new drawer for chips for player with an initial state of:
     //          - numWhiteChips white chips, numBlueChips blue chips,
     //            numRedChips red chips, numGoldChips gold chips
     public ChipsDrawer(int numWhiteChips, int numBlueChips, int numRedChips, int numGoldChips) {
-        drawer = new ArrayList<>();
+        this();
         this.numWhiteChips = numWhiteChips;
         this.numBlueChips = numBlueChips;
         this.numRedChips = numRedChips;

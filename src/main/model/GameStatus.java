@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameStatus implements Writable {
+    public static final int TABLE = 0;
+    public static final int PLAYER1 = 1;
+    public static final int PLAYER2 = 2;
+
     private String name;
     private List<Card> player1Cards;
     private List<Card> player2Cards;
@@ -23,12 +27,14 @@ public class GameStatus implements Writable {
         this.name = name;
         this.player1Cards = new ArrayList<>();
         this.player2Cards = new ArrayList<>();
+        this.drawer1 = new ChipsDrawer();
+        this.drawer2 = new ChipsDrawer();
         this.tableHand = new ArrayList<>();
         this.playerTurn = playerTurn;
     }
 
     public void setDrawer(ChipsDrawer drawer, int playerNumber) {
-        if (playerNumber == 1) {
+        if (playerNumber == PLAYER1) {
             drawer1 = drawer;
         } else {
             drawer2 = drawer;
@@ -42,7 +48,7 @@ public class GameStatus implements Writable {
 
     //getters
     public ChipsDrawer getDrawer(int playerNumber) {
-        if (playerNumber == 1) {
+        if (playerNumber == PLAYER1) {
             return drawer1;
         } else {
             return drawer2;
@@ -56,15 +62,26 @@ public class GameStatus implements Writable {
 
     //MODIFIES: this
     //EFFECTS: updates which player's turn it is
-    //          index of the player starts at 0 (which is player 1)
     public void updatePlayerTurn(int playerNumber) {
-        playerTurn = playerNumber - 1;
+        playerTurn = playerNumber;
     }
 
+//    //MODIFIES: this
+//    //EFFECTS: updates the current hand on the table
+//    public void updateTableHand(TablePile tablePile) {
+//        tableHand = tablePile.getListOfCards();
+//    }
+
     //MODIFIES: this
-    //EFFECTS: updates the current hand on the table
-    public void updateTableHand(TablePile tablePile) {
-        tableHand = tablePile.getListOfCards();
+    //EFFECTS: sets specified list of cards to cards
+    public void setCardList(ListOfCards cards, int playerNumber) {
+        if (playerNumber == TABLE) {
+            tableHand = cards.getListOfCards();
+        } else if (playerNumber == PLAYER1) {
+            player1Cards = cards.getListOfCards();
+        } else {
+            player2Cards = cards.getListOfCards();
+        }
     }
 
     public void addCardToCardList(Card card, int playerNumber) {
@@ -78,10 +95,10 @@ public class GameStatus implements Writable {
     }
 
     //EFFECTS: determines whose list of cards to modify/retrieve and returns it
-    private List<Card> getCardList(int playerNumber) {
-        if (playerNumber == 0) {
+    public List<Card> getCardList(int playerNumber) {
+        if (playerNumber == TABLE) {
             return tableHand;
-        } else if (playerNumber == 1) {
+        } else if (playerNumber == PLAYER1) {
             return player1Cards;
         } else {
             return player2Cards;
@@ -102,7 +119,8 @@ public class GameStatus implements Writable {
     }
 
     //EFFECTS: returns cards as a JSON array
-    // based on code from JsonSerializationDemo.WorkRoom.thingiesToJson()
+    //Citation: based on code from JsonSerializationDemo.WorkRoom.thingiesToJson()
+    //          URL: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
     private JSONArray cardsToJson(List<Card> cards) {
         JSONArray jsonArray = new JSONArray();
         for (Card c : cards) {

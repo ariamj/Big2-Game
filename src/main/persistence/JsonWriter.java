@@ -8,9 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 /*
- * Based on code from JsonSerializationDemo.JsonWriter
- *
  * Represents a writer that writes a JSON representation of the game status to file
+ *
+ * Citation: Based on code from JsonSerializationDemo.JsonWriter.java
+ *           URL: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
 public class JsonWriter {
     private PrintWriter writer;

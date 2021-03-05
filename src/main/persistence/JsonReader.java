@@ -13,9 +13,10 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 /*
- * Based on code from JsonSerializationDemo.JsonReader
- *
  * Represents a reader that reads the game status from JSON data from file
+ *
+ * Citation: Based on code from JsonSerializationDemo.JsonReader.java
+ *           URL: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
 public class JsonReader {
     private String source;
