@@ -22,7 +22,6 @@ public class GameStatus implements Writable {
 
     //EFFECTS: constructs gameStatus with a name, empty list of cards for both players,
     // empty list of cards for the table pile, and default player turn 1
-//    public GameStatus(String name, PlayerCards cards1, PlayerCards cards2, ChipsDrawer drawer1, ChipsDrawer drawer2) {
     public GameStatus(String name) {
         this.name = name;
         this.player1Cards = new ArrayList<>();
@@ -33,6 +32,8 @@ public class GameStatus implements Writable {
         this.playerTurn = 1;
     }
 
+    //MODIFIES: this
+    //EFFECTS: set specified playerNumber drawer to drawer
     public void setDrawer(ChipsDrawer drawer, int playerNumber) {
         if (playerNumber == PLAYER1) {
             drawer1 = drawer;
@@ -66,12 +67,6 @@ public class GameStatus implements Writable {
         playerTurn = playerNumber;
     }
 
-//    //MODIFIES: this
-//    //EFFECTS: updates the current hand on the table
-//    public void updateTableHand(TablePile tablePile) {
-//        tableHand = tablePile.getListOfCards();
-//    }
-
     //MODIFIES: this
     //EFFECTS: sets specified list of cards to cards
     public void setCardList(ListOfCards cards, int playerNumber) {
@@ -84,6 +79,9 @@ public class GameStatus implements Writable {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: adds card to specified list of cards depending on playerNumber
+    // playerNumber is either TABLE, PLAYER1, PLAYER2
     public void addCardToCardList(Card card, int playerNumber) {
         getCardList(playerNumber).add(card);
     }
@@ -108,6 +106,7 @@ public class GameStatus implements Writable {
     }
 
     @Override
+    //EFFECTS: GameStatus to a JSONObject
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", name);

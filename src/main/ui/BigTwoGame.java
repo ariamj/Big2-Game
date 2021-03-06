@@ -46,29 +46,23 @@ public class BigTwoGame {
         runBigTwoGame();
     }
 
+    //MODIFIES: this
     //EFFECTS: runs the Big 2 game
-    // choose 13 cards or half a deck then continue con alternating between players to play a turn
-    // player with the 3 of diamond starts the game
+    // if no saved game is loaded from file:
+    //      - choose 13 cards or half a deck then continue on alternating between players to play a turn
+    //      - player with the 3 of diamond or next smallest card starts the game
+    // game loaded from file:
+    //      - continue with stats from loaded game
     // game is over when one player has played all their cards, pay/collect chips accordingly
     private void runBigTwoGame() {
         initializeGame();
         playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
         displayChips();
-//        int playerTurn = 2;
         if (firstTurn) {
-            runBigTwoGameNew();
-        } else {
-            runBigTwoGameLoaded();
-        }
-        distributeWinning();
-    }
-
-    //helper
-    //TODO: COMMENT/CLEAN UP
-    private void runBigTwoGameNew() {
-        if (user1HasStartCard()) {
-            playATurn(user1);
-            firstTurn = false;
+            if (user1HasStartCard()) {
+                playATurn(user1);
+                firstTurn = false;
+            }
         }
         while (!gameOver() && !quitting) {
             gs.setPlayerTurn(playerTurn);
@@ -82,22 +76,10 @@ public class BigTwoGame {
                 firstTurn = false;
             }
         }
+        distributeWinning();
     }
 
-    //helper
-    //TODO: COMMENT/CLEAN UP
-    private void runBigTwoGameLoaded() {
-        while (!gameOver() && !quitting) {
-            gs.setPlayerTurn(playerTurn);
-            playATurn(playerList.get(playerTurn));
-            if (playerTurn == 1) {
-                playerTurn++;
-            } else {
-                playerTurn--;
-            }
-        }
-    }
-
+    //MODIFIES: this
     //EFFECTS: initializes fields and deals the deck
     private void initializeGame() {
         input = new Scanner(System.in);
@@ -107,8 +89,6 @@ public class BigTwoGame {
         table = new TablePile();
         deck = new DeckOfCards();
         deck.shuffleDeck();
-
-        //load game possibly~~~~
         System.out.println("Would you like to load a game from file? 'Y' = yes, 'N' = no: ");
         String load = input.nextLine();
         if (load.equalsIgnoreCase("Y")) {
@@ -118,8 +98,8 @@ public class BigTwoGame {
         initializeNewGame();
     }
 
-    //helper
-    //TODO: COMMENT/CLEAN UP
+    //MODIFIES: this
+    //EFFECTS: initializes a new game
     private void initializeNewGame() {
         String cardsAmount = chooseAmountOfInitialCards();
         List<Card> startCards = deck.dealCards(cardsAmount);
@@ -141,10 +121,11 @@ public class BigTwoGame {
         return input.nextLine();
     }
 
+    //MODIFIES: this
     //EFFECTS: player gets to play a turn whether that be to pass or to play or quit
     // pass = do nothing and next player goes
     // play = play a valid hand onto the table
-    // quit = quit game
+    // quit = quit game; option to save game to file
     private void playATurn(Player player) {
         System.out.print("Hit enter to confirm you are " + player.getName() + ": ");
         input.nextLine();
@@ -159,8 +140,10 @@ public class BigTwoGame {
         }
     }
 
-    //helper
-    //TODO: COMMENT/CLEAN UP
+    //MODIFIES: this
+    //EFFECTS: player plays a valid hand or pass/quit after all
+    // if pass -> do nothing after
+    // if quit -> option to save game to file
     private void play(Player player) {
         Hand handPlayed = playAHand();
         while (!canPlayHand(handPlayed, table)) {
@@ -280,6 +263,7 @@ public class BigTwoGame {
         return false;
     }
 
+    //MODIFIES: this
     //EFFECTS: loser gives amount chips lost to winner and displays play's chips
     //          if game is over due to user quitting, no distribution is done
     private void distributeWinning() {
@@ -311,6 +295,7 @@ public class BigTwoGame {
         return player.getNumCards() == 0;
     }
 
+    //MODIFIES: this
     //EFFECTS: sets quitting to be true (user has quit the game)
     private void hasQuit() {
         quitting = true;
@@ -334,8 +319,7 @@ public class BigTwoGame {
         System.out.println("Chips for " + user2.getName() + ": " + user2.getDrawer().toString());
     }
 
-    //helper
-    //TODO: COMMENT/CLEAN UP
+    //EFFECTS: saves game to file if user wants to save
     private void askSaveGame() {
         System.out.println("Do you want to save the status of the game? 'Y' = yes, 'N' = no: ");
         String save = input.nextLine();
@@ -344,8 +328,7 @@ public class BigTwoGame {
         }
     }
 
-    //saves game
-    //TODO: COMMENT/CLEAN UP
+    //EFFECTS: saves the game status to file
     private void saveGameStatus() {
         try {
             writer.open();
@@ -357,8 +340,8 @@ public class BigTwoGame {
         }
     }
 
-    //loads game
-    //TODO: COMMENT/CLEAN UP
+    //MODIFIES: this
+    //EFFECTS: loads the game status from file
     private void loadGameStatus() {
         try {
             gs = reader.read();
@@ -369,8 +352,8 @@ public class BigTwoGame {
         }
     }
 
-    //helper
-    //TODO: COMMENT/CLEAN UP
+    //MODIFIES: this
+    //EFFECTS: initializes the game according to saved stats from file
     private void initializeLoadedGame() {
         int playerNumber = GameStatus.PLAYER1;
         ChipsDrawer drawer = gs.getDrawer(playerNumber);
