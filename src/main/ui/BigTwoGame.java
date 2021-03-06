@@ -1,7 +1,10 @@
 package ui;
 
 import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +14,7 @@ import java.util.Scanner;
  * Represents the game of Big 2
  */
 public class BigTwoGame {
+    private static final String JSON_FILE = "./data/gameStatus.json";
     private static final List<String> RANK_VALUES = new ArrayList<>(Arrays.asList("X", "A", "2", "3", "4", "5", "6",
             "7", "8", "9", "10", "J", "Q", "K"));
     private static final int NUM_INITIAL_WHITE_CHIPS = 20;
@@ -25,11 +29,17 @@ public class BigTwoGame {
 
     private Player user1;
     private Player user2;
+    private Player dummyPlayer;
+    private List<Player> playerList;
     private DeckOfCards deck;
     private TablePile table;
     private boolean firstTurn = true;
+    private int playerTurn = 2;
     private boolean quitting = false;
     private Scanner input;
+    private GameStatus gs;
+    private JsonWriter writer;
+    private JsonReader reader;
 
     //EFFECTS: runs the Big 2 game
     public BigTwoGame() {
@@ -42,40 +52,86 @@ public class BigTwoGame {
     // game is over when one player has played all their cards, pay/collect chips accordingly
     private void runBigTwoGame() {
         initializeGame();
+        playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
         displayChips();
-        List<Player> playerList = new ArrayList<>(Arrays.asList(user1, user2));
-        int playerIndex = 1;
+//        int playerTurn = 2;
+        if (firstTurn) {
+            runBigTwoGameNew();
+        } else {
+            runBigTwoGameLoaded();
+        }
+        distributeWinning();
+    }
+
+    //helper
+    //TODO: COMMENT/CLEAN UP
+    private void runBigTwoGameNew() {
         if (user1HasStartCard()) {
             playATurn(user1);
             firstTurn = false;
         }
         while (!gameOver() && !quitting) {
-            playATurn(playerList.get(playerIndex));
-            if (playerIndex == 0) {
-                playerIndex++;
+            gs.setPlayerTurn(playerTurn);
+            playATurn(playerList.get(playerTurn));
+            if (playerTurn == 1) {
+                playerTurn++;
             } else {
-                playerIndex--;
+                playerTurn--;
             }
             if (firstTurn) {
                 firstTurn = false;
             }
         }
-        distributeWinning();
+    }
+
+    //helper
+    //TODO: COMMENT/CLEAN UP
+    private void runBigTwoGameLoaded() {
+        while (!gameOver() && !quitting) {
+            gs.setPlayerTurn(playerTurn);
+            playATurn(playerList.get(playerTurn));
+            if (playerTurn == 1) {
+                playerTurn++;
+            } else {
+                playerTurn--;
+            }
+        }
     }
 
     //EFFECTS: initializes fields and deals the deck
     private void initializeGame() {
         input = new Scanner(System.in);
+        gs = new GameStatus("Game number 1");
+        writer = new JsonWriter(JSON_FILE);
+        reader = new JsonReader(JSON_FILE);
         table = new TablePile();
         deck = new DeckOfCards();
         deck.shuffleDeck();
+
+        //load game possibly~~~~
+        System.out.println("Would you like to load a game from file? 'Y' = yes, 'N' = no: ");
+        String load = input.nextLine();
+        if (load.equalsIgnoreCase("Y")) {
+            loadGameStatus();
+            return;
+        }
+        initializeNewGame();
+    }
+
+    //helper
+    //TODO: COMMENT/CLEAN UP
+    private void initializeNewGame() {
         String cardsAmount = chooseAmountOfInitialCards();
         List<Card> startCards = deck.dealCards(cardsAmount);
         user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
                 NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+        gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER1);
+        gs.setDrawer(user1.getDrawer(), GameStatus.PLAYER1);
         startCards = deck.dealCards(cardsAmount);
         user2 = new Player("user2", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
                 NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+        gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER2);
+        gs.setDrawer(user2.getDrawer(), GameStatus.PLAYER2);
     }
 
     //EFFECTS: ask whether to play starting with 13 cards only or half a deck
@@ -94,25 +150,35 @@ public class BigTwoGame {
         input.nextLine();
         int nextTask = processCommand(getCommand(player, 1), "pass", "play");
         if (nextTask == QUIT) {
+            askSaveGame();
             hasQuit();
             return;
         }
         if (nextTask == PLAY) {
-            Hand handPlayed = playAHand();
-            while (!canPlayHand(handPlayed, table)) {
-                System.out.println("You can't play that hand... ");
-                int newNextTask = processCommand(getCommand(player, 2), "Y", "N");
-                if (newNextTask == PASS || newNextTask == QUIT) {
-                    if (newNextTask == QUIT) {
-                        hasQuit();
-                    }
-                    return;
-                }
-                handPlayed = playAHand();
-            }
-            player.takeATurn(handPlayed);
-            table.playHandInPile(handPlayed);
+            play(player);
         }
+    }
+
+    //helper
+    //TODO: COMMENT/CLEAN UP
+    private void play(Player player) {
+        Hand handPlayed = playAHand();
+        while (!canPlayHand(handPlayed, table)) {
+            System.out.println("You can't play that hand... ");
+            int newNextTask = processCommand(getCommand(player, 2), "Y", "N");
+            if (newNextTask == PASS || newNextTask == QUIT) {
+                if (newNextTask == QUIT) {
+                    askSaveGame();
+                    hasQuit();
+                }
+                return;
+            }
+            handPlayed = playAHand();
+        }
+        player.takeATurn(handPlayed);
+        gs.removeCardsFromPlayer(handPlayed, playerList.indexOf(player));
+        table.playHandInPile(handPlayed);
+        gs.setCardList(handPlayed, GameStatus.TABLE);
     }
 
     //EFFECTS: get user input on what they would like to do next (pass, play, or quit)
@@ -266,5 +332,57 @@ public class BigTwoGame {
     private void displayChips() {
         System.out.println("Chips for " + user1.getName() + ": " + user1.getDrawer().toString());
         System.out.println("Chips for " + user2.getName() + ": " + user2.getDrawer().toString());
+    }
+
+    //helper
+    //TODO: COMMENT/CLEAN UP
+    private void askSaveGame() {
+        System.out.println("Do you want to save the status of the game? 'Y' = yes, 'N' = no: ");
+        String save = input.nextLine();
+        if (save.equalsIgnoreCase("Y")) {
+            saveGameStatus();
+        }
+    }
+
+    //saves game
+    //TODO: COMMENT/CLEAN UP
+    private void saveGameStatus() {
+        try {
+            writer.open();
+            writer.write(gs);
+            writer.close();
+            System.out.println("Saved game status to file: " + JSON_FILE);
+        } catch (IOException e) {
+            System.out.println("Unable to write game status to file: " + JSON_FILE);
+        }
+    }
+
+    //loads game
+    //TODO: COMMENT/CLEAN UP
+    private void loadGameStatus() {
+        try {
+            gs = reader.read();
+            initializeLoadedGame();
+            System.out.println("Loaded game from file: " + JSON_FILE);
+        } catch (IOException e) {
+            System.out.println("Unable to load game from file: " + JSON_FILE);
+        }
+    }
+
+    //helper
+    //TODO: COMMENT/CLEAN UP
+    private void initializeLoadedGame() {
+        int playerNumber = GameStatus.PLAYER1;
+        ChipsDrawer drawer = gs.getDrawer(playerNumber);
+        user1 = new Player("user1", gs.getCardList(playerNumber), drawer.getNumWhiteChips(),
+                drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
+        playerNumber = GameStatus.PLAYER2;
+        drawer = gs.getDrawer(playerNumber);
+        user2 = new Player("user2", gs.getCardList(playerNumber), drawer.getNumWhiteChips(),
+                drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
+        table.setHand(new Hand(gs.getCardList(GameStatus.TABLE)));
+
+        playerTurn = gs.getPlayerTurn();
+        firstTurn = false;
     }
 }

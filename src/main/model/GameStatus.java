@@ -21,16 +21,16 @@ public class GameStatus implements Writable {
     private int playerTurn;
 
     //EFFECTS: constructs gameStatus with a name, empty list of cards for both players,
-    // empty list of cards for the table pile, and player turn
+    // empty list of cards for the table pile, and default player turn 1
 //    public GameStatus(String name, PlayerCards cards1, PlayerCards cards2, ChipsDrawer drawer1, ChipsDrawer drawer2) {
-    public GameStatus(String name, int playerTurn) {
+    public GameStatus(String name) {
         this.name = name;
         this.player1Cards = new ArrayList<>();
         this.player2Cards = new ArrayList<>();
         this.drawer1 = new ChipsDrawer();
         this.drawer2 = new ChipsDrawer();
         this.tableHand = new ArrayList<>();
-        this.playerTurn = playerTurn;
+        this.playerTurn = 1;
     }
 
     public void setDrawer(ChipsDrawer drawer, int playerNumber) {
@@ -62,7 +62,7 @@ public class GameStatus implements Writable {
 
     //MODIFIES: this
     //EFFECTS: updates which player's turn it is
-    public void updatePlayerTurn(int playerNumber) {
+    public void setPlayerTurn(int playerNumber) {
         playerTurn = playerNumber;
     }
 
@@ -90,8 +90,10 @@ public class GameStatus implements Writable {
 
     //MODIFIES: this
     //EFFECTS: remove card from the players hand, player depends on playerNumber
-    public void removeCardFromPlayer(Card card, int playerNumber) {
-        getCardList(playerNumber).remove(card);
+    public void removeCardsFromPlayer(ListOfCards cards, int playerNumber) {
+        for (Card card : cards.getListOfCards()) {
+            getCardList(playerNumber).remove(card);
+        }
     }
 
     //EFFECTS: determines whose list of cards to modify/retrieve and returns it

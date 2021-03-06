@@ -17,7 +17,7 @@ public class JsonWriterTest extends JsonTest{
     public void testWriterInvalidFile() {
         JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
         try {
-            GameStatus gs = new GameStatus("Game number 1", 1);
+            GameStatus gs = new GameStatus("Game number 1");
             writer.open();
             fail("FileNotFoundException was expected");
         } catch (FileNotFoundException fe) {
@@ -29,7 +29,7 @@ public class JsonWriterTest extends JsonTest{
     public void testWriterEmptyGameStatus() {
         JsonWriter writer = new JsonWriter("./data/testWriterEmptyGameStatus.json");
         try {
-            GameStatus gs = new GameStatus("Game number 1", 1);
+            GameStatus gs = new GameStatus("Game number 1");
             writer.open();
             writer.write(gs);
             writer.close();
@@ -66,7 +66,8 @@ public class JsonWriterTest extends JsonTest{
     }
 
     private GameStatus initializeGeneralGameStatus() {
-        GameStatus gs = new GameStatus("Game number 1", 2);
+        GameStatus gs = new GameStatus("Game number 1");
+        gs.setPlayerTurn(2);
         Card d3 = new Card(3, "diamond");
         Card s3 = new Card(3, "spade");
         Card d4 = new Card(4, "diamond");
