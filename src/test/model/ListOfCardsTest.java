@@ -31,13 +31,56 @@ public class ListOfCardsTest {
 
     @Test
     public void testHighestCard() {
-        Card highestCard = new Card(2, "diamond");
-        Card firstCard = new Card(13, "diamond");
-        Card secondCard = new Card(1, "diamond");
-        Card thirdCard = new Card(3, "diamond");
-        cardList.setListOfCards(new ArrayList<>(Arrays.asList(thirdCard, firstCard, secondCard)));
-        cardList.addCard(highestCard);
-        assertEquals(highestCard, cardList.highestCard());
+        Card d2 = new Card(2, "diamond");
+        Card d13 = new Card(13, "diamond");
+        Card d1 = new Card(1, "diamond");
+        Card d3 = new Card(3, "diamond");
+        Card d4 = new Card(4, "diamond");
+        cardList.setListOfCards(new ArrayList<>(Arrays.asList(d3, d13, d4, d1, d2)));
+        assertEquals(d2, cardList.highestCard());
+        cardList.setListOfCards(new ArrayList<>(Arrays.asList(d3, d4, d1, d13)));
+        assertEquals(d1, cardList.highestCard());
+        cardList.setListOfCards(new ArrayList<>(Arrays.asList(d3, d4, d1)));
+        assertEquals(d1, cardList.highestCard());
+        cardList.setListOfCards(new ArrayList<>(Arrays.asList(d2, d3, d13, d1)));
+        assertEquals(d2, cardList.highestCard());
+    }
+
+    @Test
+    public void testThisIsHigherCardBoth3To13() {
+        assertTrue(cardList.thisIsHigherCard(13, 3));
+        assertFalse(cardList.thisIsHigherCard(3, 13));
+        assertFalse(cardList.thisIsHigherCard(3, 3));
+    }
+
+    @Test
+    public void testThisIsHigherCardOnlySecondAceTwo() {
+        assertFalse(cardList.thisIsHigherCard(3, 1));
+        assertFalse(cardList.thisIsHigherCard(3, 2));
+        assertFalse(cardList.thisIsHigherCard(3, 14));
+    }
+
+    @Test
+    public void testThisIsHigherCardFirstAceSecond3To13() {
+        assertTrue(cardList.thisIsHigherCard(1, 13));
+        assertTrue(cardList.thisIsHigherCard(1, 3));
+        assertFalse(cardList.thisIsHigherCard(1, 14));
+    }
+
+    @Test
+    public void testThisIsHigherCardFirstAceSecondTwo() {
+        assertFalse(cardList.thisIsHigherCard(1, 2));
+    }
+
+    @Test
+    public void testThisIsHigherCardSecondTwo() {
+        assertTrue(cardList.thisIsHigherCard(2, 13));
+        assertTrue(cardList.thisIsHigherCard(2, 1));
+        assertFalse(cardList.thisIsHigherCard(2, 2));
+        assertFalse(cardList.thisIsHigherCard(2, 14));
+        assertFalse(cardList.thisIsHigherCard(14, 2));
+        assertFalse(cardList.thisIsHigherCard(14, 1));
+        assertFalse(cardList.thisIsHigherCard(14, 3));
     }
 
     @Test

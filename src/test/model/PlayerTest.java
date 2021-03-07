@@ -10,10 +10,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
-    private static final int WHITE_CHIP_VALUE = 1;
-    private static final int BLUE_CHIP_VALUE = 5;
-    private static final int RED_CHIP_VALUE = 10;
-    private static final int GOLD_CHIP_VALUE = 25;
     private static final int NUM_INITIAL_WHITE_CHIPS = 20;
     private static final int NUM_INITIAL_BLUE_CHIPS = 10;
     private static final int NUM_INITIAL_RED_CHIPS = 5;
@@ -70,12 +66,12 @@ public class PlayerTest {
 
     @Test
     public void testPayChipsGold() {
-        List<Chips> chipsLostExact = player.payChips(GOLD_CHIP_VALUE);
+        List<Chips> chipsLostExact = player.payChips(Chips.GOLD_CHIP_VALUE);
         assertEquals(1,chipsLostExact.size());
         assertEquals(35, player.getDrawer().getSize());
         assertEquals(0, player.getDrawer().getNumGoldChips());
         player.collectChips(new ArrayList<>(Arrays.asList(new Chips("gold"))));
-        List<Chips> chipsLostOver = player.payChips(GOLD_CHIP_VALUE+1);
+        List<Chips> chipsLostOver = player.payChips(Chips.GOLD_CHIP_VALUE+1);
         assertEquals(2,chipsLostOver.size());
         assertEquals(34, player.getDrawer().getSize());
         assertEquals(0, player.getDrawer().getNumGoldChips());
@@ -84,12 +80,12 @@ public class PlayerTest {
 
     @Test
     public void testPayChipsRed() {
-        List<Chips> chipsLostExact = player.payChips(RED_CHIP_VALUE);
+        List<Chips> chipsLostExact = player.payChips(Chips.RED_CHIP_VALUE);
         assertEquals(1,chipsLostExact.size());
         assertEquals(35, player.getDrawer().getSize());
         assertEquals(4, player.getDrawer().getNumRedChips());
         player.collectChips(new ArrayList<>(Arrays.asList(new Chips("red"))));
-        List<Chips> chipsLostOver = player.payChips(RED_CHIP_VALUE+1);
+        List<Chips> chipsLostOver = player.payChips(Chips.RED_CHIP_VALUE+1);
         assertEquals(2,chipsLostOver.size());
         assertEquals(34, player.getDrawer().getSize());
         assertEquals(4, player.getDrawer().getNumRedChips());
@@ -98,12 +94,12 @@ public class PlayerTest {
 
     @Test
     public void testPayChipsBlue() {
-        List<Chips> chipsLostExact = player.payChips(BLUE_CHIP_VALUE);
+        List<Chips> chipsLostExact = player.payChips(Chips.BLUE_CHIP_VALUE);
         assertEquals(1,chipsLostExact.size());
         assertEquals(35, player.getDrawer().getSize());
         assertEquals(9, player.getDrawer().getNumBlueChips());
         player.collectChips(new ArrayList<>(Arrays.asList(new Chips("blue"))));
-        List<Chips> chipsLostOver = player.payChips(BLUE_CHIP_VALUE+1);
+        List<Chips> chipsLostOver = player.payChips(Chips.BLUE_CHIP_VALUE+1);
         assertEquals(2,chipsLostOver.size());
         assertEquals(34, player.getDrawer().getSize());
         assertEquals(9, player.getDrawer().getNumBlueChips());
@@ -112,12 +108,12 @@ public class PlayerTest {
 
     @Test
     public void testPayChipsWhite() {
-        List<Chips> chipsLostExact = player.payChips(WHITE_CHIP_VALUE);
+        List<Chips> chipsLostExact = player.payChips(Chips.WHITE_CHIP_VALUE);
         assertEquals(1,chipsLostExact.size());
         assertEquals(35, player.getDrawer().getSize());
         assertEquals(19, player.getDrawer().getNumWhiteChips());
         player.collectChips(new ArrayList<>(Arrays.asList(new Chips("white"))));
-        List<Chips> chipsLostOver = player.payChips(WHITE_CHIP_VALUE+1);
+        List<Chips> chipsLostOver = player.payChips(Chips.WHITE_CHIP_VALUE+1);
         assertEquals(2,chipsLostOver.size());
         assertEquals(34, player.getDrawer().getSize());
         assertEquals(18, player.getDrawer().getNumWhiteChips());

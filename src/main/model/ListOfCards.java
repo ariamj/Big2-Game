@@ -36,16 +36,36 @@ public abstract class ListOfCards {
 
     //EFFECTS: Returns the highest card in this list of cards
     protected Card highestCard() {
-        int highestRank = 0;
+        int highestRank = 3;
         int indexOfHighest = 0;
         for (int i = 0; i < listOfCards.size(); i++) {
             int currCardRank = listOfCards.get(i).getRank();
-            if (highestRank != 2 && ((currCardRank == 1 && highestRank == 13) || currCardRank > highestRank)) {
+            if (highestRank == 2) {
+                break;
+            }
+            if (thisIsHigherCard(currCardRank, highestRank)) {
                 highestRank = listOfCards.get(i).getRank();
                 indexOfHighest = i;
             }
         }
         return listOfCards.get(indexOfHighest);
+    }
+
+    //TODO: CLEAN UP
+    //EFFECTS: returns true if r1 is a higher ranking card than r2
+    //          - 1 is > 13
+    protected boolean thisIsHigherCard(int r1, int r2) {
+        if ((r1 <= 13 && r1 >= 3) && (r2 <= 13 && r2 >= 3)) {
+            return r1 > r2;
+        } else if ((r1 <= 13 && r1 >= 3) && (r2 == 1 || r2 == 2)) {
+            return false;
+        } else if ((r1 == 1) && (r2 <= 13 && r2 >= 3)) {
+            return true;
+        } else if (r1 == 1 && r2 == 2) {
+            return false;
+        } else {
+            return (r1 == 2) && ((r2 <= 13 && r2 >= 3) || r2 == 1);
+        }
     }
 
     //MODIFIES: this

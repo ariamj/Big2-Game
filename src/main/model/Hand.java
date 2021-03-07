@@ -70,12 +70,8 @@ public class Hand extends ListOfCards {
         String otherSuit = other.getCard(0).getSuit();
         if (thisRank == otherRank) {
             return SUITS.indexOf(getCard(0).getSuit()) > SUITS.indexOf(otherSuit);
-        } else if (thisRank == 1 || thisRank == 2) {
-            return kingAceBorder(thisRank, otherRank);
-        } else if (otherRank == 1 || otherRank == 2) {
-            return !kingAceBorder(otherRank, thisRank);
         }
-        return thisRank > otherRank;
+        return thisIsHigherCard(thisRank, otherRank);
     }
 
     /**
@@ -93,12 +89,8 @@ public class Hand extends ListOfCards {
             int highestOtherSuit = Math.max(SUITS.indexOf(other.getCard(0).getSuit()),
                     SUITS.indexOf(other.getCard(1).getSuit()));
             return highestThisSuit > highestOtherSuit;
-        } else if (thisRank == 1 || thisRank == 2) {
-            return kingAceBorder(thisRank, otherRank);
-        } else if (otherRank == 1 || otherRank == 2) {
-            return !kingAceBorder(otherRank, thisRank);
         }
-        return thisRank > otherRank;
+        return thisIsHigherCard(thisRank, otherRank);
     }
 
     /**
@@ -109,12 +101,7 @@ public class Hand extends ListOfCards {
     private boolean canPlayThreeOfAKindHand(Hand other) {
         int otherRank = other.getCard(0).getRank();
         int thisRank = getCard(0).getRank();
-        if (thisRank == 1 || thisRank == 2) {
-            return kingAceBorder(thisRank, otherRank);
-        } else if (otherRank == 1 || otherRank == 2) {
-            return !kingAceBorder(otherRank, thisRank);
-        }
-        return thisRank > otherRank;
+        return thisIsHigherCard(thisRank, otherRank);
     }
 
     /*
@@ -169,12 +156,8 @@ public class Hand extends ListOfCards {
             int indexOfThisHighestSuit = SUITS.indexOf(thisHighestCard.getSuit());
             int indexOfOtherHighestSuit = SUITS.indexOf(otherHighestCard.getSuit());
             return indexOfThisHighestSuit > indexOfOtherHighestSuit;
-        } else if (thisHighestRank == 1 || thisHighestRank == 2) {
-            return kingAceBorder(thisHighestRank, otherHighestRank);
-        } else if (otherHighestRank == 1 || otherHighestRank == 2) {
-            return !(kingAceBorder(otherHighestRank, thisHighestRank));
         }
-        return thisHighestRank > otherHighestRank;
+        return thisIsHigherCard(thisHighestRank, otherHighestRank);
     }
 
     /*
@@ -189,12 +172,7 @@ public class Hand extends ListOfCards {
         int thisRank = this.highestCard().getRank();
         int otherRank = other.highestCard().getRank();
         if (thisSuit.equals(otherSuit)) {
-            if (thisRank == 1 || thisRank == 2) {
-                return kingAceBorder(thisRank, otherRank);
-            } else if (otherRank == 1 || otherRank == 2) {
-                return !(kingAceBorder(otherRank, thisRank));
-            }
-            return thisRank > otherRank;
+            return thisIsHigherCard(thisRank, otherRank);
         } else {
             return SUITS.indexOf(thisSuit) > SUITS.indexOf(otherSuit);
         }
@@ -208,12 +186,7 @@ public class Hand extends ListOfCards {
     private boolean canPLayFullHouse(Hand other) {
         int other3Rank = other.findNumCardRepeatRank(3);
         int this3Rank = this.findNumCardRepeatRank(3);
-        if (this3Rank == 1 || this3Rank == 2) {
-            return kingAceBorder(this3Rank, other3Rank);
-        } else if (other3Rank == 1 || other3Rank == 2) {
-            return !kingAceBorder(other3Rank, this3Rank);
-        }
-        return this3Rank > other3Rank;
+        return thisIsHigherCard(this3Rank, other3Rank);
     }
 
     /*
@@ -224,12 +197,7 @@ public class Hand extends ListOfCards {
     private boolean canPLayFourOfAKind(Hand other) {
         int other4Rank = other.findNumCardRepeatRank(4);
         int this4Rank = this.findNumCardRepeatRank(4);
-        if (this4Rank == 1 || this4Rank == 2) {
-            return kingAceBorder(this4Rank, other4Rank);
-        } else if (other4Rank == 1 || other4Rank == 2) {
-            return !kingAceBorder(other4Rank, this4Rank);
-        }
-        return this4Rank > other4Rank;
+        return thisIsHigherCard(this4Rank, other4Rank);
     }
 
     /*
@@ -422,13 +390,5 @@ public class Hand extends ListOfCards {
             }
         }
         return rank;
-    }
-
-    /*
-    EFFECTS: returns true is rank1 is > rank2 dealing with the border of King and Ace
-                  - 2 is higher than ace and ace is higher than king
-     */
-    private boolean kingAceBorder(int rank1, int rank2) {
-        return (rank2 <= 13 && rank2 >= 3) || (rank1 == 2 && rank2 == 1);
     }
 }

@@ -7,10 +7,10 @@ import persistence.Writable;
  * Represents a chip with a value and colour
  */
 public class Chips {
-    private static final int WHITE_CHIP_VALUE = 1;
-    private static final int BLUE_CHIP_VALUE = 5;
-    private static final int RED_CHIP_VALUE = 10;
-    private static final int GOLD_CHIP_VALUE = 25;
+    public static final int WHITE_CHIP_VALUE = 1;
+    public static final int BLUE_CHIP_VALUE = 5;
+    public static final int RED_CHIP_VALUE = 10;
+    public static final int GOLD_CHIP_VALUE = 25;
 
     private String colour;
 

@@ -37,7 +37,6 @@ public class HandTest {
     private final Card H2 = new Card(2, "heart");
     private final Card C2 = new Card(2, "clubs");
     private final Card S2 = new Card(2, "spade");
-    private final Card D11 = new Card(11, "diamond");
 
     private Hand startHand;
 
@@ -245,7 +244,7 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidPlayStriaghtFlushHand() {
+    public void testIsValidPlayStraightFlushHand() {
         Hand straightFlush1 = new Hand(new ArrayList<>(Arrays.asList(H8, H9, H10, H11, H12)));
         Hand straightFlush2 = new Hand(new ArrayList<>(Arrays.asList(H9, H10, H11, H12, H13)));
         assertTrue(straightFlush2.isValidPlay(straightFlush1));
@@ -253,7 +252,7 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidPlayRoyalStriaghtFlushHand() {
+    public void testIsValidPlayRoyalStraightFlushHand() {
         Hand royal1 = new Hand(new ArrayList<>(Arrays.asList(H10, H11, H12, H13, H1)));
         Hand royal2 = new Hand(new ArrayList<>(Arrays.asList(S10, S11, S12, S13, S1)));
         assertTrue(royal2.isValidPlay(royal1));
@@ -261,17 +260,23 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidTypeHandSingleAndPairAndThreeCards() {
+    public void testIsValidTypeHandSingleAndPair() {
         Hand single = new Hand(new ArrayList<>(Arrays.asList(D3)));
         assertTrue(single.isValidTypeHand());
         Hand pair = new Hand(new ArrayList<>(Arrays.asList(H10, D10)));
         assertTrue(pair.isValidTypeHand());
         Hand falsePair = new Hand(new ArrayList<>(Arrays.asList(D3, H10)));
         assertFalse(falsePair.isValidTypeHand());
+    }
+
+    @Test
+    public void testIsValidTypeHandThreeCards() {
         Hand threeOfAKind = new Hand(new ArrayList<>(Arrays.asList(D3, C3, H3)));
         assertTrue(threeOfAKind.isValidTypeHand());
         Hand falseThreeOfAKind = new Hand(new ArrayList<>(Arrays.asList(D3, C3, H12)));
         assertFalse(falseThreeOfAKind.isValidTypeHand());
+        Hand falseThreeOfAKindV2 = new Hand(new ArrayList<>(Arrays.asList(H12, D3, C3)));
+        assertFalse(falseThreeOfAKindV2.isValidTypeHand());
     }
 
     @Test
@@ -286,8 +291,14 @@ public class HandTest {
     public void testIsValidTypeHandFullHouseHand() {
         Hand fullHouse = new Hand(new ArrayList<>(Arrays.asList(D10, C3, D3, H10, H3)));
         assertTrue(fullHouse.isValidTypeHand());
-        Hand falseFullHouse = new Hand(new ArrayList<>(Arrays.asList(D10, C3, H9, H10, H3)));
-        assertFalse(falseFullHouse.isValidTypeHand());
+        Hand fullHouse2 = new Hand(new ArrayList<>(Arrays.asList(C3, D10, D3, H10, H3)));
+        assertTrue(fullHouse2.isValidTypeHand());
+        Hand falseFullHouse1 = new Hand(new ArrayList<>(Arrays.asList(C3, D10, D3, H2, H3)));
+        assertFalse(falseFullHouse1.isValidTypeHand());
+        Hand falseFullHouse2 = new Hand(new ArrayList<>(Arrays.asList(D10, C3, H9, H10, H3)));
+        assertFalse(falseFullHouse2.isValidTypeHand());
+        Hand falseFullHouse3 = new Hand(new ArrayList<>(Arrays.asList(H2, C3, D10, D3, H3)));
+        assertFalse(falseFullHouse3.isValidTypeHand());
     }
 
     @Test

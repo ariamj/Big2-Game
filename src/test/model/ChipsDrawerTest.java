@@ -6,12 +6,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChipsDrawerTest {
-    private static final int WHITE_CHIP_VALUE = 1;
-    private static final int BLUE_CHIP_VALUE = 5;
-    private static final int RED_CHIP_VALUE = 10;
-    private static final int GOLD_CHIP_VALUE = 25;
+    private static final int NUM_WHITE = 20;
+    private static final int NUM_RED = 10;
+    private static final int NUM_BLUE = 5;
+    private static final int NUM_GOLD = 4;
 
     private ChipsDrawer drawer;
+    private int initialSize = (NUM_WHITE + NUM_BLUE + NUM_RED + NUM_GOLD);
     private Chips whiteChip;
     private Chips blueChip;
     private Chips redChip;
@@ -19,7 +20,7 @@ public class ChipsDrawerTest {
 
     @BeforeEach
     public void runBefore() {
-        drawer = new ChipsDrawer(20, 10, 5, 1);
+        drawer = new ChipsDrawer(NUM_WHITE, NUM_BLUE, NUM_RED, NUM_GOLD);
         whiteChip = new Chips("white");
         blueChip = new Chips("blue");
         redChip = new Chips("red");
@@ -28,18 +29,18 @@ public class ChipsDrawerTest {
 
     @Test
     public void testConstructor() {
-        assertEquals(20, drawer.getNumWhiteChips());
-        assertEquals(10, drawer.getNumBlueChips());
-        assertEquals(5, drawer.getNumRedChips());
-        assertEquals(1, drawer.getNumGoldChips());
-        assertEquals(36, drawer.getSize());
+        assertEquals(NUM_WHITE, drawer.getNumWhiteChips());
+        assertEquals(NUM_BLUE, drawer.getNumBlueChips());
+        assertEquals(NUM_RED, drawer.getNumRedChips());
+        assertEquals(NUM_GOLD, drawer.getNumGoldChips());
+        assertEquals(initialSize, drawer.getSize());
     }
 
     @Test
     public void testAddChipToDrawerOnce() {
         drawer.addChipToDrawer(whiteChip);
-        assertEquals(37, drawer.getSize());
-        assertEquals(21, drawer.getNumWhiteChips());
+        assertEquals(initialSize + 1, drawer.getSize());
+        assertEquals(NUM_WHITE + 1, drawer.getNumWhiteChips());
     }
 
     @Test
@@ -50,18 +51,31 @@ public class ChipsDrawerTest {
             drawer.addChipToDrawer(redChip);
             drawer.addChipToDrawer(goldChip);
         }
-        assertEquals(76, drawer.getSize());
-        assertEquals(30, drawer.getNumWhiteChips());
-        assertEquals(20, drawer.getNumBlueChips());
-        assertEquals(15, drawer.getNumRedChips());
-        assertEquals(11, drawer.getNumGoldChips());
+        assertEquals(initialSize + 40, drawer.getSize());
+        assertEquals(NUM_WHITE + 10, drawer.getNumWhiteChips());
+        assertEquals(NUM_BLUE + 10, drawer.getNumBlueChips());
+        assertEquals(NUM_RED + 10, drawer.getNumRedChips());
+        assertEquals(NUM_GOLD + 10, drawer.getNumGoldChips());
+    }
+
+    @Test
+    public void testRemoveChipFromDrawerEmpty() {
+        ChipsDrawer emptyDrawer = new ChipsDrawer();
+        emptyDrawer.removeChipFromDrawer(whiteChip);
+        assertEquals(0, emptyDrawer.getSize());
+    }
+
+    @Test
+    public void testRemoveChipFromDrawerWrongColour() {
+        drawer.removeChipFromDrawer(new Chips("purple"));
+        assertEquals(initialSize, drawer.getSize());
     }
 
     @Test
     public void testRemoveChipFromDrawerOnce() {
         drawer.removeChipFromDrawer(whiteChip);
-        assertEquals(35, drawer.getSize());
-        assertEquals(19, drawer.getNumWhiteChips());
+        assertEquals(initialSize - 1, drawer.getSize());
+        assertEquals(NUM_WHITE - 1, drawer.getNumWhiteChips());
     }
 
     @Test
@@ -70,19 +84,19 @@ public class ChipsDrawerTest {
             drawer.removeChipFromDrawer(whiteChip);
             drawer.removeChipFromDrawer(blueChip);
             drawer.removeChipFromDrawer(redChip);
+            drawer.removeChipFromDrawer(goldChip);
         }
-        drawer.removeChipFromDrawer(goldChip);
-        assertEquals(20, drawer.getSize());
-        assertEquals(15, drawer.getNumWhiteChips());
-        assertEquals(5, drawer.getNumBlueChips());
-        assertEquals(0, drawer.getNumRedChips());
-        assertEquals(0, drawer.getNumGoldChips());
+        assertEquals(initialSize - 19, drawer.getSize());
+        assertEquals(NUM_WHITE - 5, drawer.getNumWhiteChips());
+        assertEquals(NUM_BLUE - 5, drawer.getNumBlueChips());
+        assertEquals(NUM_RED - 5, drawer.getNumRedChips());
+        assertEquals(NUM_GOLD - 4, drawer.getNumGoldChips());
     }
 
     @Test
     public void testGetBalance() {
-        int balance = (20*WHITE_CHIP_VALUE)+(10*BLUE_CHIP_VALUE)
-                +(5*RED_CHIP_VALUE)+(1*GOLD_CHIP_VALUE);
+        int balance = (NUM_WHITE * Chips.WHITE_CHIP_VALUE) + (NUM_BLUE * Chips.BLUE_CHIP_VALUE)
+                + (NUM_RED * Chips.RED_CHIP_VALUE) + (NUM_GOLD * Chips.GOLD_CHIP_VALUE);
         assertEquals(balance, drawer.getBalance());
     }
 
@@ -97,6 +111,9 @@ public class ChipsDrawerTest {
         }
         for (int i = 0; i < drawer.getNumRedChips(); i++) {
             chipsString += "R, ";
+        }
+        for (int i = 0; i < drawer.getNumGoldChips() - 1; i++) {
+            chipsString += "G, ";
         }
         chipsString += "G]";
         assertEquals(chipsString, drawer.toString());

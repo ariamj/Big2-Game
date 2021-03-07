@@ -71,21 +71,24 @@ public class ChipsDrawer implements Writable {
     //MODIFIES: this
     //EFFECTS: removes chip from drawer
     public void removeChipFromDrawer(Chips chip) {
+        if (drawer.size() == 0) {
+            return;
+        }
         String colour = chip.getColour();
         for (int i = 0; i < drawer.size(); i++) {
             if (drawer.get(i).getColour().equals(colour)) {
                 drawer.remove(i);
+                if (colour.equals(WHITE)) {
+                    numWhiteChips--;
+                } else if (colour.equals(BLUE)) {
+                    numBlueChips--;
+                } else if (colour.equals(RED)) {
+                    numRedChips--;
+                } else if (colour.equals(GOLD)) {
+                    numGoldChips--;
+                }
                 break;
             }
-        }
-        if (colour.equals(WHITE)) {
-            numWhiteChips--;
-        } else if (colour.equals(BLUE)) {
-            numBlueChips--;
-        } else if (colour.equals(RED)) {
-            numRedChips--;
-        } else {
-            numGoldChips--;
         }
     }
 
