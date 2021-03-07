@@ -7,12 +7,18 @@ import persistence.Writable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the status of the Big 2 game with a label and record of:
+ * - each player's cards and drawer
+ * - table cards
+ * - which player's turn it is
+ */
 public class GameStatus implements Writable {
     public static final int TABLE = 0;
     public static final int PLAYER1 = 1;
     public static final int PLAYER2 = 2;
 
-    private String name;
+    private String label;
     private List<Card> player1Cards;
     private List<Card> player2Cards;
     private ChipsDrawer drawer1;
@@ -20,10 +26,10 @@ public class GameStatus implements Writable {
     private List<Card> tableHand;
     private int playerTurn;
 
-    //EFFECTS: constructs gameStatus with a name, empty list of cards for both players,
+    //EFFECTS: constructs gameStatus with a label, empty list of cards for both players,
     // empty list of cards for the table pile, and default player turn 1
-    public GameStatus(String name) {
-        this.name = name;
+    public GameStatus(String label) {
+        this.label = label;
         this.player1Cards = new ArrayList<>();
         this.player2Cards = new ArrayList<>();
         this.drawer1 = new ChipsDrawer();
@@ -43,8 +49,8 @@ public class GameStatus implements Writable {
     }
 
     //getters
-    public String getName() {
-        return this.name;
+    public String getLabel() {
+        return this.label;
     }
 
     //getters
@@ -109,7 +115,7 @@ public class GameStatus implements Writable {
     //EFFECTS: GameStatus to a JSONObject
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("name", name);
+        json.put("label", label);
         json.put("player 1 cards", cardsToJson(player1Cards));
         json.put("player 1 chips", chipsToJson(drawer1));
         json.put("player 2 cards", cardsToJson(player2Cards));

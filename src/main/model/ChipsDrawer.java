@@ -84,7 +84,7 @@ public class ChipsDrawer implements Writable {
                     numBlueChips--;
                 } else if (colour.equals(RED)) {
                     numRedChips--;
-                } else if (colour.equals(GOLD)) {
+                } else {
                     numGoldChips--;
                 }
                 break;

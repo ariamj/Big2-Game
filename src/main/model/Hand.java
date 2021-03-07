@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,6 +17,8 @@ import java.util.List;
  * - Royal straight flush (technically just the highest straight flush)
  */
 public class Hand extends ListOfCards {
+    private static final List<String> FIVE_HAND_HIERARCHY = new ArrayList<>(Arrays.asList("straight",
+            "flush", "fullHouse", "fourOfAKind", "straightFlush", "royalStraightFlush"));
 
     //EFFECTS: Makes an empty new Hand
     public Hand() {
@@ -46,13 +50,13 @@ public class Hand extends ListOfCards {
             return false;
         } else if (otherSize == 0) {
             return true;
-        } else if (otherSize == 1 && isValidSingleCardHand(this)) {
+        } else if (otherSize == 1 && isValidSingleCardHand()) {
             return canPlaySingleHand(other);
-        } else if (otherSize == 2 && isValidPairHand(this)) {
+        } else if (otherSize == 2 && isValidPairHand()) {
             return canPlayPairHand(other);
-        } else if (otherSize == 3 && isValidThreeOfAKindHand(this)) {
+        } else if (otherSize == 3 && isValidThreeOfAKindHand()) {
             return canPlayThreeOfAKindHand(other);
-        } else if (otherSize == 5 && isValidFiveCardHand(this)) {
+        } else if (otherSize == 5 && isValidFiveCardHand()) {
             return canPlayFiveCardHand(other);
         }
         return false;
@@ -107,36 +111,47 @@ public class Hand extends ListOfCards {
     /*
      REQUIRES: this hand is a valid five card type hand
      EFFECTS: returns true if playing this five card hand is valid, false otherwise
-                - if other is a straight: valid if this is either a higher straight or any other five card hand
-                - if  other is a flush: valid if this is either a higher flush or any other 5 card hand > flush
-                - if  other is a full house: valid if this is either a higher full house or any other 5 card
-                                             hand > full house
-                - if  other is a 4 of a kind: valid if this is either a higher 4 of a kind or any other 5 card
-                                              hand > 4 of a kind
-                - if  other is a straight flush: valid if this is either a higher straight flush or royal
-                                                 straight flush
-                - if  other is a royal straight flush: valid if this is a higher royal straight flush
+              - if other and this hierarchy are equal:
+                    valid if this is higher than other in respective type
+              - else: valid if hierarchy of this hand type is > other hand type
+                        according to FIVE_HAND_HIERARCHY
      */
     private boolean canPlayFiveCardHand(Hand other) {
-        if (isValidStraightHand(other) && !isValidStraightFlushHand(other)) {
-            return canPlayStraight(other) || isValidFlushHand(this) || isValidFullHouseHand(this)
-                    || isValidFourOfAKindHand(this) || isValidStraightFlushHand(this);
-        } else if (isValidFlushHand(other) && !isValidStraightFlushHand(other)) {
-            return !isValidStraightHand(this) && (canPlayFlush(other) || isValidFullHouseHand(this)
-                    || isValidFourOfAKindHand(this) || isValidStraightFlushHand(this));
-        } else if (isValidFullHouseHand(other)) {
-            return !((isValidStraightHand(this) || isValidFlushHand(this)) && !isValidStraightFlushHand(this))
-                    && (canPLayFullHouse(other) || isValidFourOfAKindHand(this) || isValidStraightFlushHand(this));
-        } else if (isValidFourOfAKindHand(other)) {
-            return !(((isValidStraightHand(this) || isValidFlushHand(this)) && !isValidStraightFlushHand(this))
-                    || isValidFullHouseHand(this)) && (canPLayFourOfAKind(other) || isValidStraightFlushHand(this));
-        } else if (isValidStraightFlushHand(other) && !isValidRoyalStraightFlushHand(other)) {
-            return !(((isValidStraightHand(this) || isValidFlushHand(this)) && !isValidStraightFlushHand(this))
-                    || isValidFullHouseHand(this) || isValidFourOfAKindHand(this)) && (canPLayStraightFlush(other));
+        int otherTypeRank = other.findHandType();
+        int thisTypeRank = findHandType();
+        if (thisTypeRank == otherTypeRank) {
+            if (thisTypeRank == 0) {
+                return canPlayStraight(other);
+            } else if (thisTypeRank == 1) {
+                return canPlayFlush(other);
+            } else if (thisTypeRank == 2) {
+                return canPlayFullHouse(other);
+            } else if (thisTypeRank == 3) {
+                return canPlayFourOfAKind(other);
+            } else if (thisTypeRank == 4) {
+                return canPlayStraightFlush(other);
+            } else {
+                return canPLayRoyalStraightFlush(other);
+            }
+        }
+        return thisTypeRank > otherTypeRank;
+    }
+
+    //REQUIRES: this is a valid five card type hand
+    //EFFECTS: returns index ranking of hand type according to FIVE_HAND_HIERARCHY
+    private int findHandType() {
+        if (!isValidStraightFlushHand() && isValidStraightHand()) {
+            return FIVE_HAND_HIERARCHY.indexOf("straight");
+        } else if (!isValidStraightFlushHand() && isValidFlushHand()) {
+            return FIVE_HAND_HIERARCHY.indexOf("flush");
+        } else if (isValidFullHouseHand()) {
+            return FIVE_HAND_HIERARCHY.indexOf("fullHouse");
+        } else if (isValidFourOfAKindHand()) {
+            return FIVE_HAND_HIERARCHY.indexOf("fourOfAKind");
+        } else if (!isValidRoyalStraightFlushHand()) {
+            return FIVE_HAND_HIERARCHY.indexOf("straightFlush");
         } else {
-            return !(((isValidStraightHand(this) || isValidFlushHand(this)) && !isValidStraightFlushHand(this))
-                    || isValidFullHouseHand(this) || isValidFourOfAKindHand(this))
-                    && canPLayRoyalStraightFlush(other);
+            return FIVE_HAND_HIERARCHY.indexOf("royalStraightFlush");
         }
     }
 
@@ -183,7 +198,7 @@ public class Hand extends ListOfCards {
     EFFECTS: returns true if playing this full house hand is valid, false otherwise
               - this rank of three of a kind must be > other rank of three of a kind
      */
-    private boolean canPLayFullHouse(Hand other) {
+    private boolean canPlayFullHouse(Hand other) {
         int other3Rank = other.findNumCardRepeatRank(3);
         int this3Rank = this.findNumCardRepeatRank(3);
         return thisIsHigherCard(this3Rank, other3Rank);
@@ -194,7 +209,7 @@ public class Hand extends ListOfCards {
     EFFECTS: returns true if playing this 4 of a kind hand is valid, false otherwise
               - this rank of 4 of a kind must be > other rank of 4 of a kind
      */
-    private boolean canPLayFourOfAKind(Hand other) {
+    private boolean canPlayFourOfAKind(Hand other) {
         int other4Rank = other.findNumCardRepeatRank(4);
         int this4Rank = this.findNumCardRepeatRank(4);
         return thisIsHigherCard(this4Rank, other4Rank);
@@ -206,7 +221,7 @@ public class Hand extends ListOfCards {
               - if this suit = other suit: this highest rank must be > other highest rank
               - if this suit > other suit: is valid
      */
-    private boolean canPLayStraightFlush(Hand other) {
+    private boolean canPlayStraightFlush(Hand other) {
         return canPlayFlush(other);
     }
 
@@ -216,21 +231,21 @@ public class Hand extends ListOfCards {
               - this suit must be > other suit
      */
     private boolean canPLayRoyalStraightFlush(Hand other) {
-        return canPLayStraightFlush(other);
+        return canPlayStraightFlush(other);
     }
 
     //EFFECTS: returns true if hand is a valid type hand, false otherwise
     public boolean isValidTypeHand() {
-        return (isValidSingleCardHand(this) || isValidPairHand(this)
-                || isValidThreeOfAKindHand(this) || isValidFiveCardHand(this));
+        return (isValidSingleCardHand() || isValidPairHand()
+                || isValidThreeOfAKindHand() || isValidFiveCardHand());
     }
 
     /*
     EFFECTS: returns true if hand is a valid single type hand
               - hand only has one card
      */
-    private boolean isValidSingleCardHand(Hand hand) {
-        return hand.getSize() == 1;
+    private boolean isValidSingleCardHand() {
+        return this.getSize() == 1;
     }
 
     /*
@@ -239,12 +254,12 @@ public class Hand extends ListOfCards {
               - hand only has 2 cards
               - rank of both cards are equal
      */
-    private boolean isValidPairHand(Hand hand) {
-        if (hand.getSize() != 2) {
+    private boolean isValidPairHand() {
+        if (this.getSize() != 2) {
             return false;
         }
-        int firstCardRank = hand.getHand().get(0).getRank();
-        int secondCardRank = hand.getHand().get(1).getRank();
+        int firstCardRank = this.getHand().get(0).getRank();
+        int secondCardRank = this.getHand().get(1).getRank();
         return firstCardRank == secondCardRank;
     }
 
@@ -253,13 +268,13 @@ public class Hand extends ListOfCards {
               - hand only has 3 cards
               - rank of all 3 cards are equal
      */
-    private boolean isValidThreeOfAKindHand(Hand hand) {
-        if (hand.getSize() != 3) {
+    private boolean isValidThreeOfAKindHand() {
+        if (this.getSize() != 3) {
             return false;
         }
-        int firstCardRank = hand.getHand().get(0).getRank();
-        int secondCardRank = hand.getHand().get(1).getRank();
-        int thirdCardRank = hand.getHand().get(2).getRank();
+        int firstCardRank = this.getHand().get(0).getRank();
+        int secondCardRank = this.getHand().get(1).getRank();
+        int thirdCardRank = this.getHand().get(2).getRank();
         return firstCardRank == secondCardRank && secondCardRank == thirdCardRank;
     }
 
@@ -267,19 +282,18 @@ public class Hand extends ListOfCards {
     EFFECTS: returns true if hand is a valid 5 card hand type
               - hand has only 5 cards
      */
-    private boolean isValidFiveCardHand(Hand hand) {
-        return (hand.getSize() == 5) && (isValidStraightHand(hand) || isValidFlushHand(hand)
-                || isValidFullHouseHand(hand) || isValidFourOfAKindHand(hand) || isValidStraightFlushHand(hand)
-                || isValidRoyalStraightFlushHand(hand));
+    private boolean isValidFiveCardHand() {
+        return (this.getSize() == 5) && (isValidStraightHand() || isValidFlushHand()
+                || isValidFullHouseHand() || isValidFourOfAKindHand());
     }
 
     /*
     EFFECTS: returns true if hand is a valid straight type hand
               - rank of cards are in a sequence
      */
-    private boolean isValidStraightHand(Hand hand) {
-        int rank = hand.getCard(0).getRank() - 1;
-        for (Card card : hand.getHand()) {
+    private boolean isValidStraightHand() {
+        int rank = this.getCard(0).getRank() - 1;
+        for (Card card : this.getHand()) {
             if (!(rank == 13 && card.getRank() == 1) && !(card.getRank() == rank + 1)) {
                 return false;
             }
@@ -292,9 +306,9 @@ public class Hand extends ListOfCards {
     EFFECTS: returns true if hand is a valid flush type hand
               - suit of all cards must be equal
      */
-    private boolean isValidFlushHand(Hand hand) {
-        String suit = hand.getHand().get(0).getSuit();
-        for (Card card : hand.getHand()) {
+    private boolean isValidFlushHand() {
+        String suit = this.getHand().get(0).getSuit();
+        for (Card card : this.getHand()) {
             if (!card.getSuit().equals(suit)) {
                 return false;
             }
@@ -306,12 +320,12 @@ public class Hand extends ListOfCards {
     EFFECTS: returns true if hand is a valid full house type hand
               - hand has both a three of a kind and a pair
      */
-    private boolean isValidFullHouseHand(Hand hand) {
+    protected boolean isValidFullHouseHand() {
         int numFirstRank = 0;
         int numSecondRank = 0;
-        int firstRank = hand.getHand().get(0).getRank();
-        int secondRank = hand.getHand().get(0).getRank();
-        for (Card card : hand.getHand()) {
+        int firstRank = this.getHand().get(0).getRank();
+        int secondRank = this.getHand().get(0).getRank();
+        for (Card card : this.getHand()) {
             if (card.getRank() == firstRank) {
                 numFirstRank++;
             } else if (numSecondRank == 0) {
@@ -323,25 +337,25 @@ public class Hand extends ListOfCards {
                 return false;
             }
         }
-        return (numFirstRank == 3 && numSecondRank == 2) || (numFirstRank == 2 && numSecondRank == 3);
+        return (numFirstRank == 3 && numSecondRank == 2) || (numSecondRank == 3 && numFirstRank == 2);
     }
 
     /*
     EFFECTS: returns true if hand is a valid four of a kind type hand
               - 4 of 5 cards must have equal ranks
      */
-    private boolean isValidFourOfAKindHand(Hand hand) {
+    private boolean isValidFourOfAKindHand() {
         int numRank1 = 0;
-        int rank1 = hand.getHand().get(0).getRank();
-        for (Card card : hand.getHand()) {
+        int rank1 = this.getHand().get(0).getRank();
+        for (Card card : this.getHand()) {
             if (card.getRank() == rank1) {
                 numRank1++;
             }
         }
         if (numRank1 != 4) {
             int numRank2 = 0;
-            int rank2 = hand.getHand().get(1).getRank();
-            for (Card card : hand.getHand()) {
+            int rank2 = this.getHand().get(1).getRank();
+            for (Card card : this.getHand()) {
                 if (card.getRank() == rank2) {
                     numRank2++;
                 }
@@ -355,23 +369,23 @@ public class Hand extends ListOfCards {
     EFFECTS: returns true if hand is a valid straight flush type hand
               - hand is a valid straight type hand and a valid flush type hand
      */
-    private boolean isValidStraightFlushHand(Hand hand) {
-        return isValidStraightHand(hand) && isValidFlushHand(hand);
+    private boolean isValidStraightFlushHand() {
+        return isValidStraightHand() && isValidFlushHand();
     }
 
     /*
     EFFECTS: returns true if hand is a valid royal straight flush type hand
               - hand is a valid straight flush type hand and contains an ace
      */
-    private boolean isValidRoyalStraightFlushHand(Hand hand) {
+    protected boolean isValidRoyalStraightFlushHand() {
         boolean hasAce = false;
-        for (Card card : hand.getListOfCards()) {
+        for (Card card : this.getListOfCards()) {
             if (card.getRank() == 1) {
                 hasAce = true;
                 break;
             }
         }
-        return isValidStraightFlushHand(hand) && hasAce;
+        return isValidStraightFlushHand() && hasAce;
     }
 
     //EFFECTS: returns the rank of the cards that this hand has repeat num times (ie. pairs, triples, etc.)

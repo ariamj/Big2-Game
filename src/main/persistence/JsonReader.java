@@ -45,8 +45,8 @@ public class JsonReader {
 
     //EFFECTS: parses game status from JSONObject and returns it
     private GameStatus parseGameStatus(JSONObject jsonObject) {
-        String name = jsonObject.getString("name");
-        GameStatus gs = new GameStatus(name);
+        String label = jsonObject.getString("label");
+        GameStatus gs = new GameStatus(label);
         gs.setPlayerTurn(jsonObject.getInt("player turn"));
         addCards(gs, jsonObject, 1);
         addCards(gs, jsonObject, 2);

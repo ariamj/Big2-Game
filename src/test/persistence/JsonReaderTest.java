@@ -8,7 +8,11 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class JsonReaderTest extends JsonTest{
+/**
+ * Citation: Based on code from JsonSerializationDemo.JsonReaderTest.java
+ * URL: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+ */
+public class JsonReaderTest extends JsonTest {
 
     @Test
     public void testReaderNonExistentFile() {
@@ -26,7 +30,7 @@ public class JsonReaderTest extends JsonTest{
         JsonReader reader = new JsonReader("./data/testReaderEmptyGameStatus.json");
         try {
             GameStatus gs = reader.read();
-            assertEquals("Game number 1", gs.getName());
+            assertEquals("Game number 1", gs.getLabel());
             checkCardLists(0, 0, 0, gs);
             assertEquals(1, gs.getPlayerTurn());
         } catch (IOException e) {
@@ -39,7 +43,7 @@ public class JsonReaderTest extends JsonTest{
         JsonReader reader = new JsonReader("./data/testReaderGeneralGameStatus.json");
         try {
             GameStatus gs = reader.read();
-            assertEquals("Game number 1", gs.getName());
+            assertEquals("Game number 1", gs.getLabel());
             checkCardLists(3, 3, 2, gs);
             assertEquals(1, gs.getPlayerTurn());
             checkDrawer(20, 10, 5, 1, GameStatus.PLAYER1, gs);

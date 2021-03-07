@@ -5,6 +5,7 @@ import persistence.Writable;
 
 /**
  * Represents a chip with a value and colour
+ * INVARIANT: colour is one of: white, blue, red, gold
  */
 public class Chips {
     public static final int WHITE_CHIP_VALUE = 1;

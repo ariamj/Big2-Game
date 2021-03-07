@@ -1,1 +1,23 @@
-{"player turn":1,"player 2 cards":[],"name":"Game number 1","player 1 cards":[],"player 1 chips":[{"gold chips":0,"white chips":0,"red chips":0,"blue chips":0}],"player 2 chips":[{"gold chips":0,"white chips":0,"red chips":0,"blue chips":0}],"table pile":[]}
+{
+  "player turn": 1,
+  "player 2 cards": [],
+  "player 1 cards": [],
+  "player 1 chips": [
+    {
+      "gold chips": 0,
+      "white chips": 0,
+      "red chips": 0,
+      "blue chips": 0
+    }
+  ],
+  "label": "Game number 1",
+  "player 2 chips": [
+    {
+      "gold chips": 0,
+      "white chips": 0,
+      "red chips": 0,
+      "blue chips": 0
+    }
+  ],
+  "table pile": []
+}

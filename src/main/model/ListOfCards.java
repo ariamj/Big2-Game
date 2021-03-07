@@ -51,7 +51,6 @@ public abstract class ListOfCards {
         return listOfCards.get(indexOfHighest);
     }
 
-    //TODO: CLEAN UP
     //EFFECTS: returns true if r1 is a higher ranking card than r2
     //          - 1 is > 13
     protected boolean thisIsHigherCard(int r1, int r2) {

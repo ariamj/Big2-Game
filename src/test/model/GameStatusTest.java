@@ -34,7 +34,7 @@ public class GameStatusTest {
 
     @Test
     public void testGetName() {
-        assertEquals("Game number 1", gs.getName());
+        assertEquals("Game number 1", gs.getLabel());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class GameStatusTest {
         Card d3 = new Card(3, "diamond");
         gs.addCardToCardList(d3, GameStatus.TABLE);
         JSONObject jsonObject = gs.toJson();
-        assertEquals("Game number 1", jsonObject.get("name"));
+        assertEquals("Game number 1", jsonObject.get("label"));
         assertEquals(0, jsonObject.getJSONArray("player 1 cards").length());
         assertEquals(1, jsonObject.getJSONArray("player 1 chips").length());
         assertEquals(0, jsonObject.getJSONArray("player 2 cards").length());

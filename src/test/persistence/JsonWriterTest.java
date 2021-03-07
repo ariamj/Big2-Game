@@ -11,7 +11,11 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class JsonWriterTest extends JsonTest{
+/**
+ * Citation: Based on code from JsonSerializationDemo.JsonWriterTest.java
+ * URL: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
+ */
+public class JsonWriterTest extends JsonTest {
 
     @Test
     public void testWriterInvalidFile() {
@@ -36,7 +40,7 @@ public class JsonWriterTest extends JsonTest{
 
             JsonReader reader = new JsonReader("./data/testWriterEmptyGameStatus.json");
             gs = reader.read();
-            assertEquals("Game number 1", gs.getName());
+            assertEquals("Game number 1", gs.getLabel());
             checkCardLists(0, 0, 0, gs);
             assertEquals(1, gs.getPlayerTurn());
         } catch (IOException e) {
@@ -55,7 +59,7 @@ public class JsonWriterTest extends JsonTest{
 
             JsonReader reader = new JsonReader("./data/testWriterGeneralGameStatus.json");
             gs = reader.read();
-            assertEquals("Game number 1", gs.getName());
+            assertEquals("Game number 1", gs.getLabel());
             checkCardLists(2, 2, 2, gs);
             assertEquals(2, gs.getPlayerTurn());
             checkDrawer(18, 12, 5, 1, GameStatus.PLAYER1, gs);

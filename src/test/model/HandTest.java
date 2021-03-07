@@ -197,6 +197,17 @@ public class HandTest {
     }
 
     @Test
+    public void testIsValidPlayFiveCardHandDifferentTypes() {
+        Hand straight1 = new Hand(new ArrayList<>(Arrays.asList(H9, D10, H11, H12, D13)));
+        Hand flush1 = new Hand(new ArrayList<>(Arrays.asList(H10, H13, H11, H9, H8)));
+        Hand fullHouse1 = new Hand(new ArrayList<>(Arrays.asList(D10, C13, D13, H10, H13)));
+        Hand straightFlush1 = new Hand(new ArrayList<>(Arrays.asList(H8, H9, H10, H11, H12)));
+        assertTrue(flush1.isValidPlay(straight1));
+        assertTrue(straightFlush1.isValidPlay(straight1));
+        assertFalse(straight1.isValidPlay(fullHouse1));
+    }
+
+    @Test
     public void testIsValidPlayStraightHand() {
         Hand straight1 = new Hand(new ArrayList<>(Arrays.asList(H9, D10, H11, H12, D13)));
         Hand straight2 = new Hand(new ArrayList<>(Arrays.asList(H9, D10, H11, H12, H13)));
@@ -261,7 +272,8 @@ public class HandTest {
 
     @Test
     public void testIsValidTypeHandSingleAndPair() {
-        Hand single = new Hand(new ArrayList<>(Arrays.asList(D3)));
+        Hand single = new Hand();
+        single.addCard(D3);
         assertTrue(single.isValidTypeHand());
         Hand pair = new Hand(new ArrayList<>(Arrays.asList(H10, D10)));
         assertTrue(pair.isValidTypeHand());
@@ -288,17 +300,23 @@ public class HandTest {
     }
 
     @Test
-    public void testIsValidTypeHandFullHouseHand() {
-        Hand fullHouse = new Hand(new ArrayList<>(Arrays.asList(D10, C3, D3, H10, H3)));
-        assertTrue(fullHouse.isValidTypeHand());
-        Hand fullHouse2 = new Hand(new ArrayList<>(Arrays.asList(C3, D10, D3, H10, H3)));
+    public void testIsValidTypeHandFullHouseHandTrue() {
+        Hand fullHouse1 = new Hand(new ArrayList<>(Arrays.asList(C3, D10, D3, H10, H3)));
+        assertTrue(fullHouse1.isValidTypeHand());
+        Hand fullHouse2 = new Hand(new ArrayList<>(Arrays.asList(D10, C3, D3, H10, H3)));
         assertTrue(fullHouse2.isValidTypeHand());
-        Hand falseFullHouse1 = new Hand(new ArrayList<>(Arrays.asList(C3, D10, D3, H2, H3)));
+    }
+
+    @Test
+    public void testIsValidTypeHandFullHouseHandFalse() {
+        Hand falseFullHouse1 = new Hand(new ArrayList<>(Arrays.asList(D10, C3, H9, H10, H3)));
         assertFalse(falseFullHouse1.isValidTypeHand());
-        Hand falseFullHouse2 = new Hand(new ArrayList<>(Arrays.asList(D10, C3, H9, H10, H3)));
+        Hand falseFullHouse2 = new Hand(new ArrayList<>(Arrays.asList(H2, C3, D10, D3, H3)));
         assertFalse(falseFullHouse2.isValidTypeHand());
-        Hand falseFullHouse3 = new Hand(new ArrayList<>(Arrays.asList(H2, C3, D10, D3, H3)));
+        Hand falseFullHouse3 = new Hand(new ArrayList<>(Arrays.asList(C3, D10, D3, H2, H3)));
         assertFalse(falseFullHouse3.isValidTypeHand());
+        Hand falseFullHouse4 = new Hand(new ArrayList<>(Arrays.asList(C3, D10, D3, H10, S10, H3)));
+        assertFalse(falseFullHouse4.isValidFullHouseHand());
     }
 
     @Test
@@ -323,7 +341,11 @@ public class HandTest {
     public void testIsValidTypeHandRoyalStraightFlushHand() {
         Hand royalStraightFlush = new Hand(new ArrayList<>(Arrays.asList(H10, H11, H12, H13, H1)));
         assertTrue(royalStraightFlush.isValidTypeHand());
-        Hand falseRoyalStraightFlush = new Hand(new ArrayList<>(Arrays.asList(H10, H11, H12, H13, D3)));
-        assertFalse(falseRoyalStraightFlush.isValidTypeHand());
+        Hand falseRoyalStraightFlush1 = new Hand(new ArrayList<>(Arrays.asList(H9, H10, H11, H12, H13)));
+        assertFalse(falseRoyalStraightFlush1.isValidRoyalStraightFlushHand());
+        Hand falseRoyalStraightFlush2 = new Hand(new ArrayList<>(Arrays.asList(H10, H11, H12, H13, D3)));
+        assertFalse(falseRoyalStraightFlush2.isValidTypeHand());
+        Hand falseRoyalStraightFlush3 = new Hand(new ArrayList<>(Arrays.asList(H10, H3, H1, H12, H13)));
+        assertFalse(falseRoyalStraightFlush3.isValidRoyalStraightFlushHand());
     }
 }

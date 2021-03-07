@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a player of the game of Big 2 with a name, cards, and chips
+ * Represents a player of the game of Big 2 with a name, cards, and drawer of chips
  */
 public class Player {
     private static final Chips WHITE_CHIP = new Chips("white");

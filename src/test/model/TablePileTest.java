@@ -32,7 +32,7 @@ public class TablePileTest {
     @Test
     public void testTopHandInPileTwoCards() {
         Hand hand = new Hand(new ArrayList<>(Arrays.asList(new Card(3, "diamond"),
-                new Card(3,"spade"))));
+                new Card(3, "spade"))));
         pile.playHandInPile(hand);
         assertEquals(2, pile.getSize());
         assertTrue(pile.getCard(0).equalCards(new Card(3, "diamond")));
