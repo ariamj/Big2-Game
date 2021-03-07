@@ -14,6 +14,7 @@ import java.io.PrintWriter;
  *           URL: https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo.git
  */
 public class JsonWriter {
+    private static final int TAB = 3;
     private PrintWriter writer;
     private String destination;
 
@@ -32,7 +33,7 @@ public class JsonWriter {
     //EFFECTS: writes a JSON representation of the game status to file
     public void write(GameStatus gs) {
         JSONObject json = gs.toJson();
-        saveToFile(json.toString());
+        saveToFile(json.toString(TAB));
     }
 
     //MODIFIES: this
