@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -10,6 +11,12 @@ public class PlayerCards extends ListOfCards {
     //Creates an initial set for a player hand
     public PlayerCards(List<Card> cards) {
         super(cards);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        // stub
+        //TODO: IMPLEMENT DRAW
     }
 
     /**

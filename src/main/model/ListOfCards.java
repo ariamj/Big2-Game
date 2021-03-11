@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -110,4 +112,9 @@ public abstract class ListOfCards {
         }
         return hand + "]";
     }
+
+    //TODO: GUI STUFF TO CLEAN UP
+    public abstract void draw(Graphics g);
+
+
 }

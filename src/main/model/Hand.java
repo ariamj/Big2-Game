@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +29,14 @@ public class Hand extends ListOfCards {
     //EFFECTS: Makes a new Hand with initial cards
     public Hand(List<Card> cards) {
         super(cards);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        //TODO: IMPLEMENT DRAW
+        for (Card card : listOfCards) {
+            card.draw(g);
+        }
     }
 
     //setters

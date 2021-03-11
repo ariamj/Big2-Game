@@ -2,7 +2,9 @@ package model;
 
 import org.json.JSONObject;
 import persistence.Writable;
+import ui.BigTwoGame;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -69,4 +71,12 @@ public class Card implements Writable {
         json.put("suit", suit);
         return json;
     }
+
+    //TODO: GUI CLEAN UP
+    public void draw(Graphics g) {
+        g.setColor(new Color(9, 98, 125));
+        g.drawRect(BigTwoGame.WIDTH / 2, BigTwoGame.HEIGHT / 2, 10, 100);
+//        g.setColor(new Color(9, 98, 125));
+    }
+
 }

@@ -4,6 +4,8 @@ import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +15,7 @@ import java.util.Scanner;
 /**
  * Represents the game of Big 2
  */
-public class BigTwoGame {
+public class BigTwoGame extends JFrame {
     private static final String JSON_FILE = "./data/gameStatus.json";
     private static final List<String> RANK_VALUES = new ArrayList<>(Arrays.asList("X", "A", "2", "3", "4", "5", "6",
             "7", "8", "9", "10", "J", "Q", "K"));

@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,14 @@ public class DeckOfCards extends ListOfCards {
             for (String suit : SUITS) {
                 this.addCard(new Card(i, suit));
             }
+        }
+    }
+
+    @Override
+    //TODO: GUI CLEAN UP
+    public void draw(Graphics g) {
+        for (Card card : listOfCards) {
+            card.draw(g);
         }
     }
 

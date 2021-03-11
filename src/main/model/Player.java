@@ -1,12 +1,13 @@
 package model;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a player of the game of Big 2 with a name, cards, and drawer of chips
  */
-public class Player {
+public class Player extends JPanel {
     private static final Chips WHITE_CHIP = new Chips("white");
     private static final Chips BLUE_CHIP = new Chips("blue");
     private static final Chips RED_CHIP = new Chips("red");
