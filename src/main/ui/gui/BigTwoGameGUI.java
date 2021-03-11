@@ -31,9 +31,6 @@ public class BigTwoGameGUI extends JFrame {
     private static final int NUM_INITIAL_GOLD_CHIPS = 1;
     private static final int ANY_CARD_POINT_VALUE = 1;
     private static final int TWO_CARD_POINT_VALUE = 5;
-    private static final int PASS = 0;
-    private static final int PLAY = 1;
-    private static final int QUIT = 2;
     public static final int POP_UP_WIDTH = 500;
     public static final int POP_UP_HEIGHT = 150;
 
@@ -160,6 +157,12 @@ public class BigTwoGameGUI extends JFrame {
         return hand.isValidTypeHand() && hand.isValidPlay(tableHand);
     }
 
+    /**
+     * ------------------------------------------------------------------------------------
+     * PLAY - SECONDARY HELPERS
+     * ------------------------------------------------------------------------------------
+     */
+
     //EFFECTS: determine what the first card is
     // starts from 3 of diamond then increase suits
     private Card findStartingCard() {
@@ -258,7 +261,7 @@ public class BigTwoGameGUI extends JFrame {
 
     /**
      * ========================================================================================================
-     * HELPER FUNCTIONS
+     * HELPER FOLD FUNCTIONS
      * ========================================================================================================
      */
 
@@ -313,6 +316,12 @@ public class BigTwoGameGUI extends JFrame {
                     "Type card you would like to play (rank followed by suit name)", null);
         }
     }
+
+    /**
+     * ========================================================================================================
+     * OTHERS - graphic design helpers
+     * ========================================================================================================
+     */
 
     //TODO: SIMILAR DUPLICATE TO ONE IN GAMEGUI
     private void centreOnScreen(JFrame parent) {
