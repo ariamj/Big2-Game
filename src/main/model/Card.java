@@ -3,7 +3,9 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 import ui.BigTwoGame;
+import ui.gui.Big2GameGUI;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -80,9 +82,15 @@ public class Card implements Writable {
 //    }
 
     //TODO: GUI CLEAN UP
-    public void draw() {
+//    public void draw() {
+    public void draw(JPanel parent) {
         // stub
         // load images
+        String sep = System.getProperty("file.separator");
+        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep + "images" + sep + "aCard.jpg");
+        JLabel imageAsLabel = new JLabel(trial);
+//        imageAsLabel.setSize(new Dimension(Big2GameGUI.WIDTH / 10, Big2GameGUI.HEIGHT / 10));
+        parent.add(imageAsLabel);
     }
 
 }

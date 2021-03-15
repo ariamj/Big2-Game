@@ -25,7 +25,7 @@ public class DeckOfCards extends ListOfCards {
     public void draw() {
         for (Card card : listOfCards) {
 //            card.draw(g);
-            card.draw();
+//            card.draw();
         }
     }
 

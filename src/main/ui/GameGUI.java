@@ -31,7 +31,7 @@ public class GameGUI extends JFrame {
 //        chipsArea.setLayout(new GridLayout(0,1));
 //        chipsArea.setSize(new Dimension(0,0));
         JPanel chipsGUI = new ChipsDrawerGUI(game);
-        add(chipsArea, BorderLayout.CENTER);
+        add(chipsArea, BorderLayout.EAST);
         chipsArea.add(chipsGUI);
 
         pack();

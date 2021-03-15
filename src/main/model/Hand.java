@@ -37,7 +37,7 @@ public class Hand extends ListOfCards {
         //TODO: IMPLEMENT DRAW
         for (Card card : listOfCards) {
 //            card.draw(g);
-            card.draw();
+//            card.draw();
         }
     }
 
