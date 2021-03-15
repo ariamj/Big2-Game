@@ -4,6 +4,8 @@ import exceptions.HandNotPlayableException;
 import model.ChipsDrawer;
 import ui.gui.BigTwoGameGUI;
 import ui.gui.ChipsDrawerGUI;
+import ui.gui.TablePileGUI;
+import ui.gui.UserInteractionArea;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,11 +23,12 @@ public class GameGUI extends JFrame {
         super("Big Two");
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        setLayout(new GridLayout(4,0));
         game = new BigTwoGameGUI();
-        add(game, BorderLayout.CENTER);
+        add(game);
         JLabel statusLabel = new JLabel("Player one turn");
 //        add(statusLabel, BorderLayout.NORTH);
-        createTurnOptions();
+//        createTurnOptions();
 
         JPanel chipsArea = new JPanel();
 //        chipsArea.setLayout(new GridLayout(0,1));
@@ -33,6 +36,12 @@ public class GameGUI extends JFrame {
         JPanel chipsGUI = new ChipsDrawerGUI(game);
         add(chipsArea, BorderLayout.EAST);
         chipsArea.add(chipsGUI);
+
+        JPanel tableGUI = new TablePileGUI(game);
+        add(tableGUI, BorderLayout.CENTER);
+
+        JPanel interaction = new UserInteractionArea(game);
+        add(interaction, BorderLayout.SOUTH);
 
         pack();
         centreOnScreen();

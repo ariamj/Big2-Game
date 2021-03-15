@@ -2,12 +2,8 @@ package model;
 
 import org.json.JSONObject;
 import persistence.Writable;
-import ui.BigTwoGame;
-import ui.gui.Big2GameGUI;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Represents a card with a rank number and suit
@@ -87,7 +83,8 @@ public class Card implements Writable {
         // stub
         // load images
         String sep = System.getProperty("file.separator");
-        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep + "images" + sep + "aCard.jpg");
+        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep
+                + "images" + sep + "anotherDress.jpg");
         JLabel imageAsLabel = new JLabel(trial);
 //        imageAsLabel.setSize(new Dimension(Big2GameGUI.WIDTH / 10, Big2GameGUI.HEIGHT / 10));
         parent.add(imageAsLabel);

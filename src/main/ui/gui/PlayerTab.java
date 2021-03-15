@@ -12,6 +12,7 @@ public class PlayerTab extends JPanel {
 
 //    public PlayerTab() {
     public PlayerTab(BigTwoGameGUI game) {
+//        setSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
         this.game = game;
         placeCards();
         createTurnOptions();
@@ -20,6 +21,7 @@ public class PlayerTab extends JPanel {
     public void placeCards() {
         //TESTING PURPOSE
         game.getPlayerCards().getCardsList().get(0).draw(this);
+        validate();
     }
 
     //EFFECTS: create buttons to pass, play, and quit

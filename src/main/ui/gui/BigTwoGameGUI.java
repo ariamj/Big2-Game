@@ -89,7 +89,7 @@ public class BigTwoGameGUI extends JPanel {
 
     /**
      * ========================================================================================================
-     * GRAPHIC DRAWING
+     * GRAPHIC DRAWING ----- May not need at all
      * ========================================================================================================
      */
 
@@ -439,6 +439,7 @@ public class BigTwoGameGUI extends JPanel {
         buttonArea.add(createButton(button2Text, button2, parent));
         parent.add(buttonArea, BorderLayout.SOUTH);
         parent.pack();
+        parent.setAlwaysOnTop(true);
         centreOnScreen(parent);
         parent.setVisible(true);
     }

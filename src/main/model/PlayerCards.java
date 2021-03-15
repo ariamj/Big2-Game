@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class PlayerCards extends ListOfCards {
 
 //    @Override
 //    public void draw(Graphics g) {
-    public void draw() {
+    public void draw(JPanel parent) {
         // stub
         //TODO: IMPLEMENT DRAW
     }

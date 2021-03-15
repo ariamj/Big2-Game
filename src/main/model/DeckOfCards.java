@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class DeckOfCards extends ListOfCards {
 //    @Override
     //TODO: GUI CLEAN UP
 //    public void draw(Graphics g) {
-    public void draw() {
+    public void draw(JPanel parent) {
         for (Card card : listOfCards) {
 //            card.draw(g);
 //            card.draw();

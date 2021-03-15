@@ -9,10 +9,12 @@ public class TablePileGUI extends JPanel {
 
     public TablePileGUI(BigTwoGameGUI game) {
         table = game.getTable();
+        drawTable();
+        setVisible(true);
     }
 
     public void drawTable() {
-        table.draw();
+        table.draw(this);
     }
 
     public void update() {

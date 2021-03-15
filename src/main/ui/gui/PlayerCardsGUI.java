@@ -2,7 +2,9 @@ package ui.gui;
 
 import model.PlayerCards;
 
-public class PlayerCardsGUI {
+import javax.swing.*;
+
+public class PlayerCardsGUI extends JPanel {
     private PlayerCards cards;
 
     public PlayerCardsGUI(BigTwoGameGUI game) {
@@ -10,7 +12,7 @@ public class PlayerCardsGUI {
     }
 
     public void draw() {
-        cards.draw();
+        cards.draw(this);
     }
 
     public void update() {

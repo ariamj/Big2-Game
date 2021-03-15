@@ -5,7 +5,7 @@ import ui.GameGUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class Big2GameGUI extends JFrame {
+public class UserInteractionArea extends JPanel {
     private static final int PLAYER1_TAB_INDEX = 0;
     private static final int PLAYER2_TAB_INDEX = 1;
 
@@ -14,14 +14,15 @@ public class Big2GameGUI extends JFrame {
     private BigTwoGameGUI game;
     private JTabbedPane sideBar;
 
-    public Big2GameGUI() {
-        super("Player Cards");
-        setSize(new Dimension(WIDTH, HEIGHT));
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    public UserInteractionArea(BigTwoGameGUI game) {
+//        super("Player Cards");
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         sideBar = new JTabbedPane();
         sideBar.setTabPlacement(JTabbedPane.LEFT);
 
-        game = new BigTwoGameGUI();
+//        game = new BigTwoGameGUI();
+        this.game = game;
 
         loadTabs();
         add(sideBar);
@@ -43,6 +44,6 @@ public class Big2GameGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Big2GameGUI();
+        new UserInteractionArea(new BigTwoGameGUI());
     }
 }
