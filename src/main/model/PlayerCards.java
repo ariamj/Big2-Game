@@ -13,8 +13,9 @@ public class PlayerCards extends ListOfCards {
         super(cards);
     }
 
-    @Override
-    public void draw(Graphics g) {
+//    @Override
+//    public void draw(Graphics g) {
+    public void draw() {
         // stub
         //TODO: IMPLEMENT DRAW
     }

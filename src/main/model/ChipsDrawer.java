@@ -3,6 +3,8 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,6 +155,15 @@ public class ChipsDrawer implements Writable {
             }
         }
         return drawerString + "]";
+    }
+
+    //TODO: IMPLEMENT DRAW
+    public void draw(JPanel parent) {
+        // stub
+        String sep = System.getProperty("file.separator");
+        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep + "data" + sep + "tobs.jpg");
+        JLabel imageAsLabel = new JLabel(trial);
+        parent.add(imageAsLabel);
     }
 
     @Override

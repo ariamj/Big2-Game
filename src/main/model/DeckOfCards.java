@@ -19,11 +19,13 @@ public class DeckOfCards extends ListOfCards {
         }
     }
 
-    @Override
+//    @Override
     //TODO: GUI CLEAN UP
-    public void draw(Graphics g) {
+//    public void draw(Graphics g) {
+    public void draw() {
         for (Card card : listOfCards) {
-            card.draw(g);
+//            card.draw(g);
+            card.draw();
         }
     }
 

@@ -31,11 +31,13 @@ public class Hand extends ListOfCards {
         super(cards);
     }
 
-    @Override
-    public void draw(Graphics g) {
+//    @Override
+//    public void draw(Graphics g) {
+    public void draw() {
         //TODO: IMPLEMENT DRAW
         for (Card card : listOfCards) {
-            card.draw(g);
+//            card.draw(g);
+            card.draw();
         }
     }
 

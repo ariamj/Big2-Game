@@ -114,7 +114,8 @@ public abstract class ListOfCards {
     }
 
     //TODO: GUI STUFF TO CLEAN UP
-    public abstract void draw(Graphics g);
+//    public abstract void draw(Graphics g);
+    public abstract void draw();
 
 
 }
