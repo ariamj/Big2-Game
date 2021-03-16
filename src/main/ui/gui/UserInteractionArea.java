@@ -26,8 +26,6 @@ public class UserInteractionArea extends JPanel {
 
         loadTabs();
         add(sideBar);
-
-//        pack();
         setVisible(true);
     }
 

@@ -22,6 +22,7 @@ public class GameGUI extends JFrame {
     public GameGUI() {
         super("Big Two");
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setMaximumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 //        setLayout(new GridLayout(4,0));
         game = new BigTwoGameGUI();
@@ -47,60 +48,6 @@ public class GameGUI extends JFrame {
         centreOnScreen();
         setVisible(true);
     }
-
-    //EFFECTS: create buttons to pass, play, and quit
-    public void createTurnOptions() {
-        JPanel buttonsArea = new JPanel();
-//        buttonsArea.setLayout(new GridLayout(0, 1));
-        buttonsArea.setLayout(new FlowLayout());
-//        buttonsArea.setSize(new Dimension(0, 0));
-        add(buttonsArea, BorderLayout.SOUTH);
-
-        buttonsArea.add(game.addPassButton());
-        buttonsArea.add(game.addPlayButton());
-        buttonsArea.add(game.addQuitButton());
-    }
-//
-//    private JButton addPassButton() {
-//        JButton passButton = new JButton("pass");
-//        passButton.setActionCommand("pass");
-//        passButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                game.pass();
-//            }
-//        });
-//        return passButton;
-//    }
-//
-//    private JButton addPlayButton() {
-//        JButton playButton = new JButton("play");
-//        playButton.setActionCommand("play");
-//        playButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    game.play();
-//                } catch (HandNotPlayableException he) {
-//                    System.out.println(he.getMessage());
-////                    throw new HandNotPlayableException();
-//                }
-//            }
-//        });
-//        return playButton;
-//    }
-//
-//    private JButton addQuitButton() {
-//        JButton quitButton = new JButton("quit");
-//        quitButton.setActionCommand("quit");
-//        quitButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                game.quit();
-//            }
-//        });
-//        return quitButton;
-//    }
 
     //TODO: GUI CLEAN UP
     public void paintComponents(Graphics g) {

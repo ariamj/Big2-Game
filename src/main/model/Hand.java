@@ -37,14 +37,14 @@ public class Hand extends ListOfCards {
     public void draw(JPanel parent) {
         //TODO: IMPLEMENT DRAW
         for (Card card : listOfCards) {
-//            card.draw(g);
+            card.draw(parent);
 //            card.draw();
         }
-        String sep = System.getProperty("file.separator");
-        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep
-                + "images" + sep + "anotherDress.jpg");
-        JLabel imageAsLabel = new JLabel(trial);
-        parent.add(imageAsLabel);
+//        String sep = System.getProperty("file.separator");
+//        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep
+//                + "images" + sep + "anotherDress.jpg");
+//        JLabel imageAsLabel = new JLabel(trial);
+//        parent.add(imageAsLabel);
     }
 
     //setters
