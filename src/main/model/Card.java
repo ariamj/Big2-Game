@@ -83,11 +83,21 @@ public class Card implements Writable {
         // stub
         // load images
         String sep = System.getProperty("file.separator");
+//        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep
+//                + "images" + sep + "100x.jpg");
+//        JLabel imageAsLabel100 = new JLabel(trial);
+//        parent.add(imageAsLabel100);
         ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep
-                + "images" + sep + "anotherDress.jpg");
-        JLabel imageAsLabel = new JLabel(trial);
-//        imageAsLabel.setSize(new Dimension(Big2GameGUI.WIDTH / 10, Big2GameGUI.HEIGHT / 10));
-        parent.add(imageAsLabel);
+                + "images" + sep + "75x.jpg");
+        JLabel imageAsLabel75 = new JLabel(trial);
+//        for (int i = 0; i < 13; i++) {
+//            parent.add(imageAsLabel75);
+//        }
+        parent.add(imageAsLabel75);
+//        trial = new ImageIcon(System.getProperty("user.dir") + sep
+//                + "images" + sep + "50x.jpg");
+//        JLabel imageAsLabel50 = new JLabel(trial);
+//        parent.add(imageAsLabel50);
     }
 
 }

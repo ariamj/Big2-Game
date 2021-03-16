@@ -10,13 +10,13 @@ public class UserInteractionArea extends JPanel {
     private static final int PLAYER2_TAB_INDEX = 1;
 
     public static final int WIDTH = GameGUI.WIDTH;
-    public static final int HEIGHT = GameGUI.HEIGHT / 2;
+    public static final int HEIGHT = GameGUI.HEIGHT / 3;
     private BigTwoGameGUI game;
     private JTabbedPane sideBar;
 
     public UserInteractionArea(BigTwoGameGUI game) {
 //        super("Player Cards");
-        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setSize(new Dimension(WIDTH, HEIGHT));
 //        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         sideBar = new JTabbedPane();
         sideBar.setTabPlacement(JTabbedPane.LEFT);

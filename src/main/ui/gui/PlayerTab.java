@@ -13,6 +13,8 @@ public class PlayerTab extends JPanel {
 //    public PlayerTab() {
     public PlayerTab(BigTwoGameGUI game) {
 //        setSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
+        setLayout(new GridLayout(2, 0));
+//        setMaximumSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
         this.game = game;
         placeCards();
         createTurnOptions();
@@ -20,17 +22,23 @@ public class PlayerTab extends JPanel {
 
     public void placeCards() {
         //TESTING PURPOSE
-        game.getPlayerCards().getCardsList().get(0).draw(this);
-        validate();
+        JPanel cardsArea = new JPanel();
+        cardsArea.setLayout(new GridLayout(2, 13));
+        for (int i = 0; i < 26; i++) {
+            game.getPlayerCards().getCardsList().get(0).draw(cardsArea);
+        }
+        add(cardsArea);
+//        game.getPlayerCards().getCardsList().get(0).draw(this);
+//        validate();
     }
 
     //EFFECTS: create buttons to pass, play, and quit
     public void createTurnOptions() {
         JPanel buttonsArea = new JPanel();
 //        buttonsArea.setLayout(new GridLayout(0, 1));
-        buttonsArea.setLayout(new FlowLayout());
+        buttonsArea.setLayout(new FlowLayout(FlowLayout.CENTER));
 //        buttonsArea.setSize(new Dimension(0, 0));
-        add(buttonsArea, BorderLayout.SOUTH);
+        add(buttonsArea);
 
         buttonsArea.add(addPassButton());
         buttonsArea.add(addPlayButton());
