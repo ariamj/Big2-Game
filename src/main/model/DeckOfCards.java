@@ -21,14 +21,14 @@ public class DeckOfCards extends ListOfCards {
     }
 
 //    @Override
-    //TODO: GUI CLEAN UP
+//    TODO: GUI CLEAN UP
 //    public void draw(Graphics g) {
-    public void draw(JPanel parent) {
-        for (Card card : listOfCards) {
-//            card.draw(g);
-//            card.draw();
-        }
-    }
+//    public void draw(JPanel parent) {
+//        for (Card card : listOfCards) {
+////            card.draw(g);
+////            card.draw();
+//        }
+//    }
 
     //REQUIRES: this has at least 26 cards (ie. size is >= 26)
     //MODIFIES: this

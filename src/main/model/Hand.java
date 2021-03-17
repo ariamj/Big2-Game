@@ -34,18 +34,13 @@ public class Hand extends ListOfCards {
 
 //    @Override
 //    public void draw(Graphics g) {
-    public void draw(JPanel parent) {
-        //TODO: IMPLEMENT DRAW
-        for (Card card : listOfCards) {
-            card.draw(parent);
-//            card.draw();
-        }
-//        String sep = System.getProperty("file.separator");
-//        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep
-//                + "images" + sep + "anotherDress.jpg");
-//        JLabel imageAsLabel = new JLabel(trial);
-//        parent.add(imageAsLabel);
-    }
+//    public void draw(JPanel parent) {
+//        //TODO: IMPLEMENT DRAW
+//        for (Card card : listOfCards) {
+//            card.draw(parent);
+////            card.draw();
+//        }
+//    }
 
     //setters
     public void setHand(ListOfCards cards) {

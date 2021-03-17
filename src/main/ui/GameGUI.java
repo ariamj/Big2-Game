@@ -49,6 +49,11 @@ public class GameGUI extends JFrame {
         setVisible(true);
     }
 
+    public void update() {
+
+        repaint();
+    }
+
     //TODO: GUI CLEAN UP
     public void paintComponents(Graphics g) {
         super.paintComponents(g);

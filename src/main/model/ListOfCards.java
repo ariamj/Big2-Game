@@ -87,17 +87,17 @@ public abstract class ListOfCards {
     }
 
     //getters
-    protected List<Card> getListOfCards() {
+    public List<Card> getListOfCards() {
         return listOfCards;
     }
 
     //EFFECTS: returns the card in listOfCards at index i
-    protected Card getCard(int i) {
+    public Card getCard(int i) {
         return listOfCards.get(i);
     }
 
     //EFFECTS: returns the number of cards in this list of cards
-    protected int getSize() {
+    public int getSize() {
         return listOfCards.size();
     }
 
@@ -114,8 +114,14 @@ public abstract class ListOfCards {
     }
 
     //TODO: GUI STUFF TO CLEAN UP
-//    public abstract void draw(Graphics g);
-    public abstract void draw(JPanel parent);
+//    public abstract void draw(JPanel parent);
 
+    public void draw(JPanel parent) {
+        //TODO: IMPLEMENT DRAW
+        for (Card card : listOfCards) {
+            card.draw(parent);
+//            card.draw();
+        }
+    }
 
 }

@@ -32,8 +32,8 @@ public class UserInteractionArea extends JPanel {
     public void loadTabs() {
 //        JPanel player1Tab = new PlayerTab();
 //        JPanel player2Tab = new PlayerTab();
-        JPanel player1Tab = new PlayerTab(game);
-        JPanel player2Tab = new PlayerTab(game);
+        JPanel player1Tab = new PlayerTab(game, game.getPlayer(1));
+        JPanel player2Tab = new PlayerTab(game, game.getPlayer(2));
 
         sideBar.add(player1Tab, PLAYER1_TAB_INDEX);
         sideBar.setTitleAt(PLAYER1_TAB_INDEX, "Player 1");

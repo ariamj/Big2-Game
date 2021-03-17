@@ -3,6 +3,7 @@ package model;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a player of the game of Big 2 with a name, cards, and drawer of chips
@@ -23,6 +24,25 @@ public class Player extends JPanel {
         this.name = name;
         cards = new PlayerCards(startCards);
         drawer = new ChipsDrawer(numWhiteChips, numBlueChips, numRedChips, numGoldChips);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Player player = (Player) o;
+        return Objects.equals(name, player.name)
+                && Objects.equals(cards, player.cards)
+                && Objects.equals(drawer, player.drawer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, cards, drawer);
     }
 
     //REQUIRES: cards is not empty

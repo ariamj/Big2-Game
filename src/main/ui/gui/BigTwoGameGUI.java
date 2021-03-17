@@ -1,12 +1,10 @@
 package ui.gui;
 
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_COLOR_BURNPeer;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import exceptions.HandNotPlayableException;
-import exceptions.InvalidCardException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+import ui.GameGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,6 +36,8 @@ public class BigTwoGameGUI extends JPanel {
     private Player user2;
     private Player dummyPlayer;
     private List<Player> playerList;
+    private int currPlayerNumber;
+
     private DeckOfCards deck;
     private TablePile table;
     private boolean firstTurn = true;
@@ -62,12 +62,22 @@ public class BigTwoGameGUI extends JPanel {
         deck = new DeckOfCards();
         deck.shuffleDeck();
 
-//        createTurnOptions();
         askToLoadGame();
         if (!load) {
             initializeNewGame();
         }
         playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
+
+        if (user1HasStartCard()) {
+            currPlayerNumber = 1;
+        } else {
+            currPlayerNumber = 2;
+        }
+        System.out.println(findStartingCard().toString());
+        System.out.println(user1HasStartCard());
+        System.out.println(currPlayerNumber);
+        System.out.println(user1.getCards().toString());
+        System.out.println(user2.getCards().toString());
     }
 
     //MODIFIES: this
@@ -197,28 +207,59 @@ public class BigTwoGameGUI extends JPanel {
 
     //TODO: CLEAN UP
     //EFFECTS: play a hand
-    public void play() throws HandNotPlayableException {
+//    public void play() throws HandNotPlayableException {
+    public void play(List<Integer> playCardsIndex, Player player) throws HandNotPlayableException {
         // stub
 //        Hand selectedCards = selectCards();
-        try {
-            Hand selectedCards = selectCards();
-            //for test purposes
-            System.out.println(selectedCards.toString());
-            if (playable(selectedCards, table)) {
-                //TODO: fix alternating player
-                playHand(selectedCards, user1);
-            } else {
-                //TODO: DEAL WITH PRINTING OUT MSG FOR EXCEPTIONS
-                throw new HandNotPlayableException("You can't play that hand");
+//        try {
+//            Hand selectedCards = selectCards();
+        Hand selectedCards = new Hand(getPlayCards(playCardsIndex, player));
+        //for test purposes
+        System.out.println(selectedCards.toString());
+        if (playable(selectedCards, table)) {
+            //TODO: fix alternating player
+//            playHand(selectedCards, user1);
+            playHand(selectedCards, player);
+            if (!gameOver()) {
+                nextPlayer();
+                update();
             }
-        } catch (InvalidCardException e) {
+        } else {
             //TODO: DEAL WITH PRINTING OUT MSG FOR EXCEPTIONS
-            System.out.println(e.getMessage());
+            throw new HandNotPlayableException("You can't play that hand");
         }
+//        } catch (InvalidCardException e) {
+//            //TODO: DEAL WITH PRINTING OUT MSG FOR EXCEPTIONS
+//            System.out.println(e.getMessage());
+//        }
         //if game is not over:
+//        if (!gameOver()) {
+//            nextPlayer();
+//            update();
+//        }
         //nextPlayer();
         //else:
         //end game and stuff
+    }
+
+    public void nextPlayer() {
+        if (currPlayerNumber == 1) {
+            currPlayerNumber++;
+        } else {
+            currPlayerNumber--;
+        }
+    }
+
+    public void update() {
+        // stub
+    }
+
+    public List<Card> getPlayCards(List<Integer> cardsIndex, Player player) {
+        List<Card> toPlay = new ArrayList<>();
+        for (Integer i : cardsIndex) {
+            toPlay.add(player.getCards().getCard(i));
+        }
+        return toPlay;
     }
 
     //EFFECTS: play the selected cards
@@ -230,23 +271,23 @@ public class BigTwoGameGUI extends JPanel {
     }
 
     //EFFECTS: select cards to play
-    private Hand selectCards() throws InvalidCardException {
-        List<Card> cardsToPlay = new ArrayList<>();
-        String cardStr = "";
-        do {
-            cardStr = JOptionPane.showInputDialog(getParent(),
-                    "Type card you would like to play (rank followed by suit name)"
-                    + "\n Or 'p' to play hand", null);
-            if (cardStr.length() > 3 && RANK_VALUES.contains(cardStr.substring(0, 2).trim().toUpperCase())
-                    && ListOfCards.SUITS.contains(cardStr.substring(2).trim().toLowerCase())) {
-                int rank = RANK_VALUES.indexOf(cardStr.substring(0, 2).trim().toUpperCase());
-                cardsToPlay.add(new Card(rank, cardStr.substring(2).trim().toLowerCase()));
-            } else if (!cardStr.equalsIgnoreCase("p")) {
-                throw new InvalidCardException("That is not a card");
-            }
-        } while (!cardStr.equalsIgnoreCase("p"));
-        return new Hand(cardsToPlay);
-    }
+//    private Hand selectCards() throws InvalidCardException {
+//        List<Card> cardsToPlay = new ArrayList<>();
+//        String cardStr = "";
+//        do {
+//            cardStr = JOptionPane.showInputDialog(getParent(),
+//                    "Type card you would like to play (rank followed by suit name)"
+//                            + "\n Or 'p' to play hand", null);
+//            if (cardStr.length() > 3 && RANK_VALUES.contains(cardStr.substring(0, 2).trim().toUpperCase())
+//                    && ListOfCards.SUITS.contains(cardStr.substring(2).trim().toLowerCase())) {
+//                int rank = RANK_VALUES.indexOf(cardStr.substring(0, 2).trim().toUpperCase());
+//                cardsToPlay.add(new Card(rank, cardStr.substring(2).trim().toLowerCase()));
+//            } else if (!cardStr.equalsIgnoreCase("p")) {
+//                throw new InvalidCardException("That is not a card");
+//            }
+//        } while (!cardStr.equalsIgnoreCase("p"));
+//        return new Hand(cardsToPlay);
+//    }
 
     //EFFECTS: returns true if given hand is a valid hand to be played
     // ie. ranking of hand is higher or equal to most recent played hand
@@ -379,46 +420,46 @@ public class BigTwoGameGUI extends JPanel {
 //        buttonsArea.add(addQuitButton());
 //    }
 
-    public JButton addPassButton() {
-        JButton passButton = new JButton("pass");
-        passButton.setActionCommand("pass");
-        passButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pass();
-            }
-        });
-        return passButton;
-    }
-
-    public JButton addPlayButton() {
-        JButton playButton = new JButton("play");
-        playButton.setActionCommand("play");
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    play();
-                } catch (HandNotPlayableException he) {
-                    System.out.println(he.getMessage());
-//                    throw new HandNotPlayableException();
-                }
-            }
-        });
-        return playButton;
-    }
-
-    public JButton addQuitButton() {
-        JButton quitButton = new JButton("quit");
-        quitButton.setActionCommand("quit");
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                quit();
-            }
-        });
-        return quitButton;
-    }
+//    public JButton addPassButton() {
+//        JButton passButton = new JButton("pass");
+//        passButton.setActionCommand("pass");
+//        passButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                pass();
+//            }
+//        });
+//        return passButton;
+//    }
+//
+//    public JButton addPlayButton() {
+//        JButton playButton = new JButton("play");
+//        playButton.setActionCommand("play");
+//        playButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    play();
+//                } catch (HandNotPlayableException he) {
+//                    System.out.println(he.getMessage());
+////                    throw new HandNotPlayableException();
+//                }
+//            }
+//        });
+//        return playButton;
+//    }
+//
+//    public JButton addQuitButton() {
+//        JButton quitButton = new JButton("quit");
+//        quitButton.setActionCommand("quit");
+//        quitButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                quit();
+//            }
+//        });
+//        return quitButton;
+//    }
 
     /**
      * ========================================================================================================
@@ -504,9 +545,13 @@ public class BigTwoGameGUI extends JPanel {
         return table;
     }
 
-    public PlayerCards getPlayerCards() {
+    public Player getPlayer(int playerNumber) {
+        return playerList.get(playerNumber);
+    }
+
+    public Player getCurrPlayer() {
         //TODO: FIX FOR ALTERNATING PLAYER
-        return user1.getCards();
+        return playerList.get(currPlayerNumber);
     }
 
     public ChipsDrawer getPlayerChips() {
