@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import static model.GameStatus.PLAYER1;
+
 /**
  * Represents the game of Big 2
  */
@@ -49,12 +51,22 @@ public class BigTwoGameGUI extends JPanel {
     private JsonReader reader;
     boolean load = false;
 
+    private ChipsDrawerGUI chipsGUI;
+    private TablePileGUI tableGUI;
+    private UserInteractionArea interaction;
+    private GridBagConstraints constraints;
+
     public enum Actions {
         LOAD_GAME, SAVE, NO, QUIT, PLAY_CARD, CANCEL
     }
 
     //EFFECTS: constructs a new Big 2 game
     public BigTwoGameGUI() {
+//        setMinimumSize(new Dimension(GameGUI.WIDTH, GameGUI.HEIGHT));
+//        setMaximumSize(new Dimension(GameGUI.WIDTH, GameGUI.HEIGHT));
+        setLayout(new GridBagLayout());
+        constraints = new GridBagConstraints();
+
         gs = new GameStatus("Game number 1");
         writer = new JsonWriter(JSON_FILE);
         reader = new JsonReader(JSON_FILE);
@@ -78,6 +90,8 @@ public class BigTwoGameGUI extends JPanel {
         System.out.println(currPlayerNumber);
         System.out.println(user1.getCards().toString());
         System.out.println(user2.getCards().toString());
+        drawGame();
+        setVisible(true);
     }
 
     //MODIFIES: this
@@ -87,8 +101,8 @@ public class BigTwoGameGUI extends JPanel {
         List<Card> startCards = deck.dealCards("13 cards");
         user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
                 NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
-        gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER1);
-        gs.setDrawer(user1.getDrawer(), GameStatus.PLAYER1);
+        gs.setCardList(new PlayerCards(startCards), PLAYER1);
+        gs.setDrawer(user1.getDrawer(), PLAYER1);
 
         startCards = deck.dealCards("13 cards");
         user2 = new Player("user2", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
@@ -108,35 +122,72 @@ public class BigTwoGameGUI extends JPanel {
 //        drawChips();
 //        drawPlayerCards();
 //        drawTablePile();
+
+        tableGUI = new TablePileGUI(this);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 3;
+        constraints.gridheight = 2;
+        add(tableGUI, constraints);
+
+        chipsGUI = new ChipsDrawerGUI(this);
+        constraints.gridx = 3;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 2;
+        constraints.anchor = GridBagConstraints.EAST;
+        add(chipsGUI, constraints);
+
+        interaction = new UserInteractionArea(this);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 4;
+        constraints.gridheight = 0;
+        constraints.anchor = GridBagConstraints.SOUTH;
+        add(interaction,constraints);
     }
 
     /**
      * ========================================================================================================
-     * RUN THE GAME
+     * RUN THE GAME -- HELPERS
      * ========================================================================================================
      */
 
-    public void runGame() {
-        if (firstTurn) {
-            if (user1HasStartCard()) {
-//                playATurn(user1);
-                firstTurn = false;
-            }
+    public void nextPlayer() {
+        if (currPlayerNumber == 1) {
+            currPlayerNumber++;
+        } else {
+            currPlayerNumber--;
         }
-        while (!gameOver() && !quitting) {
-            gs.setPlayerTurn(playerTurn);
-//            playATurn(playerList.get(playerTurn));
-            if (playerTurn == 1) {
-                playerTurn++;
-            } else {
-                playerTurn--;
-            }
-            if (firstTurn) {
-                firstTurn = false;
-            }
-        }
-        distributeWinning();
     }
+
+    public void update() {
+        // stub
+        tableGUI.update();
+        chipsGUI.update();
+    }
+
+//    public void runGame() {
+//        if (firstTurn) {
+//            if (user1HasStartCard()) {
+////                playATurn(user1);
+//                firstTurn = false;
+//            }
+//        }
+//        while (!gameOver() && !quitting) {
+//            gs.setPlayerTurn(playerTurn);
+////            playATurn(playerList.get(playerTurn));
+//            if (playerTurn == 1) {
+//                playerTurn++;
+//            } else {
+//                playerTurn--;
+//            }
+//            if (firstTurn) {
+//                firstTurn = false;
+//            }
+//        }
+//        distributeWinning();
+//    }
 
     /**
      * ------------------------------------------------------------------------------------
@@ -161,14 +212,19 @@ public class BigTwoGameGUI extends JPanel {
     //EFFECTS: loser gives amount chips lost to winner and displays play's chips
     //          if game is over due to user quitting, no distribution is done
     private void distributeWinning() {
+        Player winner = null;
         if (!quitting) {
             if (isWinner(user1)) {
                 user1.collectChips(user2.payChips(pointsLost(user2)));
+                winner = user1;
             } else {
                 user2.collectChips(user1.payChips(pointsLost(user1)));
+                winner = user2;
             }
         }
 //        displayChips();
+        createPopUp(winner.getName() + " is the winner!", "Yay!", "Oh well",
+                Actions.QUIT, Actions.QUIT);
     }
 
     //EFFECTS: returns the amount of points player has lost based on number of cards and what cards play still has
@@ -196,7 +252,7 @@ public class BigTwoGameGUI extends JPanel {
      */
 
     public void pass() {
-        // stub
+        nextPlayer();
     }
 
     /**
@@ -223,6 +279,8 @@ public class BigTwoGameGUI extends JPanel {
             if (!gameOver()) {
                 nextPlayer();
                 update();
+            } else {
+                distributeWinning();
             }
         } else {
             //TODO: DEAL WITH PRINTING OUT MSG FOR EXCEPTIONS
@@ -233,25 +291,9 @@ public class BigTwoGameGUI extends JPanel {
 //            System.out.println(e.getMessage());
 //        }
         //if game is not over:
-//        if (!gameOver()) {
-//            nextPlayer();
-//            update();
-//        }
         //nextPlayer();
         //else:
         //end game and stuff
-    }
-
-    public void nextPlayer() {
-        if (currPlayerNumber == 1) {
-            currPlayerNumber++;
-        } else {
-            currPlayerNumber--;
-        }
-    }
-
-    public void update() {
-        // stub
     }
 
     public List<Card> getPlayCards(List<Integer> cardsIndex, Player player) {
@@ -268,6 +310,7 @@ public class BigTwoGameGUI extends JPanel {
         gs.removeCardsFromPlayer(selectedCards, playerList.indexOf(player));
         table.playHandInPile(selectedCards);
         gs.setCardList(selectedCards, GameStatus.TABLE);
+        firstTurn = false;
     }
 
     //EFFECTS: select cards to play
@@ -387,7 +430,7 @@ public class BigTwoGameGUI extends JPanel {
     //MODIFIES: this
     //EFFECTS: initializes the game according to saved stats from file
     private void initializeLoadedGame() {
-        int playerNumber = GameStatus.PLAYER1;
+        int playerNumber = PLAYER1;
         ChipsDrawer drawer = gs.getDrawer(playerNumber);
         user1 = new Player("user1", gs.getCardList(playerNumber), drawer.getNumWhiteChips(),
                 drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
@@ -399,6 +442,7 @@ public class BigTwoGameGUI extends JPanel {
 
         playerTurn = gs.getPlayerTurn();
         firstTurn = false;
+        update();
     }
 
     /**
@@ -554,8 +598,17 @@ public class BigTwoGameGUI extends JPanel {
         return playerList.get(currPlayerNumber);
     }
 
-    public ChipsDrawer getPlayerChips() {
+    public ChipsDrawer getPlayerChips(int playerNumber) {
         //TODO: FIX FOR ALTERNATING PLAYER
         return user1.getDrawer();
+    }
+
+    //getters
+    public ChipsDrawer getDrawer(int playerNumber) {
+        if (playerNumber == PLAYER1) {
+            return user1.getDrawer();
+        } else {
+            return user2.getDrawer();
+        }
     }
 }

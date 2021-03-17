@@ -16,7 +16,7 @@ public class UserInteractionArea extends JPanel {
 
     public UserInteractionArea(BigTwoGameGUI game) {
 //        super("Player Cards");
-        setSize(new Dimension(WIDTH, HEIGHT));
+//        setSize(new Dimension(WIDTH, HEIGHT));
 //        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         sideBar = new JTabbedPane();
         sideBar.setTabPlacement(JTabbedPane.LEFT);

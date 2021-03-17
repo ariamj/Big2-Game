@@ -1,7 +1,6 @@
 package ui.gui;
 
 import exceptions.HandNotPlayableException;
-import model.Card;
 import model.ListOfCards;
 import model.Player;
 
@@ -21,10 +20,12 @@ public class PlayerTab extends JPanel {
     private Player player;
 
     private GridBagConstraints constraints;
-    private JPanel cardsArea;
-    private JPanel selectArea;
+    private JPanel cardsArea1;
+    private JPanel cardsArea2;
+    private JPanel selectArea1;
+    private JPanel selectArea2;
 
-//    public PlayerTab() {
+    //    public PlayerTab() {
     public PlayerTab(BigTwoGameGUI game, Player player) {
         setMaximumSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
 
@@ -33,7 +34,6 @@ public class PlayerTab extends JPanel {
 
         this.game = game;
         this.player = player;
-//        this.player = game.getCurrPlayer();
 
         cardsIndex = new ArrayList<>();
 
@@ -43,44 +43,46 @@ public class PlayerTab extends JPanel {
 
     public void placeCards() {
         //TESTING PURPOSE
-        createCardsRow(0, 0, 0, 13);
-        createSelectCardsRow(0, 1);
+        cardsArea1 = new JPanel();
+        cardsArea2 = new JPanel();
+        selectArea1 = new JPanel();
+        selectArea2 = new JPanel();
+        createCardsRow(0, 0, 0, 13, cardsArea1);
+        createSelectCardsRow(0, 1, selectArea1);
         //if playing with half deck
         if (player.getNumCards() > 13) {
-            createCardsRow(0, 2, 14, player.getNumCards());
-            createSelectCardsRow(0, 3);
+            createCardsRow(0, 2, 14, player.getNumCards(), cardsArea2);
+//            createCardsRow(0, 2, 0, 13, cardsArea2);
+            createSelectCardsRow(0, 3, selectArea2);
         }
     }
 
-    public void createCardsRow(int x, int y, int firstIndex, int lastIndex) {
+    public void createCardsRow(int x, int y, int firstIndex, int lastIndex, JPanel area) {
         ListOfCards cards = player.getCards();
-        cardsArea = new JPanel();
+//        area = new JPanel();
 //        JPanel cardsArea = new JPanel();
-        cardsArea.setLayout(new GridLayout(0, 13));
+        area.setLayout(new GridLayout(0, 13));
         constraints.gridx = x;
         constraints.gridy = y;
-        add(cardsArea, constraints);
-//        for (int i = 0; i < 13; i++) {
-//            player.getCards().getCardsList().get(0).draw(cardsArea);
-//        }
+        add(area, constraints);
         if (cards.getSize() <= 13) {
-            cards.draw(cardsArea);
+            cards.draw(area);
         } else {
             for (int i = firstIndex; i < lastIndex; i++) {
-                cards.getCard(i).draw(cardsArea);
+                cards.getCard(i).draw(area);
             }
         }
     }
 
-    public void createSelectCardsRow(int x, int y) {
-        selectArea = new JPanel();
-        selectArea.setLayout(new GridLayout(0,13));
+    public void createSelectCardsRow(int x, int y, JPanel area) {
+//        selectArea1 = new JPanel();
+        area.setLayout(new GridLayout(0, 13));
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = x;
         constraints.gridy = y;
-        add(selectArea, constraints);
+        add(area, constraints);
         for (int i = 0; i < player.getNumCards(); i++) {
-            createCheckBox(selectArea, i);
+            createCheckBox(area, i);
         }
     }
 
@@ -143,15 +145,18 @@ public class PlayerTab extends JPanel {
                     System.out.println(game.getCurrPlayer().equals(player));
                     if (game.getCurrPlayer().equals(player)) {
                         game.play(cardsIndex, player);
-                        update();
                     } else {
                         JFrame popUp = new JFrame();
                         JOptionPane.showMessageDialog(popUp, "Not your turn!");
                     }
 //                    game.play(cardsIndex);
                 } catch (HandNotPlayableException he) {
-                    System.out.println(he.getMessage());
+                    JFrame popUp = new JFrame();
+                    JOptionPane.showMessageDialog(popUp, he.getMessage());
+//                    System.out.println(he.getMessage());
 //                    throw new HandNotPlayableException();
+                } finally {
+                    update();
                 }
             }
         });
@@ -171,13 +176,20 @@ public class PlayerTab extends JPanel {
     }
 
     public void update() {
-        if (cardsArea != null) {
-            remove(cardsArea);
-            remove(selectArea);
-            createCardsRow(0, 0, 0, 13);
-            createSelectCardsRow(0, 1);
+        if (cardsArea1 != null) {
+            remove(cardsArea1);
         }
-//        placeCards();
+        if (selectArea1 != null) {
+            remove(selectArea1);
+        }
+        if (cardsArea2 != null) {
+            remove(cardsArea2);
+        }
+        if (selectArea2 != null) {
+            remove(selectArea2);
+        }
+        placeCards();
+        cardsIndex = new ArrayList<>();
         updateUI();
     }
 }

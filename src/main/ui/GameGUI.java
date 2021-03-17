@@ -31,18 +31,14 @@ public class GameGUI extends JFrame {
 //        add(statusLabel, BorderLayout.NORTH);
 //        createTurnOptions();
 
-        JPanel chipsArea = new JPanel();
-//        chipsArea.setLayout(new GridLayout(0,1));
-//        chipsArea.setSize(new Dimension(0,0));
-        JPanel chipsGUI = new ChipsDrawerGUI(game);
-        add(chipsArea, BorderLayout.EAST);
-        chipsArea.add(chipsGUI);
-
-        JPanel tableGUI = new TablePileGUI(game);
-        add(tableGUI, BorderLayout.CENTER);
-
-        JPanel interaction = new UserInteractionArea(game);
-        add(interaction, BorderLayout.SOUTH);
+//        JPanel chipsGUI = new ChipsDrawerGUI(game);
+//        add(chipsGUI, BorderLayout.EAST);
+//
+//        JPanel tableGUI = new TablePileGUI(game);
+//        add(tableGUI, BorderLayout.CENTER);
+//
+//        JPanel interaction = new UserInteractionArea(game);
+//        add(interaction, BorderLayout.SOUTH);
 
         pack();
         centreOnScreen();

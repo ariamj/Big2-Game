@@ -16,14 +16,17 @@ public class TablePileGUI extends JPanel {
     public static final int HEIGHT = GameGUI.HEIGHT / 3;
 
     private Hand table;
+    private BigTwoGameGUI game;
 
 //    public TablePileGUI() {
     public TablePileGUI(BigTwoGameGUI game) {
         setSize(new Dimension(WIDTH, HEIGHT));
 //        table = game.getTable();
-        Hand list = new Hand(new ArrayList<>(Arrays.asList(new Card(1, "diamond"),
-                new Card(4, "spade"))));
-        table = list;
+//        Hand list = new Hand(new ArrayList<>(Arrays.asList(new Card(1, "diamond"),
+//                new Card(4, "spade"))));
+//        table = list;
+
+        this.game = game;
         drawTable();
 
         setVisible(true);
@@ -31,13 +34,16 @@ public class TablePileGUI extends JPanel {
 
     public void drawTable() {
 //        JPanel parent = new JPanel();
+        table = game.getTable();
         table.draw(this);
 //        add(parent);
     }
 
     public void update() {
-        // stubb
-        // updates after player plays a hand
+        // stub
+        removeAll();
+        drawTable();
+        updateUI();
     }
 
     public static void main(String[] args) {
