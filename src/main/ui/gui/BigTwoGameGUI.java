@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import static model.GameStatus.PLAYER1;
 
@@ -22,9 +21,7 @@ import static model.GameStatus.PLAYER1;
  * Represents the game of Big 2
  */
 public class BigTwoGameGUI extends JPanel {
-    private static final String JSON_FILE = "./data/gameStatus.json";
-    private static final List<String> RANK_VALUES = new ArrayList<>(Arrays.asList("X", "A", "2", "3", "4", "5", "6",
-            "7", "8", "9", "10", "J", "Q", "K"));
+    public static final String JSON_FILE = "./data/gameStatus.json";
     private static final int NUM_INITIAL_WHITE_CHIPS = 20;
     private static final int NUM_INITIAL_BLUE_CHIPS = 10;
     private static final int NUM_INITIAL_RED_CHIPS = 5;
@@ -33,65 +30,75 @@ public class BigTwoGameGUI extends JPanel {
     private static final int TWO_CARD_POINT_VALUE = 5;
     public static final int POP_UP_WIDTH = 500;
     public static final int POP_UP_HEIGHT = 150;
+    public static final int NEW_GAME = 0;
+    public static final int LOAD_SAVED = 1;
+    public static final Font MSG_FONT = new Font("Times New Roman", 1, 32);
 
     private Player user1;
     private Player user2;
     private Player dummyPlayer;
     private List<Player> playerList;
-    private int currPlayerNumber;
 
     private DeckOfCards deck;
     private TablePile table;
     private boolean firstTurn = true;
     private int playerTurn = 2;
     private boolean quitting = false;
-    private Scanner input;
     private GameStatus gs;
     private JsonWriter writer;
     private JsonReader reader;
-    boolean load = false;
 
     private ChipsDrawerGUI chipsGUI;
     private TablePileGUI tableGUI;
     private UserInteractionArea interaction;
     private GridBagConstraints constraints;
+    private JLabel announce;
 
     public enum Actions {
-        LOAD_GAME, SAVE, NO, QUIT, PLAY_CARD, CANCEL
+        LOAD_GAME, SAVE, NO, QUIT, CANCEL
     }
 
     //EFFECTS: constructs a new Big 2 game
-    public BigTwoGameGUI() {
-//        setMinimumSize(new Dimension(GameGUI.WIDTH, GameGUI.HEIGHT));
-//        setMaximumSize(new Dimension(GameGUI.WIDTH, GameGUI.HEIGHT));
+    public BigTwoGameGUI(int version) {
+        setMinimumSize(new Dimension(GameGUI.WIDTH, GameGUI.HEIGHT));
+        setMaximumSize(new Dimension(GameGUI.WIDTH, GameGUI.HEIGHT));
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
 
+        announce = new JLabel();
+        announce.setFont(MSG_FONT);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        add(announce, constraints);
+
+        initializeGame();
+
+        if (version == NEW_GAME) {
+            initializeNewGame();
+            if (user1HasStartCard()) {
+                playerTurn = 1;
+            } else {
+                playerTurn = 2;
+            }
+        } else {
+            loadGameStatus();
+        }
+
+        playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
+        drawGame();
+        update();
+//        setVisible(true);
+    }
+
+    //MODIFIES: this
+    //EFFECTS: initializes fields and deals the deck
+    private void initializeGame() {
         gs = new GameStatus("Game number 1");
         writer = new JsonWriter(JSON_FILE);
         reader = new JsonReader(JSON_FILE);
         table = new TablePile();
         deck = new DeckOfCards();
         deck.shuffleDeck();
-
-        askToLoadGame();
-        if (!load) {
-            initializeNewGame();
-        }
-        playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
-
-        if (user1HasStartCard()) {
-            currPlayerNumber = 1;
-        } else {
-            currPlayerNumber = 2;
-        }
-        System.out.println(findStartingCard().toString());
-        System.out.println(user1HasStartCard());
-        System.out.println(currPlayerNumber);
-        System.out.println(user1.getCards().toString());
-        System.out.println(user2.getCards().toString());
-        drawGame();
-        setVisible(true);
     }
 
     //MODIFIES: this
@@ -118,11 +125,6 @@ public class BigTwoGameGUI extends JPanel {
      */
 
     public void drawGame() {
-//        chipsGUI.draw(this);
-//        drawChips();
-//        drawPlayerCards();
-//        drawTablePile();
-
         tableGUI = new TablePileGUI(this);
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -144,7 +146,7 @@ public class BigTwoGameGUI extends JPanel {
         constraints.gridwidth = 4;
         constraints.gridheight = 0;
         constraints.anchor = GridBagConstraints.SOUTH;
-        add(interaction,constraints);
+        add(interaction, constraints);
     }
 
     /**
@@ -154,41 +156,19 @@ public class BigTwoGameGUI extends JPanel {
      */
 
     public void nextPlayer() {
-        if (currPlayerNumber == 1) {
-            currPlayerNumber++;
+        if (playerTurn == 1) {
+            playerTurn++;
         } else {
-            currPlayerNumber--;
+            playerTurn--;
         }
+        announce.setText("It is now " + playerList.get(playerTurn).getName() + "'s turn.");
     }
 
     public void update() {
-        // stub
         tableGUI.update();
         chipsGUI.update();
-
+        interaction.update();
     }
-
-//    public void runGame() {
-//        if (firstTurn) {
-//            if (user1HasStartCard()) {
-////                playATurn(user1);
-//                firstTurn = false;
-//            }
-//        }
-//        while (!gameOver() && !quitting) {
-//            gs.setPlayerTurn(playerTurn);
-////            playATurn(playerList.get(playerTurn));
-//            if (playerTurn == 1) {
-//                playerTurn++;
-//            } else {
-//                playerTurn--;
-//            }
-//            if (firstTurn) {
-//                firstTurn = false;
-//            }
-//        }
-//        distributeWinning();
-//    }
 
     /**
      * ------------------------------------------------------------------------------------
@@ -214,17 +194,21 @@ public class BigTwoGameGUI extends JPanel {
     //          if game is over due to user quitting, no distribution is done
     private void distributeWinning() {
         Player winner = null;
+        Player loser = null;
+        int lostPoints = 0;
         if (!quitting) {
             if (isWinner(user1)) {
-                user1.collectChips(user2.payChips(pointsLost(user2)));
                 winner = user1;
+                loser = user2;
             } else {
-                user2.collectChips(user1.payChips(pointsLost(user1)));
                 winner = user2;
+                loser = user1;
             }
+            lostPoints = pointsLost(loser);
+            winner.collectChips(loser.payChips(lostPoints));
         }
-//        displayChips();
-        createPopUp(winner.getName() + " is the winner!", "Yay!", "Oh well",
+        createPopUp(winner.getName() + " is the winner! \n " + winner.getName()
+                + " won " + lostPoints + " points worth of chips!", "Yay!", "Oh well",
                 Actions.QUIT, Actions.QUIT);
     }
 
@@ -254,6 +238,7 @@ public class BigTwoGameGUI extends JPanel {
 
     public void pass() {
         table.setHand(new Hand());
+        gs.setCardList(table, GameStatus.TABLE);
         tableGUI.update();
         nextPlayer();
     }
@@ -268,16 +253,9 @@ public class BigTwoGameGUI extends JPanel {
     //EFFECTS: play a hand
 //    public void play() throws HandNotPlayableException {
     public void play(List<Integer> playCardsIndex, Player player) throws HandNotPlayableException {
-        // stub
-//        Hand selectedCards = selectCards();
-//        try {
-//            Hand selectedCards = selectCards();
         Hand selectedCards = new Hand(getPlayCards(playCardsIndex, player));
-        //for test purposes
-        System.out.println(selectedCards.toString());
         if (playable(selectedCards, table)) {
             //TODO: fix alternating player
-//            playHand(selectedCards, user1);
             playHand(selectedCards, player);
             if (!gameOver()) {
                 nextPlayer();
@@ -289,14 +267,6 @@ public class BigTwoGameGUI extends JPanel {
             //TODO: DEAL WITH PRINTING OUT MSG FOR EXCEPTIONS
             throw new HandNotPlayableException("You can't play that hand");
         }
-//        } catch (InvalidCardException e) {
-//            //TODO: DEAL WITH PRINTING OUT MSG FOR EXCEPTIONS
-//            System.out.println(e.getMessage());
-//        }
-        //if game is not over:
-        //nextPlayer();
-        //else:
-        //end game and stuff
     }
 
     public List<Card> getPlayCards(List<Integer> cardsIndex, Player player) {
@@ -310,30 +280,12 @@ public class BigTwoGameGUI extends JPanel {
     //EFFECTS: play the selected cards
     private void playHand(Hand selectedCards, Player player) {
         player.takeATurn(selectedCards);
-        gs.removeCardsFromPlayer(selectedCards, playerList.indexOf(player));
+        gs.removeCardsFromPlayer(selectedCards, player);
+//        gs.removeCardsFromPlayer(selectedCards, playerList.indexOf(player));
         table.playHandInPile(selectedCards);
         gs.setCardList(selectedCards, GameStatus.TABLE);
         firstTurn = false;
     }
-
-    //EFFECTS: select cards to play
-//    private Hand selectCards() throws InvalidCardException {
-//        List<Card> cardsToPlay = new ArrayList<>();
-//        String cardStr = "";
-//        do {
-//            cardStr = JOptionPane.showInputDialog(getParent(),
-//                    "Type card you would like to play (rank followed by suit name)"
-//                            + "\n Or 'p' to play hand", null);
-//            if (cardStr.length() > 3 && RANK_VALUES.contains(cardStr.substring(0, 2).trim().toUpperCase())
-//                    && ListOfCards.SUITS.contains(cardStr.substring(2).trim().toLowerCase())) {
-//                int rank = RANK_VALUES.indexOf(cardStr.substring(0, 2).trim().toUpperCase());
-//                cardsToPlay.add(new Card(rank, cardStr.substring(2).trim().toLowerCase()));
-//            } else if (!cardStr.equalsIgnoreCase("p")) {
-//                throw new InvalidCardException("That is not a card");
-//            }
-//        } while (!cardStr.equalsIgnoreCase("p"));
-//        return new Hand(cardsToPlay);
-//    }
 
     //EFFECTS: returns true if given hand is a valid hand to be played
     // ie. ranking of hand is higher or equal to most recent played hand
@@ -404,6 +356,9 @@ public class BigTwoGameGUI extends JPanel {
             System.out.println("Saved game status to file: " + JSON_FILE);
         } catch (IOException e) {
             System.out.println("Unable to write game status to file: " + JSON_FILE);
+            JFrame msg = new JFrame();
+            JOptionPane.showMessageDialog(msg, "Unable to write game status to file: "
+                    + BigTwoGameGUI.JSON_FILE);
         }
     }
 
@@ -413,13 +368,15 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    public void askToLoadGame() {
-        createPopUp("Do you want to load a saved game from file?", "Yes", "No",
-                Actions.LOAD_GAME, Actions.NO);
-    }
+//    public void askToLoadGame() {
+//        createPopUp("Do you want to load a saved game from file?", "Yes", "No",
+//                Actions.LOAD_GAME, Actions.NO);
+////        update();
+//    }
 
     //MODIFIES: this
     //EFFECTS: loads the game status from file
+    //TODO: CLEAN UP
     private void loadGameStatus() {
         try {
             gs = reader.read();
@@ -427,12 +384,15 @@ public class BigTwoGameGUI extends JPanel {
             System.out.println("Loaded game from file: " + JSON_FILE);
         } catch (IOException e) {
             System.out.println("Unable to load game from file: " + JSON_FILE);
+            JFrame msg = new JFrame();
+            JOptionPane.showMessageDialog(msg, "Unable to load game from file: " + BigTwoGameGUI.JSON_FILE);
         }
     }
 
     //MODIFIES: this
     //EFFECTS: initializes the game according to saved stats from file
     private void initializeLoadedGame() {
+
         int playerNumber = PLAYER1;
         ChipsDrawer drawer = gs.getDrawer(playerNumber);
         user1 = new Player("user1", gs.getCardList(playerNumber), drawer.getNumWhiteChips(),
@@ -445,68 +405,7 @@ public class BigTwoGameGUI extends JPanel {
 
         playerTurn = gs.getPlayerTurn();
         firstTurn = false;
-        update();
     }
-
-    /**
-     * ========================================================================================================
-     * BUTTONS
-     * ========================================================================================================
-     */
-
-//    //EFFECTS: create buttons to pass, play, and quit
-//    public void createTurnOptions() {
-//        JPanel buttonsArea = new JPanel();
-////        buttonsArea.setLayout(new GridLayout(0, 1));
-//        buttonsArea.setLayout(new FlowLayout());
-////        buttonsArea.setSize(new Dimension(0, 0));
-//        add(buttonsArea, BorderLayout.SOUTH);
-//
-//        buttonsArea.add(addPassButton());
-//        buttonsArea.add(addPlayButton());
-//        buttonsArea.add(addQuitButton());
-//    }
-
-//    public JButton addPassButton() {
-//        JButton passButton = new JButton("pass");
-//        passButton.setActionCommand("pass");
-//        passButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                pass();
-//            }
-//        });
-//        return passButton;
-//    }
-//
-//    public JButton addPlayButton() {
-//        JButton playButton = new JButton("play");
-//        playButton.setActionCommand("play");
-//        playButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    play();
-//                } catch (HandNotPlayableException he) {
-//                    System.out.println(he.getMessage());
-////                    throw new HandNotPlayableException();
-//                }
-//            }
-//        });
-//        return playButton;
-//    }
-//
-//    public JButton addQuitButton() {
-//        JButton quitButton = new JButton("quit");
-//        quitButton.setActionCommand("quit");
-//        quitButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                quit();
-//            }
-//        });
-//        return quitButton;
-//    }
 
     /**
      * ========================================================================================================
@@ -514,7 +413,7 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    private void createPopUp(String text, String button1Text, String button2Text, Actions button1, Actions button2) {
+    public void createPopUp(String text, String button1Text, String button2Text, Actions button1, Actions button2) {
         JFrame parent = new JFrame();
         parent.setPreferredSize(new Dimension(POP_UP_WIDTH, POP_UP_HEIGHT));
         JLabel question = new JLabel(text);
@@ -550,23 +449,21 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    private void executeActions(Actions action, JFrame parent) {
+    public void executeActions(Actions action, JFrame parent) {
         if (action.equals(Actions.LOAD_GAME)) {
-            load = true;
             loadGameStatus();
             parent.setVisible(false);
         } else if (action.equals(Actions.SAVE)) {
             saveGameStatus();
             parent.setVisible(false);
+            JFrame msg = new JFrame();
+            JOptionPane.showMessageDialog(msg, "Saved game status to file: "
+                    + BigTwoGameGUI.JSON_FILE);
         } else if (action.equals(Actions.NO) || action.equals(Actions.CANCEL) || action == Actions.QUIT) {
             parent.setVisible(false);
             if (action == Actions.QUIT) {
                 // show "has quit" text --> remove buttons and stuff
             }
-        } else if (action.equals(Actions.PLAY_CARD)) {
-            //stub
-            String cardStr = JOptionPane.showInputDialog(parent,
-                    "Type card you would like to play (rank followed by suit name)", null);
         }
     }
 
@@ -597,13 +494,7 @@ public class BigTwoGameGUI extends JPanel {
     }
 
     public Player getCurrPlayer() {
-        //TODO: FIX FOR ALTERNATING PLAYER
-        return playerList.get(currPlayerNumber);
-    }
-
-    public ChipsDrawer getPlayerChips(int playerNumber) {
-        //TODO: FIX FOR ALTERNATING PLAYER
-        return user1.getDrawer();
+        return playerList.get(playerTurn);
     }
 
     //getters

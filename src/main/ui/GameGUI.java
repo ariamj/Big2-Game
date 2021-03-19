@@ -1,20 +1,16 @@
 package ui;
 
-import exceptions.HandNotPlayableException;
-import model.ChipsDrawer;
 import ui.gui.BigTwoGameGUI;
-import ui.gui.ChipsDrawerGUI;
-import ui.gui.TablePileGUI;
-import ui.gui.UserInteractionArea;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class GameGUI extends JFrame {
-    public static final int WIDTH = 1000;
+    private static final String YES = "Yes";
+    private static final String NO = "No";
+    public static final int WIDTH = 1100;
     public static final int HEIGHT = 700;
 
     private BigTwoGameGUI game;
@@ -22,14 +18,8 @@ public class GameGUI extends JFrame {
     public GameGUI() {
         super("Big Two");
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        setMaximumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        setLayout(new GridLayout(4,0));
-        game = new BigTwoGameGUI();
-        add(game);
-        JLabel statusLabel = new JLabel("Player one turn");
-//        add(statusLabel, BorderLayout.NORTH);
-//        createTurnOptions();
+        askToLoadGame();
 
 //        JPanel chipsGUI = new ChipsDrawerGUI(game);
 //        add(chipsGUI, BorderLayout.EAST);
@@ -39,32 +29,62 @@ public class GameGUI extends JFrame {
 //
 //        JPanel interaction = new UserInteractionArea(game);
 //        add(interaction, BorderLayout.SOUTH);
-
         pack();
-        centreOnScreen();
-        setVisible(true);
+        centreOnScreen(this);
+//        setVisible(true);
     }
 
-    public void update() {
-
-        repaint();
+    public void askToLoadGame() {
+        createPopUp("Do you want to load a saved game from file?", YES, NO);
     }
 
-    //TODO: GUI CLEAN UP
-    public void paintComponents(Graphics g) {
-        super.paintComponents(g);
-//        drawGame(g);
+    public void createPopUp(String text, String button1Text, String button2Text) {
+        JFrame parent = new JFrame();
+        parent.setPreferredSize(new Dimension(500, 150));
+        JLabel question = new JLabel(text);
+        question.setFont(new Font("Times New Roman", 14, 18));
+
+        JPanel buttonArea = new JPanel();
+
+        parent.add(question, BorderLayout.NORTH);
+        buttonArea.add(createButton(button1Text, parent));
+        buttonArea.add(createButton(button2Text, parent));
+        parent.add(buttonArea, BorderLayout.SOUTH);
+        parent.pack();
+        parent.setAlwaysOnTop(true);
+        centreOnScreen(parent);
+        parent.setVisible(true);
     }
 
-    //TODO: GUI CLEAN UP
-//    public void drawGame(Graphics g) {
-    public void drawGame() {
-//        game.draw(g);
-        game.drawGame();
+    private JButton createButton(String text, JFrame parent) {
+        JButton button = new JButton(text);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                executeAction(text, parent);
+            }
+        });
+        return button;
     }
 
-    private void centreOnScreen() {
+    private void executeAction(String text, JFrame parent) {
+        if (text.equals(YES)) {
+            game = new BigTwoGameGUI(BigTwoGameGUI.LOAD_SAVED);
+            add(game);
+            setVisible(true);
+            parent.setVisible(false);
+            JFrame popUp = new JFrame();
+            JOptionPane.showMessageDialog(popUp, "Loaded game from file: " + BigTwoGameGUI.JSON_FILE);
+        } else {
+            game = new BigTwoGameGUI(BigTwoGameGUI.NEW_GAME);
+            add(game);
+            setVisible(true);
+            parent.setVisible(false);
+        }
+    }
+
+    private void centreOnScreen(JFrame parent) {
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((scrn.width - getWidth()) / 2, (scrn.height - getHeight()) / 2);
+        parent.setLocation((scrn.width - parent.getWidth()) / 2, (scrn.height - parent.getHeight()) / 2);
     }
 }

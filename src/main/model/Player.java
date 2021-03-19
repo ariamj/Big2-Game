@@ -26,25 +26,6 @@ public class Player extends JPanel {
         drawer = new ChipsDrawer(numWhiteChips, numBlueChips, numRedChips, numGoldChips);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Player player = (Player) o;
-        return Objects.equals(name, player.name)
-                && Objects.equals(cards, player.cards)
-                && Objects.equals(drawer, player.drawer);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, cards, drawer);
-    }
-
     //REQUIRES: cards is not empty
     //MODIFIES: this
     //EFFECTS: play hand by removing cards in hand from cards

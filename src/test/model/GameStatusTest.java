@@ -101,7 +101,12 @@ public class GameStatusTest {
         ListOfCards cards2 = new PlayerCards(new ArrayList<>(Arrays.asList(d4, s4)));
         gs.setCardList(cards2, GameStatus.PLAYER1);
         ListOfCards removeList = new Hand(new ArrayList<>(Arrays.asList(s4)));
-        gs.removeCardsFromPlayer(removeList, GameStatus.PLAYER1);
+//        gs.removeCardsFromPlayer(removeList, GameStatus.PLAYER1);
+        Player player = new Player("player1", cards2.getListOfCards(), 20, 10,
+                5, 1);
+        gs.removeCardsFromPlayer(removeList, player);
+
+
         List<Card> cardList1 = gs.getCardList(GameStatus.PLAYER1);
         assertEquals(1, cardList1.size());
         assertTrue(cardList1.contains(d4));

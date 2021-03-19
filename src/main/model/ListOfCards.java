@@ -120,7 +120,6 @@ public abstract class ListOfCards {
         //TODO: IMPLEMENT DRAW
         for (Card card : listOfCards) {
             card.draw(parent);
-//            card.draw();
         }
     }
 

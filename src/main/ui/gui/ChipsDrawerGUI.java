@@ -14,7 +14,7 @@ public class ChipsDrawerGUI extends JPanel {
 
     public ChipsDrawerGUI(BigTwoGameGUI game) {
 //        setBackground(Color.lightGray);
-//        setMaximumSize(new Dimension((GameGUI.WIDTH / 10) * 2, (GameGUI.HEIGHT / 10) * 2));
+//        setSize(new Dimension((GameGUI.WIDTH / 10) * 2, (GameGUI.HEIGHT / 10) * 2));
 //        setLayout(new GridLayout(2, 1));
         setLayout(new GridBagLayout());
         this.game = game;

@@ -71,18 +71,8 @@ public class Card implements Writable {
         return json;
     }
 
-//    //TODO: GUI CLEAN UP
-//    public void draw(Graphics g) {
-//        g.setColor(new Color(9, 98, 125));
-//        g.drawRect(BigTwoGame.WIDTH / 2, BigTwoGame.HEIGHT / 2, 10, 100);
-////        g.setColor(new Color(9, 98, 125));
-//    }
-
     //TODO: GUI CLEAN UP
-//    public void draw() {
     public void draw(JPanel parent) {
-        // stub
-        // load images
         String sep = System.getProperty("file.separator");
         ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep
                 + "images" + sep + this.toString() + ".jpg");

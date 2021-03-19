@@ -157,15 +157,6 @@ public class ChipsDrawer implements Writable {
         return drawerString + "]";
     }
 
-    //TODO: IMPLEMENT DRAW
-    public void draw(JPanel parent) {
-        // stub
-        String sep = System.getProperty("file.separator");
-        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep + "data" + sep + "tobs.jpg");
-        JLabel imageAsLabel = new JLabel(trial);
-        parent.add(imageAsLabel);
-    }
-
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

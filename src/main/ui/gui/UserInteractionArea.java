@@ -14,6 +14,9 @@ public class UserInteractionArea extends JPanel {
     private BigTwoGameGUI game;
     private JTabbedPane sideBar;
 
+    private PlayerTab player1Tab;
+    private PlayerTab player2Tab;
+
     public UserInteractionArea(BigTwoGameGUI game) {
 //        super("Player Cards");
 //        setSize(new Dimension(WIDTH, HEIGHT));
@@ -32,8 +35,8 @@ public class UserInteractionArea extends JPanel {
     public void loadTabs() {
 //        JPanel player1Tab = new PlayerTab();
 //        JPanel player2Tab = new PlayerTab();
-        JPanel player1Tab = new PlayerTab(game, game.getPlayer(1));
-        JPanel player2Tab = new PlayerTab(game, game.getPlayer(2));
+        player1Tab = new PlayerTab(game, game.getPlayer(1));
+        player2Tab = new PlayerTab(game, game.getPlayer(2));
 
         sideBar.add(player1Tab, PLAYER1_TAB_INDEX);
         sideBar.setTitleAt(PLAYER1_TAB_INDEX, "Player 1");
@@ -42,11 +45,11 @@ public class UserInteractionArea extends JPanel {
     }
 
     public void update() {
-        Component tab = sideBar.getTabComponentAt(PLAYER1_TAB_INDEX);
-//        tab.update();
+        player1Tab.update();
+        player2Tab.update();
     }
 
-    public static void main(String[] args) {
-        new UserInteractionArea(new BigTwoGameGUI());
-    }
+//    public static void main(String[] args) {
+//        new UserInteractionArea(new BigTwoGameGUI());
+//    }
 }

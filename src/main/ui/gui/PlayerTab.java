@@ -39,6 +39,8 @@ public class PlayerTab extends JPanel {
 
         placeCards();
         createTurnOptions();
+
+//        update();
     }
 
     public void placeCards() {
@@ -52,15 +54,12 @@ public class PlayerTab extends JPanel {
         //if playing with half deck
         if (player.getNumCards() > 13) {
             createCardsRow(0, 2, 14, player.getNumCards(), cardsArea2);
-//            createCardsRow(0, 2, 0, 13, cardsArea2);
             createSelectCardsRow(0, 3, selectArea2);
         }
     }
 
     public void createCardsRow(int x, int y, int firstIndex, int lastIndex, JPanel area) {
         ListOfCards cards = player.getCards();
-//        area = new JPanel();
-//        JPanel cardsArea = new JPanel();
         area.setLayout(new GridLayout(0, 13));
         constraints.gridx = x;
         constraints.gridy = y;
@@ -75,7 +74,6 @@ public class PlayerTab extends JPanel {
     }
 
     public void createSelectCardsRow(int x, int y, JPanel area) {
-//        selectArea1 = new JPanel();
         area.setLayout(new GridLayout(0, 13));
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = x;
@@ -101,9 +99,6 @@ public class PlayerTab extends JPanel {
                 } else {
                     cardsIndex.remove((Integer) i);
                 }
-                //TESTING....
-                //TODO: CLEAN UP
-                System.out.println(cardsIndex.toString());
             }
         });
     }
@@ -172,19 +167,15 @@ public class PlayerTab extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    System.out.println(game.getCurrPlayer().equals(player));
                     if (game.getCurrPlayer().equals(player)) {
                         game.play(cardsIndex, player);
                     } else {
                         JFrame popUp = new JFrame();
                         JOptionPane.showMessageDialog(popUp, "Not your turn!");
                     }
-//                    game.play(cardsIndex);
                 } catch (HandNotPlayableException he) {
                     JFrame popUp = new JFrame();
                     JOptionPane.showMessageDialog(popUp, he.getMessage());
-//                    System.out.println(he.getMessage());
-//                    throw new HandNotPlayableException();
                 } finally {
                     update();
                 }
@@ -220,6 +211,5 @@ public class PlayerTab extends JPanel {
         }
         placeCards();
         cardsIndex = new ArrayList<>();
-        updateUI();
     }
 }

@@ -19,6 +19,7 @@ public class TablePileGUI extends JPanel {
 
     private Hand table;
     private BigTwoGameGUI game;
+    private JPanel cardsArea;
 
 //    public TablePileGUI() {
     public TablePileGUI(BigTwoGameGUI game) {
@@ -35,17 +36,21 @@ public class TablePileGUI extends JPanel {
     }
 
     public void drawTable() {
-//        JPanel parent = new JPanel();
+        cardsArea = new JPanel();
         table = game.getTable();
-        table.draw(this);
-//        add(parent);
+        table.draw(cardsArea);
+        add(cardsArea, BorderLayout.CENTER);
     }
 
     public void update() {
         // stub
-        removeAll();
+//        removeAll();
+        if (cardsArea != null) {
+            remove(cardsArea);
+        }
         drawTable();
         updateUI();
+
     }
 
     public static void main(String[] args) {
