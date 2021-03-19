@@ -121,6 +121,31 @@ public class PlayerTab extends JPanel {
         buttonsArea.add(addPassButton());
         buttonsArea.add(addPlayButton());
         buttonsArea.add(addQuitButton());
+
+        buttonsArea.add(addIconButtonTest());
+    }
+
+    //MAKING BUTTON AS ICON!!!
+    //TODO: TESTING
+    public JButton addIconButtonTest() {
+        String sep = System.getProperty("file.separator");
+        Icon image1 = new ImageIcon(System.getProperty("user.dir") + sep
+                + "images" + sep + "AD.jpg");
+
+        JButton button = new JButton();
+        button.setIcon(image1);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (button.getIcon().equals(image1)) {
+                    button.setIcon(new ImageIcon(System.getProperty("user.dir") + sep
+                            + "images" + sep + "75x.jpg"));
+                } else {
+                    button.setIcon(image1);
+                }
+            }
+        });
+        return button;
     }
 
     public JButton addPassButton() {
@@ -129,7 +154,12 @@ public class PlayerTab extends JPanel {
         passButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.pass();
+                if (game.getCurrPlayer().equals(player)) {
+                    game.pass();
+                } else {
+                    JFrame popUp = new JFrame();
+                    JOptionPane.showMessageDialog(popUp, "Not your turn!");
+                }
             }
         });
         return passButton;

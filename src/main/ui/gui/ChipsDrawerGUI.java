@@ -28,6 +28,7 @@ public class ChipsDrawerGUI extends JPanel {
     public void draw() {
         chips1 = game.getDrawer(1);
         chips2 = game.getDrawer(2);
+//        drawPlayerChips(chips1, 1, DARK_BLUE, 0);
         drawPlayerChips(chips1, 1, Color.lightGray, 0);
         drawPlayerChips(chips2, 2, Color.orange, 1);
     }

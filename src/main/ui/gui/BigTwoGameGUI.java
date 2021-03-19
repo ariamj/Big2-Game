@@ -165,6 +165,7 @@ public class BigTwoGameGUI extends JPanel {
         // stub
         tableGUI.update();
         chipsGUI.update();
+
     }
 
 //    public void runGame() {
@@ -252,6 +253,8 @@ public class BigTwoGameGUI extends JPanel {
      */
 
     public void pass() {
+        table.setHand(new Hand());
+        tableGUI.update();
         nextPlayer();
     }
 

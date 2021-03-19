@@ -41,6 +41,11 @@ public class UserInteractionArea extends JPanel {
         sideBar.setTitleAt(PLAYER2_TAB_INDEX, "Player 2");
     }
 
+    public void update() {
+        Component tab = sideBar.getTabComponentAt(PLAYER1_TAB_INDEX);
+//        tab.update();
+    }
+
     public static void main(String[] args) {
         new UserInteractionArea(new BigTwoGameGUI());
     }

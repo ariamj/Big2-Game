@@ -85,16 +85,9 @@ public class Card implements Writable {
         // load images
         String sep = System.getProperty("file.separator");
         ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep
-                + "images" + sep + "AD.jpg");
+                + "images" + sep + this.toString() + ".jpg");
         JLabel imageAsLabel75 = new JLabel(trial);
-//        for (int i = 0; i < 13; i++) {
-//            parent.add(imageAsLabel75);
-//        }
         parent.add(imageAsLabel75);
-//        trial = new ImageIcon(System.getProperty("user.dir") + sep
-//                + "images" + sep + "50x.jpg");
-//        JLabel imageAsLabel50 = new JLabel(trial);
-//        parent.add(imageAsLabel50);
     }
 
 }
