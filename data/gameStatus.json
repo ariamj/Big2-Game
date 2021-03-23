@@ -22,10 +22,6 @@
          "suit": "diamond"
       },
       {
-         "rank": 8,
-         "suit": "heart"
-      },
-      {
          "rank": 11,
          "suit": "clubs"
       },
@@ -40,10 +36,6 @@
       {
          "rank": 6,
          "suit": "spade"
-      },
-      {
-         "rank": 2,
-         "suit": "heart"
       }
    ],
    "player 1 cards": [
@@ -60,20 +52,12 @@
          "suit": "heart"
       },
       {
-         "rank": 1,
-         "suit": "heart"
-      },
-      {
          "rank": 2,
          "suit": "clubs"
       },
       {
          "rank": 2,
          "suit": "diamond"
-      },
-      {
-         "rank": 4,
-         "suit": "spade"
       },
       {
          "rank": 10,
@@ -102,7 +86,7 @@
       "blue chips": 5
    }],
    "table pile": [{
-      "rank": 10,
-      "suit": "spade"
+      "rank": 8,
+      "suit": "heart"
    }]
 }

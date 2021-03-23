@@ -124,8 +124,7 @@ public class PlayerTab extends JPanel {
     //TODO: TESTING
     public JButton addIconButtonTest() {
         String sep = System.getProperty("file.separator");
-        Icon image1 = new ImageIcon(System.getProperty("user.dir") + sep
-                + "images" + sep + "AD.jpg");
+        Icon image1 = new ImageIcon("./data/images/AD.jpg");
 
         JButton button = new JButton();
         button.setIcon(image1);
@@ -133,8 +132,7 @@ public class PlayerTab extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (button.getIcon().equals(image1)) {
-                    button.setIcon(new ImageIcon(System.getProperty("user.dir") + sep
-                            + "images" + sep + "75x.jpg"));
+                    button.setIcon(new ImageIcon("./data/images/KS.jpg"));
                 } else {
                     button.setIcon(image1);
                 }

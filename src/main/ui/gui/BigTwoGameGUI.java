@@ -161,10 +161,11 @@ public class BigTwoGameGUI extends JPanel {
         } else {
             playerTurn--;
         }
-        announce.setText("It is now " + playerList.get(playerTurn).getName() + "'s turn.");
+        gs.setPlayerTurn(playerTurn);
     }
 
     public void update() {
+        announce.setText("It is now " + playerList.get(playerTurn).getName() + "'s turn.");
         tableGUI.update();
         chipsGUI.update();
         interaction.update();
