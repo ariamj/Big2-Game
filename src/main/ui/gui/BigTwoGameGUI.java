@@ -30,9 +30,11 @@ public class BigTwoGameGUI extends JPanel {
     private static final int TWO_CARD_POINT_VALUE = 5;
     public static final int POP_UP_WIDTH = 500;
     public static final int POP_UP_HEIGHT = 150;
-    public static final int NEW_GAME = 0;
-    public static final int LOAD_SAVED = 1;
-    public static final Font MSG_FONT = new Font("Times New Roman", 1, 32);
+    public static final int NEW_GAME_13 = 0;
+    public static final int NEW_GAME_HALF_DECK = 1;
+    public static final int LOAD_SAVED = 2;
+//    public static final Font MSG_FONT = new Font("Times New Roman", 1, 32);
+    public static final Font MSG_FONT = new Font("Phosphate", 1, 64);
 
     private Player user1;
     private Player user2;
@@ -62,6 +64,7 @@ public class BigTwoGameGUI extends JPanel {
     public BigTwoGameGUI(int version) {
         setMinimumSize(new Dimension(GameGUI.WIDTH, GameGUI.HEIGHT));
         setMaximumSize(new Dimension(GameGUI.WIDTH, GameGUI.HEIGHT));
+        setBackground(GameGUI.BACKGROUND);
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
 
@@ -73,16 +76,31 @@ public class BigTwoGameGUI extends JPanel {
 
         initializeGame();
 
-        if (version == NEW_GAME) {
-            initializeNewGame();
+        if (version == LOAD_SAVED) {
+            loadGameStatus();
+        } else {
+            if (version == NEW_GAME_13) {
+                initializeNewGame("13 cards");
+            } else {
+                initializeNewGame("half deck");
+            }
             if (user1HasStartCard()) {
                 playerTurn = 1;
             } else {
                 playerTurn = 2;
             }
-        } else {
-            loadGameStatus();
         }
+
+//        if (version == NEW_GAME_13) {
+//            initializeNewGame("13 cards");
+//            if (user1HasStartCard()) {
+//                playerTurn = 1;
+//            } else {
+//                playerTurn = 2;
+//            }
+//        } else {
+//            loadGameStatus();
+//        }
 
         playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
         drawGame();
@@ -103,15 +121,15 @@ public class BigTwoGameGUI extends JPanel {
 
     //MODIFIES: this
     //EFFECTS: initializes a new game
-    public void initializeNewGame() {
+    public void initializeNewGame(String numCardsStart) {
         // TODO: implement choosing option
-        List<Card> startCards = deck.dealCards("13 cards");
+        List<Card> startCards = deck.dealCards(numCardsStart);
         user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
                 NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
         gs.setCardList(new PlayerCards(startCards), PLAYER1);
         gs.setDrawer(user1.getDrawer(), PLAYER1);
 
-        startCards = deck.dealCards("13 cards");
+        startCards = deck.dealCards(numCardsStart);
         user2 = new Player("user2", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
                 NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
         gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER2);
@@ -240,8 +258,9 @@ public class BigTwoGameGUI extends JPanel {
     public void pass() {
         table.setHand(new Hand());
         gs.setCardList(table, GameStatus.TABLE);
-        tableGUI.update();
+//        tableGUI.update();
         nextPlayer();
+        update();
     }
 
     /**
@@ -467,6 +486,25 @@ public class BigTwoGameGUI extends JPanel {
             }
         }
     }
+
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//        if (quitting) {
+//            quitGameText(g);
+//        }
+//    }
+//
+//    public void quitGameText(Graphics g) {
+//        g.setColor(Color.BLACK);
+//        g.setFont(MSG_FONT);
+//        FontMetrics fm = g.getFontMetrics();
+//        centreString("You have quit the game", g, fm, GameGUI.HEIGHT / 2);
+//    }
+//
+//    public void centreString(String text, Graphics g, FontMetrics fm, int y) {
+//        int width = fm.stringWidth(text);
+//        g.drawString(text, (GameGUI.WIDTH - width) / 2, y);
+//    }
 
     /**
      * ========================================================================================================

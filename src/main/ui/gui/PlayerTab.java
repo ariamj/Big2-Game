@@ -3,6 +3,7 @@ package ui.gui;
 import exceptions.HandNotPlayableException;
 import model.ListOfCards;
 import model.Player;
+import ui.GameGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +29,7 @@ public class PlayerTab extends JPanel {
     //    public PlayerTab() {
     public PlayerTab(BigTwoGameGUI game, Player player) {
         setMaximumSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
-
+        setBackground(GameGUI.BACKGROUND);
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
 
@@ -50,15 +51,16 @@ public class PlayerTab extends JPanel {
         selectArea1 = new JPanel();
         selectArea2 = new JPanel();
         createCardsRow(0, 0, 0, 13, cardsArea1);
-        createSelectCardsRow(0, 1, selectArea1);
+        createSelectCardsRow(0, 1, 0, 13, selectArea1);
         //if playing with half deck
         if (player.getNumCards() > 13) {
-            createCardsRow(0, 2, 14, player.getNumCards(), cardsArea2);
-            createSelectCardsRow(0, 3, selectArea2);
+            createCardsRow(0, 2, 13, player.getNumCards(), cardsArea2);
+            createSelectCardsRow(0, 3, 13, player.getNumCards(), selectArea2);
         }
     }
 
     public void createCardsRow(int x, int y, int firstIndex, int lastIndex, JPanel area) {
+        area.setBackground(GameGUI.BACKGROUND);
         ListOfCards cards = player.getCards();
         area.setLayout(new GridLayout(0, 13));
         constraints.gridx = x;
@@ -73,14 +75,24 @@ public class PlayerTab extends JPanel {
         }
     }
 
-    public void createSelectCardsRow(int x, int y, JPanel area) {
+    public void createSelectCardsRow(int x, int y, int firstIndex, int lastIndex, JPanel area) {
+        area.setBackground(GameGUI.BACKGROUND);
         area.setLayout(new GridLayout(0, 13));
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = x;
         constraints.gridy = y;
         add(area, constraints);
-        for (int i = 0; i < player.getNumCards(); i++) {
-            createCheckBox(area, i);
+//        for (int i = firstIndex; i < player.getNumCards(); i++) {
+//            createCheckBox(area, i);
+//        }
+        if (player.getNumCards() <= 13) {
+            for (int i = 0; i < player.getNumCards(); i++) {
+                createCheckBox(area, i);
+            }
+        } else {
+            for (int i = firstIndex; i < lastIndex; i++) {
+                createCheckBox(area, i);
+            }
         }
     }
 
@@ -97,7 +109,7 @@ public class PlayerTab extends JPanel {
                 if (selectCard.isSelected()) {
                     cardsIndex.add(i);
                 } else {
-                    cardsIndex.remove((Integer) i);
+                    cardsIndex.remove(i);
                 }
             }
         });
@@ -106,6 +118,12 @@ public class PlayerTab extends JPanel {
     //EFFECTS: create buttons to pass, play, and quit
     public void createTurnOptions() {
         JPanel buttonsArea = new JPanel();
+        buttonsArea.setBackground(GameGUI.BACKGROUND);
+
+//        FlowLayout layout = new FlowLayout(FlowLayout.CENTER);
+//        layout.setHgap(10);
+//        buttonsArea.setLayout(layout);
+
         buttonsArea.setLayout(new FlowLayout(FlowLayout.CENTER));
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 0;
@@ -117,6 +135,7 @@ public class PlayerTab extends JPanel {
         buttonsArea.add(addPlayButton());
         buttonsArea.add(addQuitButton());
 
+        buttonsArea.add(addIconButtonTest());
         buttonsArea.add(addIconButtonTest());
     }
 

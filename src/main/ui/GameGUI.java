@@ -10,30 +10,25 @@ import java.awt.event.ActionListener;
 public class GameGUI extends JFrame {
     private static final String YES = "Yes";
     private static final String NO = "No";
+    private static final String CARDS_13 = "13 cards";
+    private static final String HALF_DECK = "Half Deck";
     public static final int WIDTH = 1100;
     public static final int HEIGHT = 700;
+    public static final Color BACKGROUND = new Color(130, 62, 56);
 
     private BigTwoGameGUI game;
 
+    //EFFECTS: set up which game window to operate; saved or new game
     public GameGUI() {
         super("Big Two");
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         askToLoadGame();
-
-//        JPanel chipsGUI = new ChipsDrawerGUI(game);
-//        add(chipsGUI, BorderLayout.EAST);
-//
-//        JPanel tableGUI = new TablePileGUI(game);
-//        add(tableGUI, BorderLayout.CENTER);
-//
-//        JPanel interaction = new UserInteractionArea(game);
-//        add(interaction, BorderLayout.SOUTH);
         pack();
         centreOnScreen(this);
-//        setVisible(true);
     }
 
+    //EFFECTS: ask to play a new game or loaded game form file
     public void askToLoadGame() {
         createPopUp("Do you want to load a saved game from file?", YES, NO);
     }
@@ -75,8 +70,18 @@ public class GameGUI extends JFrame {
             parent.setVisible(false);
             JFrame popUp = new JFrame();
             JOptionPane.showMessageDialog(popUp, "Loaded game from file: " + BigTwoGameGUI.JSON_FILE);
+        } else if (text.equals(NO)) {
+            createPopUp("How many cards would you like to start with?", CARDS_13, HALF_DECK);
+//            game = new BigTwoGameGUI(BigTwoGameGUI.NEW_GAME_13);
+//            add(game);
+//            setVisible(true);
+            parent.setVisible(false);
         } else {
-            game = new BigTwoGameGUI(BigTwoGameGUI.NEW_GAME);
+            if (text.equals(CARDS_13)) {
+                game = new BigTwoGameGUI(BigTwoGameGUI.NEW_GAME_13);
+            } else {
+                game = new BigTwoGameGUI(BigTwoGameGUI.NEW_GAME_HALF_DECK);
+            }
             add(game);
             setVisible(true);
             parent.setVisible(false);

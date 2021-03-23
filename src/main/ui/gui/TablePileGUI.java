@@ -24,6 +24,7 @@ public class TablePileGUI extends JPanel {
 //    public TablePileGUI() {
     public TablePileGUI(BigTwoGameGUI game) {
         setSize(new Dimension(WIDTH, HEIGHT));
+        setBackground(GameGUI.BACKGROUND);
 //        table = game.getTable();
 //        Hand list = new Hand(new ArrayList<>(Arrays.asList(new Card(1, "diamond"),
 //                new Card(4, "spade"))));
@@ -37,6 +38,7 @@ public class TablePileGUI extends JPanel {
 
     public void drawTable() {
         cardsArea = new JPanel();
+        cardsArea.setBackground(GameGUI.BACKGROUND);
         table = game.getTable();
         table.draw(cardsArea);
         add(cardsArea, BorderLayout.CENTER);

@@ -1,5 +1,5 @@
 {
-   "player turn": 1,
+   "player turn": 2,
    "player 2 cards": [
       {
          "rank": 1,
@@ -18,20 +18,12 @@
          "suit": "spade"
       },
       {
-         "rank": 7,
-         "suit": "diamond"
-      },
-      {
          "rank": 11,
          "suit": "clubs"
       },
       {
          "rank": 11,
          "suit": "spade"
-      },
-      {
-         "rank": 12,
-         "suit": "clubs"
       },
       {
          "rank": 6,
@@ -60,14 +52,6 @@
          "suit": "diamond"
       },
       {
-         "rank": 10,
-         "suit": "clubs"
-      },
-      {
-         "rank": 10,
-         "suit": "heart"
-      },
-      {
          "rank": 4,
          "suit": "diamond"
       }
@@ -86,7 +70,7 @@
       "blue chips": 5
    }],
    "table pile": [{
-      "rank": 8,
+      "rank": 10,
       "suit": "heart"
    }]
 }

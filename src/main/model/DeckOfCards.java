@@ -35,11 +35,13 @@ public class DeckOfCards extends ListOfCards {
     //EFFECTS: deals out startAmount amount of cards
     public List<Card> dealCards(String startAmount) {
         List<Card> cardDealt = new ArrayList<>();
-        int numCards = this.getSize();
+        int numCards = 26;
+//        int numCards = this.getSize();
         if (startAmount.equals("13 cards")) {
-            numCards = 26;
+            numCards = 13;
+//            numCards = 26;
         }
-        for (int i = 0; i < numCards; i += 2) {
+        for (int i = 0; i < numCards; i++) {
             Card cardToBeRemoved = this.getCard(i);
             cardDealt.add(cardToBeRemoved);
         }
