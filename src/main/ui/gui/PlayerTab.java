@@ -21,6 +21,8 @@ public class PlayerTab extends JPanel {
     private Player player;
 
     private GridBagConstraints constraints;
+//    private JPanel tabField;
+    private CardsGUI cardsGUI;
     private JPanel cardsArea1;
     private JPanel cardsArea2;
     private JPanel selectArea1;
@@ -32,17 +34,40 @@ public class PlayerTab extends JPanel {
         setBackground(GameGUI.BACKGROUND);
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
-
+//
         this.game = game;
         this.player = player;
-
+//        this.tabField = new JPanel();
+        this.cardsGUI = new CardsGUI();
+//
         cardsIndex = new ArrayList<>();
-
+//
         placeCards();
         createTurnOptions();
 
+//        constructTabField();
+
 //        update();
     }
+
+//    public JPanel getTabField() {
+//        return tabField;
+//    }
+
+//    public void constructTabField() {
+//        tabField.setMaximumSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
+//        tabField.setBackground(GameGUI.BACKGROUND);
+//        tabField.setLayout(new GridBagLayout());
+//        constraints = new GridBagConstraints();
+//
+////        this.game = game;
+////        this.player = player;
+//
+//        cardsIndex = new ArrayList<>();
+//
+//        placeCards();
+//        createTurnOptions();
+//    }
 
     public void placeCards() {
         //TESTING PURPOSE
@@ -67,10 +92,12 @@ public class PlayerTab extends JPanel {
         constraints.gridy = y;
         add(area, constraints);
         if (cards.getSize() <= 13) {
-            cards.draw(area);
+            cardsGUI.drawCardList(area, cards);
+//            cards.draw(area);
         } else {
             for (int i = firstIndex; i < lastIndex; i++) {
-                cards.getCard(i).draw(area);
+                cardsGUI.drawCard(area, cards.getCard(i));
+//                cards.getCard(i).draw(area);
             }
         }
     }

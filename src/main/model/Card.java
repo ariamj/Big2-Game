@@ -72,13 +72,13 @@ public class Card implements Writable {
     }
 
     //TODO: GUI CLEAN UP --> MOVE ALL DRAW METHODS TO UI
-    public void draw(JPanel parent) {
-//        String sep = System.getProperty("file.separator");
-        ImageIcon trial = new ImageIcon("./data/images/" + this.toString() + ".jpg");
-//        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep + "data" + sep
-//                + "images" + sep + this.toString() + ".jpg");
-        JLabel imageAsLabel75 = new JLabel(trial);
-        parent.add(imageAsLabel75);
-    }
+//    public void draw(JPanel parent) {
+////        String sep = System.getProperty("file.separator");
+//        ImageIcon trial = new ImageIcon("./data/images/" + this.toString() + ".jpg");
+////        ImageIcon trial = new ImageIcon(System.getProperty("user.dir") + sep + "data" + sep
+////                + "images" + sep + this.toString() + ".jpg");
+//        JLabel imageAsLabel75 = new JLabel(trial);
+//        parent.add(imageAsLabel75);
+//    }
 
 }

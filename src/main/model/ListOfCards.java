@@ -116,11 +116,11 @@ public abstract class ListOfCards {
     //TODO: GUI STUFF TO CLEAN UP
 //    public abstract void draw(JPanel parent);
 
-    public void draw(JPanel parent) {
-        //TODO: IMPLEMENT DRAW
-        for (Card card : listOfCards) {
-            card.draw(parent);
-        }
-    }
+//    public void draw(JPanel parent) {
+//        //TODO: IMPLEMENT DRAW
+//        for (Card card : listOfCards) {
+//            card.draw(parent);
+//        }
+//    }
 
 }

@@ -20,6 +20,7 @@ public class TablePileGUI extends JPanel {
     private Hand table;
     private BigTwoGameGUI game;
     private JPanel cardsArea;
+    private CardsGUI cardsGUI;
 
 //    public TablePileGUI() {
     public TablePileGUI(BigTwoGameGUI game) {
@@ -31,6 +32,7 @@ public class TablePileGUI extends JPanel {
 //        table = list;
 
         this.game = game;
+        this.cardsGUI = new CardsGUI();
         drawTable();
 
         setVisible(true);
@@ -40,7 +42,8 @@ public class TablePileGUI extends JPanel {
         cardsArea = new JPanel();
         cardsArea.setBackground(GameGUI.BACKGROUND);
         table = game.getTable();
-        table.draw(cardsArea);
+        cardsGUI.drawCardList(cardsArea, table);
+//        table.draw(cardsArea);
         add(cardsArea, BorderLayout.CENTER);
     }
 

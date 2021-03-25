@@ -32,16 +32,6 @@ public class Hand extends ListOfCards {
         super(cards);
     }
 
-//    @Override
-//    public void draw(Graphics g) {
-//    public void draw(JPanel parent) {
-//        //TODO: IMPLEMENT DRAW
-//        for (Card card : listOfCards) {
-//            card.draw(parent);
-////            card.draw();
-//        }
-//    }
-
     //setters
     public void setHand(ListOfCards cards) {
         super.setListOfCards(cards.getListOfCards());
