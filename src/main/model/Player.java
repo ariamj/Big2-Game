@@ -75,7 +75,7 @@ public class Player extends JPanel {
     //EFFECTS: removes chip from drawer and update points lost
     private int removeChips(Chips chip, List<Chips> paidChips, int pointsLost, int pointsValue) {
         drawer.removeChipFromDrawer(chip);
-        paidChips.add(GOLD_CHIP);
+        paidChips.add(chip);
         pointsLost -= pointsValue;
         return pointsLost;
     }

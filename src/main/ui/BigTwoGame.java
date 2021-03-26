@@ -162,8 +162,6 @@ public class BigTwoGame extends JFrame {
         }
         player.takeATurn(handPlayed);
         gs.removeCardsFromPlayer(handPlayed, player);
-        //TODO: FIX BACK
-//        gs.removeCardsFromPlayer(handPlayed, playerList.indexOf(player));
         table.playHandInPile(handPlayed);
         gs.setCardList(handPlayed, GameStatus.TABLE);
     }

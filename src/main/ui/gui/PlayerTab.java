@@ -21,53 +21,29 @@ public class PlayerTab extends JPanel {
     private Player player;
 
     private GridBagConstraints constraints;
-//    private JPanel tabField;
     private CardsGUI cardsGUI;
     private JPanel cardsArea1;
     private JPanel cardsArea2;
     private JPanel selectArea1;
     private JPanel selectArea2;
 
-    //    public PlayerTab() {
     public PlayerTab(BigTwoGameGUI game, Player player) {
         setMaximumSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
         setBackground(GameGUI.BACKGROUND);
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
-//
+
         this.game = game;
         this.player = player;
-//        this.tabField = new JPanel();
         this.cardsGUI = new CardsGUI();
-//
         cardsIndex = new ArrayList<>();
 //
         placeCards();
         createTurnOptions();
 
-//        constructTabField();
 
 //        update();
     }
-
-//    public JPanel getTabField() {
-//        return tabField;
-//    }
-
-//    public void constructTabField() {
-//        tabField.setMaximumSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
-//        tabField.setBackground(GameGUI.BACKGROUND);
-//        tabField.setLayout(new GridBagLayout());
-//        constraints = new GridBagConstraints();
-//
-////        this.game = game;
-////        this.player = player;
-//
-//        cardsIndex = new ArrayList<>();
-//
-//        placeCards();
-//        createTurnOptions();
-//    }
 
     public void placeCards() {
         //TESTING PURPOSE
@@ -193,12 +169,7 @@ public class PlayerTab extends JPanel {
         passButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (game.getCurrPlayer().equals(player)) {
-                    game.pass();
-                } else {
-                    JFrame popUp = new JFrame();
-                    JOptionPane.showMessageDialog(popUp, "Not your turn!");
-                }
+                game.pass();
             }
         });
         return passButton;
@@ -211,15 +182,9 @@ public class PlayerTab extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (game.getCurrPlayer().equals(player)) {
-                        game.play(cardsIndex, player);
-                    } else {
-                        JFrame popUp = new JFrame();
-                        JOptionPane.showMessageDialog(popUp, "Not your turn!");
-                    }
+                    game.play(cardsIndex, player);
                 } catch (HandNotPlayableException he) {
-                    JFrame popUp = new JFrame();
-                    JOptionPane.showMessageDialog(popUp, he.getMessage());
+                    GameGUI.showMsg(he.getMessage());
                 } finally {
                     update();
                 }
@@ -238,6 +203,12 @@ public class PlayerTab extends JPanel {
             }
         });
         return quitButton;
+    }
+
+    private void showMsg(String msg) {
+        Icon image1 = new ImageIcon("./data/images/Msg_Icon.jpg");
+        JOptionPane.showMessageDialog(null, msg, null,
+                JOptionPane.INFORMATION_MESSAGE, image1);
     }
 
     public void update() {

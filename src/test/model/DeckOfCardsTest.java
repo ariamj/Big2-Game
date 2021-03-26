@@ -44,7 +44,7 @@ public class DeckOfCardsTest {
     @Test
     public void testDealCards13Cards() {
         List<Card> cardsDealt = new ArrayList<>();
-        for (int i = 0; i < 26; i += 2) {
+        for (int i = 0; i < 13; i++) {
             cardsDealt.add(deck.getCard(i));
         }
         Hand dealtHand1 = new Hand(cardsDealt);
@@ -56,7 +56,7 @@ public class DeckOfCardsTest {
     @Test
     public void testDealCardsHalfDeck() {
         List<Card> cardsDealt = new ArrayList<>();
-        for (int i = 0; i < deck.getSize(); i += 2) {
+        for (int i = 0; i < deck.getSize() / 2; i++) {
             cardsDealt.add(deck.getCard(i));
         }
         Hand dealtHand1 = new Hand(cardsDealt);

@@ -28,12 +28,10 @@ public class BigTwoGameGUI extends JPanel {
     private static final int NUM_INITIAL_GOLD_CHIPS = 1;
     private static final int ANY_CARD_POINT_VALUE = 1;
     private static final int TWO_CARD_POINT_VALUE = 5;
-    public static final int POP_UP_WIDTH = 500;
-    public static final int POP_UP_HEIGHT = 150;
     public static final int NEW_GAME_13 = 0;
     public static final int NEW_GAME_HALF_DECK = 1;
     public static final int LOAD_SAVED = 2;
-//    public static final Font MSG_FONT = new Font("Times New Roman", 1, 32);
+    //    public static final Font MSG_FONT = new Font("Times New Roman", 1, 32);
     public static final Font MSG_FONT = new Font("Phosphate", 1, 64);
 
     private Player user1;
@@ -75,37 +73,11 @@ public class BigTwoGameGUI extends JPanel {
         add(announce, constraints);
 
         initializeGame();
-
-        if (version == LOAD_SAVED) {
-            loadGameStatus();
-        } else {
-            if (version == NEW_GAME_13) {
-                initializeNewGame("13 cards");
-            } else {
-                initializeNewGame("half deck");
-            }
-            if (user1HasStartCard()) {
-                playerTurn = 1;
-            } else {
-                playerTurn = 2;
-            }
-        }
-
-//        if (version == NEW_GAME_13) {
-//            initializeNewGame("13 cards");
-//            if (user1HasStartCard()) {
-//                playerTurn = 1;
-//            } else {
-//                playerTurn = 2;
-//            }
-//        } else {
-//            loadGameStatus();
-//        }
+        setGameVersion(version);
 
         playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
         drawGame();
         update();
-//        setVisible(true);
     }
 
     //MODIFIES: this
@@ -120,9 +92,30 @@ public class BigTwoGameGUI extends JPanel {
     }
 
     //MODIFIES: this
+    //EFFECTS: initializes the game based on which version wanted
+    //          - LOAD_SAVE: loads a saved game from file
+    //          - NEW_GAME_13: starts the game with 13 cards each
+    //          - else: starts the game with half a deck each (ie. 26 cards each)
+    private void setGameVersion(int version) {
+        if (version == LOAD_SAVED) {
+            loadGameStatus();
+        } else {
+            if (version == NEW_GAME_13) {
+                initializeNewGame("13 cards");
+            } else {
+                initializeNewGame("half deck");
+            }
+            if (user1HasStartCard()) {
+                playerTurn = 1;
+            } else {
+                playerTurn = 2;
+            }
+        }
+    }
+
+    //MODIFIES: this
     //EFFECTS: initializes a new game
     public void initializeNewGame(String numCardsStart) {
-        // TODO: implement choosing option
         List<Card> startCards = deck.dealCards(numCardsStart);
         user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
                 NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
@@ -153,7 +146,7 @@ public class BigTwoGameGUI extends JPanel {
         chipsGUI = new ChipsDrawerGUI(this);
         constraints.gridx = 3;
         constraints.gridy = 0;
-        constraints.gridwidth = 1;
+        constraints.gridwidth = 2;
         constraints.gridheight = 2;
         constraints.anchor = GridBagConstraints.EAST;
         add(chipsGUI, constraints);
@@ -161,7 +154,7 @@ public class BigTwoGameGUI extends JPanel {
         interaction = new UserInteractionArea(this);
         constraints.gridx = 0;
         constraints.gridy = 2;
-        constraints.gridwidth = 4;
+        constraints.gridwidth = 5;
         constraints.gridheight = 0;
         constraints.anchor = GridBagConstraints.SOUTH;
         add(interaction, constraints);
@@ -215,19 +208,18 @@ public class BigTwoGameGUI extends JPanel {
         Player winner = null;
         Player loser = null;
         int lostPoints = 0;
-        if (!quitting) {
-            if (isWinner(user1)) {
-                winner = user1;
-                loser = user2;
-            } else {
-                winner = user2;
-                loser = user1;
-            }
-            lostPoints = pointsLost(loser);
-            winner.collectChips(loser.payChips(lostPoints));
+        if (isWinner(user1)) {
+            winner = user1;
+            loser = user2;
+        } else {
+            winner = user2;
+            loser = user1;
         }
+        lostPoints = pointsLost(loser);
+        winner.collectChips(loser.payChips(lostPoints));
+        chipsGUI.update();
         createPopUp(winner.getName() + " is the winner! \n " + winner.getName()
-                + " won " + lostPoints + " points worth of chips!", "Yay!", "Oh well",
+                        + " won " + lostPoints + " points worth of chips!", "Yay!", "Oh well",
                 Actions.QUIT, Actions.QUIT);
     }
 
@@ -258,7 +250,6 @@ public class BigTwoGameGUI extends JPanel {
     public void pass() {
         table.setHand(new Hand());
         gs.setCardList(table, GameStatus.TABLE);
-//        tableGUI.update();
         nextPlayer();
         update();
     }
@@ -269,13 +260,10 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    //TODO: CLEAN UP
     //EFFECTS: play a hand
-//    public void play() throws HandNotPlayableException {
     public void play(List<Integer> playCardsIndex, Player player) throws HandNotPlayableException {
         Hand selectedCards = new Hand(getPlayCards(playCardsIndex, player));
         if (playable(selectedCards, table)) {
-            //TODO: fix alternating player
             playHand(selectedCards, player);
             if (!gameOver()) {
                 nextPlayer();
@@ -284,7 +272,6 @@ public class BigTwoGameGUI extends JPanel {
                 distributeWinning();
             }
         } else {
-            //TODO: DEAL WITH PRINTING OUT MSG FOR EXCEPTIONS
             throw new HandNotPlayableException("You can't play that hand");
         }
     }
@@ -301,7 +288,6 @@ public class BigTwoGameGUI extends JPanel {
     private void playHand(Hand selectedCards, Player player) {
         player.takeATurn(selectedCards);
         gs.removeCardsFromPlayer(selectedCards, player);
-//        gs.removeCardsFromPlayer(selectedCards, playerList.indexOf(player));
         table.playHandInPile(selectedCards);
         gs.setCardList(selectedCards, GameStatus.TABLE);
         firstTurn = false;
@@ -373,12 +359,8 @@ public class BigTwoGameGUI extends JPanel {
             writer.open();
             writer.write(gs);
             writer.close();
-            System.out.println("Saved game status to file: " + JSON_FILE);
         } catch (IOException e) {
-            System.out.println("Unable to write game status to file: " + JSON_FILE);
-            JFrame msg = new JFrame();
-            JOptionPane.showMessageDialog(msg, "Unable to write game status to file: "
-                    + BigTwoGameGUI.JSON_FILE);
+            GameGUI.showMsg("Unable to write game status to file: " + JSON_FILE);
         }
     }
 
@@ -388,31 +370,20 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-//    public void askToLoadGame() {
-//        createPopUp("Do you want to load a saved game from file?", "Yes", "No",
-//                Actions.LOAD_GAME, Actions.NO);
-////        update();
-//    }
-
     //MODIFIES: this
     //EFFECTS: loads the game status from file
-    //TODO: CLEAN UP
     private void loadGameStatus() {
         try {
             gs = reader.read();
             initializeLoadedGame();
-            System.out.println("Loaded game from file: " + JSON_FILE);
         } catch (IOException e) {
-            System.out.println("Unable to load game from file: " + JSON_FILE);
-            JFrame msg = new JFrame();
-            JOptionPane.showMessageDialog(msg, "Unable to load game from file: " + BigTwoGameGUI.JSON_FILE);
+            GameGUI.showMsg("Unable to load game from file: " + JSON_FILE);
         }
     }
 
     //MODIFIES: this
     //EFFECTS: initializes the game according to saved stats from file
     private void initializeLoadedGame() {
-
         int playerNumber = PLAYER1;
         ChipsDrawer drawer = gs.getDrawer(playerNumber);
         user1 = new Player("user1", gs.getCardList(playerNumber), drawer.getNumWhiteChips(),
@@ -435,19 +406,23 @@ public class BigTwoGameGUI extends JPanel {
 
     public void createPopUp(String text, String button1Text, String button2Text, Actions button1, Actions button2) {
         JFrame parent = new JFrame();
-        parent.setPreferredSize(new Dimension(POP_UP_WIDTH, POP_UP_HEIGHT));
-        JLabel question = new JLabel(text);
-        question.setFont(new Font("Times New Roman", 14, 18));
+        parent.setPreferredSize(new Dimension(GameGUI.POP_UP_WIDTH, GameGUI.POP_UP_HEIGHT));
+        parent.getContentPane().setBackground(GameGUI.POP_UP_COLOUR);
+        JLabel msg = new JLabel(text);
+        msg.setFont(new Font("Zapfino", 2, 18)); ///////
+//        msg.setFont(new Font("Times New Roman", 14, 18));
+        msg.setHorizontalAlignment(SwingConstants.CENTER);
 
         JPanel buttonArea = new JPanel();
+        buttonArea.setBackground(GameGUI.POP_UP_COLOUR);
 
-        parent.add(question, BorderLayout.NORTH);
+        parent.add(msg, BorderLayout.NORTH);
         buttonArea.add(createButton(button1Text, button1, parent));
         buttonArea.add(createButton(button2Text, button2, parent));
         parent.add(buttonArea, BorderLayout.SOUTH);
         parent.pack();
         parent.setAlwaysOnTop(true);
-        centreOnScreen(parent);
+        GameGUI.centreOnScreen(parent);
         parent.setVisible(true);
     }
 
@@ -476,9 +451,7 @@ public class BigTwoGameGUI extends JPanel {
         } else if (action.equals(Actions.SAVE)) {
             saveGameStatus();
             parent.setVisible(false);
-            JFrame msg = new JFrame();
-            JOptionPane.showMessageDialog(msg, "Saved game status to file: "
-                    + BigTwoGameGUI.JSON_FILE);
+            GameGUI.showMsg("Saved game status to file: " + JSON_FILE);
         } else if (action.equals(Actions.NO) || action.equals(Actions.CANCEL) || action == Actions.QUIT) {
             parent.setVisible(false);
             if (action == Actions.QUIT) {
@@ -487,36 +460,11 @@ public class BigTwoGameGUI extends JPanel {
         }
     }
 
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        if (quitting) {
-//            quitGameText(g);
-//        }
-//    }
-//
-//    public void quitGameText(Graphics g) {
-//        g.setColor(Color.BLACK);
-//        g.setFont(MSG_FONT);
-//        FontMetrics fm = g.getFontMetrics();
-//        centreString("You have quit the game", g, fm, GameGUI.HEIGHT / 2);
-//    }
-//
-//    public void centreString(String text, Graphics g, FontMetrics fm, int y) {
-//        int width = fm.stringWidth(text);
-//        g.drawString(text, (GameGUI.WIDTH - width) / 2, y);
-//    }
-
     /**
      * ========================================================================================================
      * OTHERS - graphic design helpers
      * ========================================================================================================
      */
-
-    //TODO: SIMILAR DUPLICATE TO ONE IN GAMEGUI
-    private void centreOnScreen(JFrame parent) {
-        Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
-        parent.setLocation((scrn.width - parent.getWidth()) / 2, (scrn.height - parent.getHeight()) / 2);
-    }
 
     /**
      * ========================================================================================================

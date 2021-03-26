@@ -1,6 +1,5 @@
 package ui.gui;
 
-import com.sun.xml.internal.fastinfoset.algorithm.HexadecimalEncodingAlgorithm;
 import model.Player;
 import ui.GameGUI;
 
@@ -8,8 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import static ui.gui.BigTwoGameGUI.MSG_FONT;
 
 public class UserInteractionArea extends JPanel {
     private static final int PLAYER1_TAB_INDEX = 0;
@@ -24,15 +21,11 @@ public class UserInteractionArea extends JPanel {
     private PlayerTab player2Tab;
 
     public UserInteractionArea(BigTwoGameGUI game) {
-//        super("Player Cards");
-//        setSize(new Dimension(WIDTH, HEIGHT));
-//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBackground(GameGUI.BACKGROUND);
         sideBar = new JTabbedPane();
         sideBar.setBackground(GameGUI.BACKGROUND);
         sideBar.setTabPlacement(JTabbedPane.LEFT);
 
-//        game = new BigTwoGameGUI();
         this.game = game;
 
         loadTabs();
@@ -41,15 +34,11 @@ public class UserInteractionArea extends JPanel {
     }
 
     public void loadTabs() {
-//        JPanel player1Tab = new PlayerTab();
-//        JPanel player2Tab = new PlayerTab();
         player1Tab = new PlayerTab(game, game.getPlayer(1));
         player2Tab = new PlayerTab(game, game.getPlayer(2));
 
-//        sideBar.add(player1Tab.getTabField(), PLAYER1_TAB_INDEX);
         sideBar.add(player1Tab, PLAYER1_TAB_INDEX);
         sideBar.setTitleAt(PLAYER1_TAB_INDEX, "Player 1");
-//        sideBar.add(player2Tab.getTabField(), PLAYER2_TAB_INDEX);
         sideBar.add(player2Tab, PLAYER2_TAB_INDEX);
         sideBar.setTitleAt(PLAYER2_TAB_INDEX, "Player 2");
     }
@@ -59,7 +48,6 @@ public class UserInteractionArea extends JPanel {
         player2Tab.update();
 
         Player currPlayer = game.getCurrPlayer();
-//        confirm(currPlayer.getName());
 
         if (currPlayer.equals(game.getPlayer(1))) {
             sideBar.setSelectedIndex(PLAYER1_TAB_INDEX);
@@ -75,7 +63,7 @@ public class UserInteractionArea extends JPanel {
 
     public void confirm(String name) {
         JFrame halt = new JFrame();
-        halt.getContentPane().setBackground(GameGUI.BACKGROUND);
+        halt.getContentPane().setBackground(GameGUI.POP_UP_COLOUR);
         halt.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         halt.setResizable(false);
         halt.setAlwaysOnTop(true);
@@ -84,7 +72,6 @@ public class UserInteractionArea extends JPanel {
         msg.setHorizontalAlignment(SwingConstants.CENTER);
         msg.setFont(new Font("Phosphate", 1, 32));
         halt.add(msg, BorderLayout.CENTER);
-//        msg.setBackground(GameGUI.BACKGROUND);
         halt.add(confirmButton(halt), BorderLayout.SOUTH);
         halt.setVisible(true);
     }
@@ -99,8 +86,4 @@ public class UserInteractionArea extends JPanel {
         });
         return confirm;
     }
-
-//    public static void main(String[] args) {
-//        new UserInteractionArea(new BigTwoGameGUI());
-//    }
 }

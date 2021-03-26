@@ -14,7 +14,10 @@ public class GameGUI extends JFrame {
     private static final String HALF_DECK = "Half Deck";
     public static final int WIDTH = 1100;
     public static final int HEIGHT = 700;
+    public static final int POP_UP_WIDTH = 700;
+    public static final int POP_UP_HEIGHT = 150;
     public static final Color BACKGROUND = new Color(130, 62, 56);
+    public static final Color POP_UP_COLOUR = new Color(172, 127, 127);
 
     private BigTwoGameGUI game;
 
@@ -35,7 +38,7 @@ public class GameGUI extends JFrame {
 
     public void createPopUp(String text, String button1Text, String button2Text) {
         JFrame parent = new JFrame();
-        parent.setPreferredSize(new Dimension(500, 150));
+        parent.setPreferredSize(new Dimension(POP_UP_WIDTH, POP_UP_HEIGHT));
         JLabel question = new JLabel(text);
         question.setFont(new Font("Times New Roman", 14, 18));
 
@@ -68,13 +71,13 @@ public class GameGUI extends JFrame {
             add(game);
             setVisible(true);
             parent.setVisible(false);
-            JFrame popUp = new JFrame();
-            JOptionPane.showMessageDialog(popUp, "Loaded game from file: " + BigTwoGameGUI.JSON_FILE);
+//            JFrame popUp = new JFrame();
+            Icon image1 = new ImageIcon("./data/images/Msg_Icon.jpg");
+            JOptionPane.showMessageDialog(null,
+                    "Loaded game from file: " + BigTwoGameGUI.JSON_FILE, null,
+                    JOptionPane.INFORMATION_MESSAGE, image1);
         } else if (text.equals(NO)) {
             createPopUp("How many cards would you like to start with?", CARDS_13, HALF_DECK);
-//            game = new BigTwoGameGUI(BigTwoGameGUI.NEW_GAME_13);
-//            add(game);
-//            setVisible(true);
             parent.setVisible(false);
         } else {
             if (text.equals(CARDS_13)) {
@@ -88,8 +91,14 @@ public class GameGUI extends JFrame {
         }
     }
 
-    private void centreOnScreen(JFrame parent) {
+    public static void centreOnScreen(JFrame parent) {
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         parent.setLocation((scrn.width - parent.getWidth()) / 2, (scrn.height - parent.getHeight()) / 2);
+    }
+
+    public static void showMsg(String msg) {
+        Icon image1 = new ImageIcon("./data/images/Msg_Icon.jpg");
+        JOptionPane.showMessageDialog(null, msg, null,
+                JOptionPane.INFORMATION_MESSAGE, image1);
     }
 }

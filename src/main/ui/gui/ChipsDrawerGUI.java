@@ -21,25 +21,19 @@ public class ChipsDrawerGUI extends JPanel {
         draw();
     }
 
-//    public void draw2() {
-//        chips1.draw(this);
-//    }
-
     public void draw() {
         chips1 = game.getDrawer(1);
         chips2 = game.getDrawer(2);
-//        drawPlayerChips(chips1, 1, DARK_BLUE, 0);
         drawPlayerChips(chips1, 1, Color.lightGray, 0);
         drawPlayerChips(chips2, 2, Color.orange, 1);
     }
 
     public void drawPlayerChips(ChipsDrawer drawer, int playerNumber, Color colour, int y) {
         JPanel playerChipsArea = new JPanel();
-//        playerChipsArea.setLayout(new GridLayout(5, 0));
         playerChipsArea.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
-        playerChipsArea.setPreferredSize(new Dimension((int) (GameGUI.WIDTH / 10) * 2,
-                (int) (GameGUI.HEIGHT / 10) * 2));
+        playerChipsArea.setPreferredSize(new Dimension((GameGUI.WIDTH / 10) * 2,
+                (GameGUI.HEIGHT / 10) * 2));
         playerChipsArea.setBackground(colour);
 
         JLabel userName = new JLabel("PLAYER " + playerNumber + " CHIPS");
