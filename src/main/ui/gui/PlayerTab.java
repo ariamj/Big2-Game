@@ -1,9 +1,9 @@
 package ui.gui;
 
-import exceptions.HandNotPlayableException;
 import model.ListOfCards;
 import model.Player;
 import ui.GameGUI;
+import ui.exceptions.HandNotPlayableException;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,10 +1,10 @@
 package ui.gui;
 
-import exceptions.HandNotPlayableException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.GameGUI;
+import ui.exceptions.HandNotPlayableException;
 
 import javax.swing.*;
 import java.awt.*;

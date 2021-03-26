@@ -36,6 +36,7 @@ public class GameGUI extends JFrame {
         createPopUp("Do you want to load a saved game from file?", YES, NO);
     }
 
+    //EFFECTS: creates a pop up window displaying a message with options
     public void createPopUp(String text, String button1Text, String button2Text) {
         JFrame parent = new JFrame();
         parent.setPreferredSize(new Dimension(POP_UP_WIDTH, POP_UP_HEIGHT));
@@ -54,6 +55,7 @@ public class GameGUI extends JFrame {
         parent.setVisible(true);
     }
 
+    //EFFECTS: creates a JButton on parent
     private JButton createButton(String text, JFrame parent) {
         JButton button = new JButton(text);
         button.addActionListener(new ActionListener() {
@@ -65,17 +67,14 @@ public class GameGUI extends JFrame {
         return button;
     }
 
+    //EFFECTS: executes the action specified by button name
     private void executeAction(String text, JFrame parent) {
         if (text.equals(YES)) {
             game = new BigTwoGameGUI(BigTwoGameGUI.LOAD_SAVED);
             add(game);
             setVisible(true);
             parent.setVisible(false);
-//            JFrame popUp = new JFrame();
-            Icon image1 = new ImageIcon("./data/images/Msg_Icon.jpg");
-            JOptionPane.showMessageDialog(null,
-                    "Loaded game from file: " + BigTwoGameGUI.JSON_FILE, null,
-                    JOptionPane.INFORMATION_MESSAGE, image1);
+            showMsg("Loaded game from file: " + BigTwoGameGUI.JSON_FILE);
         } else if (text.equals(NO)) {
             createPopUp("How many cards would you like to start with?", CARDS_13, HALF_DECK);
             parent.setVisible(false);
@@ -91,11 +90,13 @@ public class GameGUI extends JFrame {
         }
     }
 
+    //EFFECTS: centers parent onto screen
     public static void centreOnScreen(JFrame parent) {
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         parent.setLocation((scrn.width - parent.getWidth()) / 2, (scrn.height - parent.getHeight()) / 2);
     }
 
+    //EFFECTS: displays a pop up message
     public static void showMsg(String msg) {
         Icon image1 = new ImageIcon("./data/images/Msg_Icon.jpg");
         JOptionPane.showMessageDialog(null, msg, null,
