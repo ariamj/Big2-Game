@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Represents the framework of the Big 2 game
+ */
 public class GameGUI extends JFrame {
     private static final String YES = "Yes";
     private static final String NO = "No";
@@ -42,6 +45,7 @@ public class GameGUI extends JFrame {
         parent.setPreferredSize(new Dimension(POP_UP_WIDTH, POP_UP_HEIGHT));
         JLabel question = new JLabel(text);
         question.setFont(new Font("Times New Roman", 14, 18));
+        question.setHorizontalAlignment(SwingConstants.CENTER);
 
         JPanel buttonArea = new JPanel();
 

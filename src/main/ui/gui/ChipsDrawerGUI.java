@@ -6,12 +6,16 @@ import ui.GameGUI;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Represents a visual of each player's chips drawer
+ */
 public class ChipsDrawerGUI extends JPanel {
     private static final Font FONT = new Font("Times New Roman", 1, 15);
     private ChipsDrawer chips1;
     private ChipsDrawer chips2;
     private BigTwoGameGUI game;
 
+    //EFFECTS: creates a panel for the chips to be displayed
     public ChipsDrawerGUI(BigTwoGameGUI game) {
 //        setBackground(Color.lightGray);
 //        setSize(new Dimension((GameGUI.WIDTH / 10) * 2, (GameGUI.HEIGHT / 10) * 2));
@@ -21,14 +25,16 @@ public class ChipsDrawerGUI extends JPanel {
         draw();
     }
 
-    public void draw() {
+    //EFFECTS: draws each player's chips
+    private void draw() {
         chips1 = game.getDrawer(1);
         chips2 = game.getDrawer(2);
         drawPlayerChips(chips1, 1, Color.lightGray, 0);
         drawPlayerChips(chips2, 2, Color.orange, 1);
     }
 
-    public void drawPlayerChips(ChipsDrawer drawer, int playerNumber, Color colour, int y) {
+    //EFFECTS: drawer player's chip, player according to playerNumber
+    private void drawPlayerChips(ChipsDrawer drawer, int playerNumber, Color colour, int y) {
         JPanel playerChipsArea = new JPanel();
         playerChipsArea.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -47,7 +53,8 @@ public class ChipsDrawerGUI extends JPanel {
         addChipLabels(playerChipsArea, constraints, y, drawer);
     }
 
-    public void addChipLabels(JPanel parent, GridBagConstraints constraints, int y, ChipsDrawer drawer) {
+    //EFFECTS: adds the listing for the chips in the form "type : #"
+    private void addChipLabels(JPanel parent, GridBagConstraints constraints, int y, ChipsDrawer drawer) {
         JLabel whiteChips = new JLabel("White Chips: " + drawer.getNumWhiteChips());
         whiteChips.setFont(FONT);
         JLabel blueChips = new JLabel("Blue Chips: " + drawer.getNumBlueChips());
@@ -68,6 +75,8 @@ public class ChipsDrawerGUI extends JPanel {
         add(parent, constraints);
     }
 
+    //MODIFIES: this
+    //EFFECTS: updates the chips panel
     public void update() {
         removeAll();
         draw();

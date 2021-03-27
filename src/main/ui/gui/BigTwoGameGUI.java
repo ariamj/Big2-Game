@@ -31,7 +31,6 @@ public class BigTwoGameGUI extends JPanel {
     public static final int NEW_GAME_13 = 0;
     public static final int NEW_GAME_HALF_DECK = 1;
     public static final int LOAD_SAVED = 2;
-    //    public static final Font MSG_FONT = new Font("Times New Roman", 1, 32);
     public static final Font MSG_FONT = new Font("Phosphate", 1, 64);
 
     private Player user1;
@@ -43,7 +42,7 @@ public class BigTwoGameGUI extends JPanel {
     private TablePile table;
     private boolean firstTurn = true;
     private int playerTurn = 2;
-    private boolean quitting = false;
+//    private boolean quitting = false;
     private GameStatus gs;
     private JsonWriter writer;
     private JsonReader reader;
@@ -55,7 +54,7 @@ public class BigTwoGameGUI extends JPanel {
     private JLabel announce;
 
     public enum Actions {
-        LOAD_GAME, SAVE, NO, QUIT, CANCEL
+        LOAD_GAME, SAVE, NO, GAME_OVER, CANCEL
     }
 
     //EFFECTS: constructs a new Big 2 game
@@ -115,7 +114,7 @@ public class BigTwoGameGUI extends JPanel {
 
     //MODIFIES: this
     //EFFECTS: initializes a new game
-    public void initializeNewGame(String numCardsStart) {
+    private void initializeNewGame(String numCardsStart) {
         List<Card> startCards = deck.dealCards(numCardsStart);
         user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
                 NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
@@ -135,7 +134,9 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    public void drawGame() {
+    //MODIFIES: this
+    //EFFECTS: draws all the components of the game onto this
+    private void drawGame() {
         tableGUI = new TablePileGUI(this);
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -166,7 +167,9 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    public void nextPlayer() {
+    //MODIFIES: this
+    //EFFECTS: update playerTurn with next player
+    private void nextPlayer() {
         if (playerTurn == 1) {
             playerTurn++;
         } else {
@@ -175,7 +178,9 @@ public class BigTwoGameGUI extends JPanel {
         gs.setPlayerTurn(playerTurn);
     }
 
-    public void update() {
+    //MODIFIES: this
+    //EFFECTS: updates the game
+    private void update() {
         announce.setText("It is now " + playerList.get(playerTurn).getName() + "'s turn.");
         tableGUI.update();
         chipsGUI.update();
@@ -202,8 +207,7 @@ public class BigTwoGameGUI extends JPanel {
     }
 
     //MODIFIES: this
-    //EFFECTS: loser gives amount chips lost to winner and displays play's chips
-    //          if game is over due to user quitting, no distribution is done
+    //EFFECTS: loser gives amount chips lost to winner
     private void distributeWinning() {
         Player winner = null;
         Player loser = null;
@@ -220,7 +224,7 @@ public class BigTwoGameGUI extends JPanel {
         chipsGUI.update();
         createPopUp(winner.getName() + " is the winner! \n " + winner.getName()
                         + " won " + lostPoints + " points worth of chips!", "Yay!", "Oh well",
-                Actions.QUIT, Actions.QUIT);
+                Actions.GAME_OVER, Actions.GAME_OVER);
     }
 
     //EFFECTS: returns the amount of points player has lost based on number of cards and what cards play still has
@@ -247,6 +251,8 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
+    //MODIFIES: this
+    //EFFECTS: player passed; reset table
     public void pass() {
         table.setHand(new Hand());
         gs.setCardList(table, GameStatus.TABLE);
@@ -260,7 +266,9 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    //EFFECTS: play a hand
+    //MODIFIES: this
+    //EFFECTS: play a hand, if game is over, distribute winnings
+    //          - throws HandNotPlayableException is the chosen hand cannot be played
     public void play(List<Integer> playCardsIndex, Player player) throws HandNotPlayableException {
         Hand selectedCards = new Hand(getPlayCards(playCardsIndex, player));
         if (playable(selectedCards, table)) {
@@ -276,7 +284,8 @@ public class BigTwoGameGUI extends JPanel {
         }
     }
 
-    public List<Card> getPlayCards(List<Integer> cardsIndex, Player player) {
+    //EFFECTS: returns chosen cards according to cardsIndex
+    private List<Card> getPlayCards(List<Integer> cardsIndex, Player player) {
         List<Card> toPlay = new ArrayList<>();
         for (Integer i : cardsIndex) {
             toPlay.add(player.getCards().getCard(i));
@@ -284,6 +293,7 @@ public class BigTwoGameGUI extends JPanel {
         return toPlay;
     }
 
+    //MODIFIES: this
     //EFFECTS: play the selected cards
     private void playHand(Hand selectedCards, Player player) {
         player.takeATurn(selectedCards);
@@ -350,7 +360,8 @@ public class BigTwoGameGUI extends JPanel {
     //      - if yes: save game status to file
     //      - if no: quit application
     public void quit() {
-        createPopUp("Do you want to save the game?", "Yes", "No", Actions.SAVE, Actions.QUIT);
+        createPopUp("Do you want to save the game?", "Yes",
+                "No", Actions.SAVE, Actions.NO);
     }
 
     //EFFECTS: saves the game status to file
@@ -404,7 +415,8 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    public void createPopUp(String text, String button1Text, String button2Text, Actions button1, Actions button2) {
+    //EFFECTS: creates a pop up with a message and options
+    private void createPopUp(String text, String button1Text, String button2Text, Actions button1, Actions button2) {
         JFrame parent = new JFrame();
         parent.setPreferredSize(new Dimension(GameGUI.POP_UP_WIDTH, GameGUI.POP_UP_HEIGHT));
         parent.getContentPane().setBackground(GameGUI.POP_UP_COLOUR);
@@ -444,7 +456,9 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    public void executeActions(Actions action, JFrame parent) {
+    //MODIFIES: this
+    //EFFECTS: executes actions from buttons according to action
+    private void executeActions(Actions action, JFrame parent) {
         if (action.equals(Actions.LOAD_GAME)) {
             loadGameStatus();
             parent.setVisible(false);
@@ -452,12 +466,25 @@ public class BigTwoGameGUI extends JPanel {
             saveGameStatus();
             parent.setVisible(false);
             GameGUI.showMsg("Saved game status to file: " + JSON_FILE);
-        } else if (action.equals(Actions.NO) || action.equals(Actions.CANCEL) || action == Actions.QUIT) {
+            displayEndGame("You have quit the game");
+        } else if (action.equals(Actions.NO) || action.equals(Actions.CANCEL) || action == Actions.GAME_OVER) {
             parent.setVisible(false);
-            if (action == Actions.QUIT) {
+            if (action == Actions.GAME_OVER) {
                 // show "has quit" text --> remove buttons and stuff
+                displayEndGame("Game Over");
             }
         }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: repaint entire window to display message about end of game
+    private void displayEndGame(String text) {
+        removeAll();
+        setLayout(new FlowLayout());
+        JLabel end = new JLabel(text);
+        end.setFont(MSG_FONT);
+        add(end, BorderLayout.CENTER);
+        updateUI();
     }
 
     /**
@@ -472,19 +499,22 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
+    //getter
     public TablePile getTable() {
         return table;
     }
 
+    //getter
     public Player getPlayer(int playerNumber) {
         return playerList.get(playerNumber);
     }
 
+    //getter
     public Player getCurrPlayer() {
         return playerList.get(playerTurn);
     }
 
-    //getters
+    //getter (according to playerNumber)
     public ChipsDrawer getDrawer(int playerNumber) {
         if (playerNumber == PLAYER1) {
             return user1.getDrawer();

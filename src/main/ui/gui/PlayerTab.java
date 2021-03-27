@@ -15,52 +15,50 @@ import java.util.List;
 import static javax.swing.SwingConstants.CENTER;
 import static javax.swing.SwingConstants.TOP;
 
+/**
+ * Represents a player tab for each individual player
+ */
 public class PlayerTab extends JPanel {
     private List<Integer> cardsIndex;
     private BigTwoGameGUI game;
     private Player player;
 
     private GridBagConstraints constraints;
-    private CardsGUI cardsGUI;
     private JPanel cardsArea1;
     private JPanel cardsArea2;
     private JPanel selectArea1;
     private JPanel selectArea2;
 
+    //EFFECTS: creates a panel for player
     public PlayerTab(BigTwoGameGUI game, Player player) {
         setMaximumSize(new Dimension(UserInteractionArea.WIDTH, UserInteractionArea.HEIGHT));
         setBackground(GameGUI.BACKGROUND);
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
-
         this.game = game;
         this.player = player;
-        this.cardsGUI = new CardsGUI();
         cardsIndex = new ArrayList<>();
-//
         placeCards();
         createTurnOptions();
-
-
-//        update();
     }
 
-    public void placeCards() {
-        //TESTING PURPOSE
+    //MODIFIES: this
+    //EFFECTS: place player's cards on display with a checkbos associating with each card
+    private void placeCards() {
         cardsArea1 = new JPanel();
         cardsArea2 = new JPanel();
         selectArea1 = new JPanel();
         selectArea2 = new JPanel();
         createCardsRow(0, 0, 0, 13, cardsArea1);
         createSelectCardsRow(0, 1, 0, 13, selectArea1);
-        //if playing with half deck
         if (player.getNumCards() > 13) {
             createCardsRow(0, 2, 13, player.getNumCards(), cardsArea2);
             createSelectCardsRow(0, 3, 13, player.getNumCards(), selectArea2);
         }
     }
 
-    public void createCardsRow(int x, int y, int firstIndex, int lastIndex, JPanel area) {
+    //EFFECTS: creates a row of cards on display
+    private void createCardsRow(int x, int y, int firstIndex, int lastIndex, JPanel area) {
         area.setBackground(GameGUI.BACKGROUND);
         ListOfCards cards = player.getCards();
         area.setLayout(new GridLayout(0, 13));
@@ -68,26 +66,22 @@ public class PlayerTab extends JPanel {
         constraints.gridy = y;
         add(area, constraints);
         if (cards.getSize() <= 13) {
-            cardsGUI.drawCardList(area, cards);
-//            cards.draw(area);
+            CardsGUI.drawCardList(area, cards);
         } else {
             for (int i = firstIndex; i < lastIndex; i++) {
-                cardsGUI.drawCard(area, cards.getCard(i));
-//                cards.getCard(i).draw(area);
+                CardsGUI.drawCard(area, cards.getCard(i));
             }
         }
     }
 
-    public void createSelectCardsRow(int x, int y, int firstIndex, int lastIndex, JPanel area) {
+    //EFFECTS: creates a row of checkboxes for the cards
+    private void createSelectCardsRow(int x, int y, int firstIndex, int lastIndex, JPanel area) {
         area.setBackground(GameGUI.BACKGROUND);
         area.setLayout(new GridLayout(0, 13));
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = x;
         constraints.gridy = y;
         add(area, constraints);
-//        for (int i = firstIndex; i < player.getNumCards(); i++) {
-//            createCheckBox(area, i);
-//        }
         if (player.getNumCards() <= 13) {
             for (int i = 0; i < player.getNumCards(); i++) {
                 createCheckBox(area, i);
@@ -99,7 +93,8 @@ public class PlayerTab extends JPanel {
         }
     }
 
-    public void createCheckBox(JPanel parent, int i) {
+    //EFFECTS: creates a single checkbox
+    private void createCheckBox(JPanel parent, int i) {
         JCheckBox selectCard = new JCheckBox();
         selectCard.setHorizontalAlignment(CENTER);
         selectCard.setVerticalAlignment(TOP);
@@ -119,7 +114,7 @@ public class PlayerTab extends JPanel {
     }
 
     //EFFECTS: create buttons to pass, play, and quit
-    public void createTurnOptions() {
+    private void createTurnOptions() {
         JPanel buttonsArea = new JPanel();
         buttonsArea.setBackground(GameGUI.BACKGROUND);
 
@@ -144,7 +139,7 @@ public class PlayerTab extends JPanel {
 
     //MAKING BUTTON AS ICON!!!
     //TODO: TESTING
-    public JButton addIconButtonTest() {
+    private JButton addIconButtonTest() {
         String sep = System.getProperty("file.separator");
         Icon image1 = new ImageIcon("./data/images/AD.jpg");
 
@@ -163,7 +158,8 @@ public class PlayerTab extends JPanel {
         return button;
     }
 
-    public JButton addPassButton() {
+    //EFFECTS: creates and returns a button to pass
+    private JButton addPassButton() {
         JButton passButton = new JButton("pass");
         passButton.setActionCommand("pass");
         passButton.addActionListener(new ActionListener() {
@@ -175,7 +171,10 @@ public class PlayerTab extends JPanel {
         return passButton;
     }
 
-    public JButton addPlayButton() {
+    //EFFECTS: creates and returns a button to play
+    //          - when clicked, update tab
+    //          - if picked hand is not playable, display message
+    private JButton addPlayButton() {
         JButton playButton = new JButton("play");
         playButton.setActionCommand("play");
         playButton.addActionListener(new ActionListener() {
@@ -193,7 +192,8 @@ public class PlayerTab extends JPanel {
         return playButton;
     }
 
-    public JButton addQuitButton() {
+    //EFFECTS: creates and returns a button to quit
+    private JButton addQuitButton() {
         JButton quitButton = new JButton("quit");
         quitButton.setActionCommand("quit");
         quitButton.addActionListener(new ActionListener() {
@@ -205,12 +205,8 @@ public class PlayerTab extends JPanel {
         return quitButton;
     }
 
-    private void showMsg(String msg) {
-        Icon image1 = new ImageIcon("./data/images/Msg_Icon.jpg");
-        JOptionPane.showMessageDialog(null, msg, null,
-                JOptionPane.INFORMATION_MESSAGE, image1);
-    }
-
+    //MODIFIES: this
+    //EFFECTS: updates the tab
     public void update() {
         if (cardsArea1 != null) {
             remove(cardsArea1);
