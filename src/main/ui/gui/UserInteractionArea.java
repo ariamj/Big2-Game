@@ -77,21 +77,10 @@ public class UserInteractionArea extends JPanel {
         msg.setHorizontalAlignment(SwingConstants.CENTER);
         msg.setFont(new Font("Phosphate", 1, 32));
         halt.add(msg, BorderLayout.CENTER);
-        JButton confirmB = confirmButton(halt);
+        JButton confirmB = Helper.createButton("Confirm", Helper.CONFIRM,
+                Helper.BUTTON_SIZE_1, halt, null);
         halt.add(confirmB, BorderLayout.SOUTH);
         halt.getRootPane().setDefaultButton(confirmB);
         halt.setVisible(true);
-    }
-
-    //EFFECTS: creates a button for confirmation
-    private JButton confirmButton(JFrame parent) {
-        JButton confirm = new JButton("Confirm");
-        confirm.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parent.setVisible(false);
-            }
-        });
-        return confirm;
     }
 }

@@ -2,10 +2,7 @@ package ui.exceptions;
 
 public class HandNotPlayableException extends Exception {
 
-    public HandNotPlayableException() {
-
-    }
-
+    //thrown when hand chosen is not playable
     public HandNotPlayableException(String msg) {
         super(msg);
     }

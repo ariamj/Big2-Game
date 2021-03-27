@@ -3,6 +3,7 @@ package ui.gui;
 import model.ListOfCards;
 import model.Player;
 import ui.GameGUI;
+import ui.exceptions.FirstTurnException;
 import ui.exceptions.HandNotPlayableException;
 
 import javax.swing.*;
@@ -19,7 +20,6 @@ import static javax.swing.SwingConstants.TOP;
  * Represents a player tab for each individual player
  */
 public class PlayerTab extends JPanel {
-    public static final Dimension BUTTON_SIZE = new Dimension(80, 40);
     private List<Integer> cardsIndex;
     private BigTwoGameGUI game;
     private Player player;
@@ -162,12 +162,16 @@ public class PlayerTab extends JPanel {
     //EFFECTS: creates and returns a button to pass
     private JButton addPassButton() {
         JButton passButton = new JButton("pass");
-        passButton.setFont(GameGUI.BUTTON_FONT);
-        passButton.setPreferredSize(BUTTON_SIZE);
+        passButton.setFont(Helper.BUTTON_FONT);
+        passButton.setPreferredSize(Helper.BUTTON_SIZE_1);
         passButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.pass();
+                try {
+                    game.pass();
+                } catch (FirstTurnException fe) {
+                    Helper.showMsg(fe.getMessage());
+                }
             }
         });
         return passButton;
@@ -178,15 +182,15 @@ public class PlayerTab extends JPanel {
     //          - if picked hand is not playable, display message
     private JButton addPlayButton() {
         JButton playButton = new JButton("play");
-        playButton.setFont(GameGUI.BUTTON_FONT);
-        playButton.setPreferredSize(BUTTON_SIZE);
+        playButton.setFont(Helper.BUTTON_FONT);
+        playButton.setPreferredSize(Helper.BUTTON_SIZE_1);
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     game.play(cardsIndex, player);
                 } catch (HandNotPlayableException he) {
-                    GameGUI.showMsg(he.getMessage());
+                    Helper.showMsg(he.getMessage());
                 } finally {
                     update();
                 }
@@ -198,8 +202,8 @@ public class PlayerTab extends JPanel {
     //EFFECTS: creates and returns a button to quit
     private JButton addQuitButton() {
         JButton quitButton = new JButton("quit");
-        quitButton.setFont(GameGUI.BUTTON_FONT);
-        quitButton.setPreferredSize(BUTTON_SIZE);
+        quitButton.setFont(Helper.BUTTON_FONT);
+        quitButton.setPreferredSize(Helper.BUTTON_SIZE_1);
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

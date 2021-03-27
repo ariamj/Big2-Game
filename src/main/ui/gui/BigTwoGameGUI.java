@@ -4,12 +4,11 @@ import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.GameGUI;
+import ui.exceptions.FirstTurnException;
 import ui.exceptions.HandNotPlayableException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +30,7 @@ public class BigTwoGameGUI extends JPanel {
     public static final int NEW_GAME_13 = 0;
     public static final int NEW_GAME_HALF_DECK = 1;
     public static final int LOAD_SAVED = 2;
-    public static final Font MSG_FONT = new Font("Phosphate", 1, 64);
+    public static final Font ANNOUNCE_FONT = new Font("Phosphate", 1, 64);
 
     private Player user1;
     private Player user2;
@@ -42,8 +41,8 @@ public class BigTwoGameGUI extends JPanel {
     private TablePile table;
     private boolean firstTurn = true;
     private int playerTurn = 2;
-    private GameStatus gs;
-    private JsonWriter writer;
+    private static GameStatus gs;
+    private static JsonWriter writer;
     private JsonReader reader;
 
     private ChipsDrawerGUI chipsGUI;
@@ -51,10 +50,6 @@ public class BigTwoGameGUI extends JPanel {
     private UserInteractionArea interaction;
     private GridBagConstraints constraints;
     private JLabel announce;
-
-    public enum Actions {
-        SAVE, NO, GAME_OVER, CANCEL
-    }
 
     //EFFECTS: constructs a new Big 2 game
     public BigTwoGameGUI(int version) {
@@ -65,7 +60,7 @@ public class BigTwoGameGUI extends JPanel {
         constraints = new GridBagConstraints();
 
         announce = new JLabel();
-        announce.setFont(MSG_FONT);
+        announce.setFont(ANNOUNCE_FONT);
         constraints.gridx = 0;
         constraints.gridy = 0;
         add(announce, constraints);
@@ -221,9 +216,9 @@ public class BigTwoGameGUI extends JPanel {
         lostPoints = pointsLost(loser);
         winner.collectChips(loser.payChips(lostPoints));
         chipsGUI.update();
-        createPopUp(winner.getName() + " is the winner! \n " + winner.getName()
+        Helper.createPopUp(winner.getName() + " is the winner! \n " + winner.getName()
                         + " won " + lostPoints + " points worth of chips!", "Yay!", "Oh well",
-                Actions.GAME_OVER, Actions.GAME_OVER);
+                Helper.GAME_OVER, Helper.GAME_OVER, this);
     }
 
     //EFFECTS: returns the amount of points player has lost based on number of cards and what cards play still has
@@ -251,12 +246,17 @@ public class BigTwoGameGUI extends JPanel {
      */
 
     //MODIFIES: this
-    //EFFECTS: player passed; reset table
-    public void pass() {
-        table.setHand(new Hand());
-        gs.setCardList(table, GameStatus.TABLE);
-        nextPlayer();
-        update();
+    //EFFECTS: player passed; if not first turn, reset table
+    //          else: throw FirstTurnException
+    public void pass() throws FirstTurnException {
+        if (!firstTurn) {
+            table.setHand(new Hand());
+            gs.setCardList(table, GameStatus.TABLE);
+            nextPlayer();
+            update();
+        } else {
+            throw new FirstTurnException("You can't pass as the starting player");
+        }
     }
 
     /**
@@ -359,18 +359,18 @@ public class BigTwoGameGUI extends JPanel {
     //      - if yes: save game status to file
     //      - if no: quit application
     public void quit() {
-        createPopUp("Do you want to save the game?", "Yes",
-                "No", Actions.SAVE, Actions.NO);
+        Helper.createPopUp("Do you want to save the game?", "Save",
+                "Don't save", Helper.SAVE, Helper.DONT_SAVE, this);
     }
 
     //EFFECTS: saves the game status to file
-    private void saveGameStatus() {
+    public static void saveGameStatus() {
         try {
             writer.open();
             writer.write(gs);
             writer.close();
         } catch (IOException e) {
-            GameGUI.showMsg("Unable to write game status to file: " + JSON_FILE);
+            Helper.showMsg("Unable to write game status to file: " + JSON_FILE);
         }
     }
 
@@ -380,8 +380,6 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
-    //TODO: MADE STATIC FOR TESTING BUTTONS
-
     //MODIFIES: this
     //EFFECTS: loads the game status from file
     private void loadGameStatus() {
@@ -389,7 +387,7 @@ public class BigTwoGameGUI extends JPanel {
             gs = reader.read();
             initializeLoadedGame();
         } catch (IOException e) {
-            GameGUI.showMsg("Unable to load game from file: " + JSON_FILE);
+            Helper.showMsg("Unable to load game from file: " + JSON_FILE);
         }
     }
 
@@ -409,87 +407,6 @@ public class BigTwoGameGUI extends JPanel {
         playerTurn = gs.getPlayerTurn();
         firstTurn = false;
     }
-
-    /**
-     * ========================================================================================================
-     * HELPER FOLD FUNCTIONS
-     * ========================================================================================================
-     */
-
-    //EFFECTS: creates a pop up with a message and options
-    private void createPopUp(String text, String button1Text, String button2Text, Actions button1, Actions button2) {
-        JFrame parent = new JFrame();
-        parent.setPreferredSize(new Dimension(GameGUI.POP_UP_WIDTH, GameGUI.POP_UP_HEIGHT));
-        parent.getContentPane().setBackground(GameGUI.POP_UP_COLOUR);
-        JLabel msg = new JLabel(text);
-        msg.setFont(new Font("Zapfino", 2, 18)); ///////
-//        msg.setFont(new Font("Times New Roman", 14, 18));
-        msg.setHorizontalAlignment(SwingConstants.CENTER);
-
-        JPanel buttonArea = new JPanel();
-        buttonArea.setBackground(GameGUI.POP_UP_COLOUR);
-
-        parent.add(msg, BorderLayout.NORTH);
-        buttonArea.add(createButton(button1Text, button1, parent));
-        buttonArea.add(createButton(button2Text, button2, parent));
-        parent.add(buttonArea, BorderLayout.SOUTH);
-        parent.pack();
-        parent.setAlwaysOnTop(true);
-        GameGUI.centreOnScreen(parent);
-        parent.setVisible(true);
-    }
-
-    //EFFECTS: creates a button labeled text that does action on parent
-    private JButton createButton(String text, Actions action, JFrame parent) {
-        JButton button = new JButton(text);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeActions(action, parent);
-            }
-        });
-        return button;
-    }
-
-    /**
-     * ========================================================================================================
-     * ACTIONS
-     * ========================================================================================================
-     */
-
-    //MODIFIES: this
-    //EFFECTS: executes actions from buttons according to action
-    private void executeActions(Actions action, JFrame parent) {
-        if (action.equals(Actions.SAVE)) {
-            saveGameStatus();
-            parent.setVisible(false);
-            GameGUI.showMsg("Saved game status to file: " + JSON_FILE);
-            displayEndGame("You have quit the game");
-        } else if (action.equals(Actions.NO) || action.equals(Actions.CANCEL) || action == Actions.GAME_OVER) {
-            parent.setVisible(false);
-            if (action == Actions.GAME_OVER) {
-                // show "has quit" text --> remove buttons and stuff
-                displayEndGame("Game Over");
-            }
-        }
-    }
-
-    //MODIFIES: this
-    //EFFECTS: repaint entire window to display message about end of game
-    private void displayEndGame(String text) {
-        removeAll();
-        setLayout(new FlowLayout());
-        JLabel end = new JLabel(text);
-        end.setFont(MSG_FONT);
-        add(end, BorderLayout.CENTER);
-        updateUI();
-    }
-
-    /**
-     * ========================================================================================================
-     * OTHERS - graphic design helpers
-     * ========================================================================================================
-     */
 
     /**
      * ========================================================================================================
