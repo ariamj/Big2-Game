@@ -42,7 +42,6 @@ public class BigTwoGameGUI extends JPanel {
     private TablePile table;
     private boolean firstTurn = true;
     private int playerTurn = 2;
-//    private boolean quitting = false;
     private GameStatus gs;
     private JsonWriter writer;
     private JsonReader reader;
@@ -54,7 +53,7 @@ public class BigTwoGameGUI extends JPanel {
     private JLabel announce;
 
     public enum Actions {
-        LOAD_GAME, SAVE, NO, GAME_OVER, CANCEL
+        SAVE, NO, GAME_OVER, CANCEL
     }
 
     //EFFECTS: constructs a new Big 2 game
@@ -381,6 +380,8 @@ public class BigTwoGameGUI extends JPanel {
      * ========================================================================================================
      */
 
+    //TODO: MADE STATIC FOR TESTING BUTTONS
+
     //MODIFIES: this
     //EFFECTS: loads the game status from file
     private void loadGameStatus() {
@@ -459,10 +460,7 @@ public class BigTwoGameGUI extends JPanel {
     //MODIFIES: this
     //EFFECTS: executes actions from buttons according to action
     private void executeActions(Actions action, JFrame parent) {
-        if (action.equals(Actions.LOAD_GAME)) {
-            loadGameStatus();
-            parent.setVisible(false);
-        } else if (action.equals(Actions.SAVE)) {
+        if (action.equals(Actions.SAVE)) {
             saveGameStatus();
             parent.setVisible(false);
             GameGUI.showMsg("Saved game status to file: " + JSON_FILE);

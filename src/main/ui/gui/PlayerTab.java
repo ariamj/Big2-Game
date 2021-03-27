@@ -19,7 +19,7 @@ import static javax.swing.SwingConstants.TOP;
  * Represents a player tab for each individual player
  */
 public class PlayerTab extends JPanel {
-    private static final Dimension BUTTON_SIZE = new Dimension(80, 40);
+    public static final Dimension BUTTON_SIZE = new Dimension(80, 40);
     private List<Integer> cardsIndex;
     private BigTwoGameGUI game;
     private Player player;
