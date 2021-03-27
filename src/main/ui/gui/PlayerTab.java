@@ -19,6 +19,7 @@ import static javax.swing.SwingConstants.TOP;
  * Represents a player tab for each individual player
  */
 public class PlayerTab extends JPanel {
+    private static final Dimension BUTTON_SIZE = new Dimension(80, 40);
     private List<Integer> cardsIndex;
     private BigTwoGameGUI game;
     private Player player;
@@ -141,7 +142,7 @@ public class PlayerTab extends JPanel {
     //TODO: TESTING
     private JButton addIconButtonTest() {
         String sep = System.getProperty("file.separator");
-        Icon image1 = new ImageIcon("./data/images/AD.jpg");
+        Icon image1 = new ImageIcon("./data/images/KS.jpg");
 
         JButton button = new JButton();
         button.setIcon(image1);
@@ -149,7 +150,7 @@ public class PlayerTab extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (button.getIcon().equals(image1)) {
-                    button.setIcon(new ImageIcon("./data/images/KS.jpg"));
+                    button.setIcon(new ImageIcon("./data/images/KS_Selected.jpg"));
                 } else {
                     button.setIcon(image1);
                 }
@@ -161,7 +162,8 @@ public class PlayerTab extends JPanel {
     //EFFECTS: creates and returns a button to pass
     private JButton addPassButton() {
         JButton passButton = new JButton("pass");
-        passButton.setActionCommand("pass");
+        passButton.setFont(GameGUI.BUTTON_FONT);
+        passButton.setPreferredSize(BUTTON_SIZE);
         passButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -176,7 +178,8 @@ public class PlayerTab extends JPanel {
     //          - if picked hand is not playable, display message
     private JButton addPlayButton() {
         JButton playButton = new JButton("play");
-        playButton.setActionCommand("play");
+        playButton.setFont(GameGUI.BUTTON_FONT);
+        playButton.setPreferredSize(BUTTON_SIZE);
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -195,7 +198,8 @@ public class PlayerTab extends JPanel {
     //EFFECTS: creates and returns a button to quit
     private JButton addQuitButton() {
         JButton quitButton = new JButton("quit");
-        quitButton.setActionCommand("quit");
+        quitButton.setFont(GameGUI.BUTTON_FONT);
+        quitButton.setPreferredSize(BUTTON_SIZE);
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

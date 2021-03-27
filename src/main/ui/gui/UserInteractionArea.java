@@ -65,7 +65,7 @@ public class UserInteractionArea extends JPanel {
         confirm(currPlayer.getName());
     }
 
-    //EFFECTS: comfirms player is current player before proceeding
+    //EFFECTS: confirms player is current player before proceeding
     private void confirm(String name) {
         JFrame halt = new JFrame();
         halt.getContentPane().setBackground(GameGUI.POP_UP_COLOUR);

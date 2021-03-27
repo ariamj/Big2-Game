@@ -3,6 +3,7 @@ package ui;
 import ui.gui.BigTwoGameGUI;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +22,7 @@ public class GameGUI extends JFrame {
     public static final int POP_UP_HEIGHT = 150;
     public static final Color BACKGROUND = new Color(130, 62, 56);
     public static final Color POP_UP_COLOUR = new Color(172, 127, 127);
+    public static final Font BUTTON_FONT = new Font("SignPainter", 14, 20);
 
     private BigTwoGameGUI game;
 
@@ -30,8 +32,31 @@ public class GameGUI extends JFrame {
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         askToLoadGame();
+        add(newGame(), BorderLayout.PAGE_END);
         pack();
         centreOnScreen(this);
+    }
+
+    //MODIFIES: this
+    //EFFECTS: creates a button to make a new game
+    private JPanel newGame() {
+        JPanel globalArea = new JPanel();
+        FlowLayout layout = new FlowLayout();
+        layout.setAlignment(FlowLayout.RIGHT);
+        globalArea.setLayout(layout);
+        globalArea.setBackground(BACKGROUND);
+        JButton newGame = new JButton("New Game");
+        newGame.setPreferredSize(new Dimension(150, 50));
+        newGame.setFont(BUTTON_FONT);
+        newGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removeAll();
+                new GameGUI();
+            }
+        });
+        globalArea.add(newGame);
+        return globalArea;
     }
 
     //EFFECTS: ask to play a new game or loaded game form file
