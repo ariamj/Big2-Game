@@ -17,6 +17,9 @@ import java.util.List;
  * Represents a player tab for each individual player
  */
 public class PlayerTab extends JPanel {
+    private static final String PASS = "pass";
+    private static final String PLAY = "play";
+    private static final String QUIT = "quit";
     private List<Card> cardList;
     private BigTwoGameGUI game;
     private Player player;
@@ -72,21 +75,6 @@ public class PlayerTab extends JPanel {
         }
     }
 
-    //EFFECTS: create buttons to pass, play, and quit
-    private void createTurnOptions() {
-        JPanel buttonsArea = new JPanel();
-        buttonsArea.setBackground(GameGUI.BACKGROUND);
-        buttonsArea.setLayout(new FlowLayout(FlowLayout.CENTER));
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.ipady = 1;
-        add(buttonsArea, constraints);
-        buttonsArea.add(addPassButton());
-        buttonsArea.add(addPlayButton());
-        buttonsArea.add(addQuitButton());
-    }
-
     //EFFECTS: creates and returns a card as a button;
     //          - if isSelected(), add card to cardList
     //          - else: remove from cardList
@@ -110,60 +98,54 @@ public class PlayerTab extends JPanel {
         return button;
     }
 
-    //==========================================================================================
-
-    //EFFECTS: creates and returns a button to pass
-    private JButton addPassButton() {
-        JButton passButton = new JButton("pass");
-        passButton.setFont(Helper.BUTTON_FONT);
-        passButton.setPreferredSize(Helper.BUTTON_SIZE_1);
-        passButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    game.pass();
-                } catch (FirstTurnException fe) {
-                    Helper.showMsg(fe.getMessage());
-                }
-            }
-        });
-        return passButton;
+    //EFFECTS: create buttons to pass, play, and quit
+    private void createTurnOptions() {
+        JPanel buttonsArea = new JPanel();
+        buttonsArea.setBackground(GameGUI.BACKGROUND);
+        buttonsArea.setLayout(new FlowLayout(FlowLayout.CENTER));
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.ipady = 1;
+        add(buttonsArea, constraints);
+        buttonsArea.add(createOptionButton(PASS));
+        buttonsArea.add(createOptionButton(PLAY));
+        buttonsArea.add(createOptionButton(QUIT));
     }
 
-    //EFFECTS: creates and returns a button to play
-    //          - when clicked, update tab
-    //          - if picked hand is not playable, display message
-    private JButton addPlayButton() {
-        JButton playButton = new JButton("play");
-        playButton.setFont(Helper.BUTTON_FONT);
-        playButton.setPreferredSize(Helper.BUTTON_SIZE_1);
-        playButton.addActionListener(new ActionListener() {
+    //EFFECTS: creates and returns one of the option buttons
+    private JButton createOptionButton(String command) {
+        JButton button = new JButton(command);
+        button.setFont(Helper.BUTTON_FONT);
+        button.setPreferredSize(Helper.BUTTON_SIZE_1);
+        button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    game.play(cardList, player);
-                } catch (HandNotPlayableException he) {
-                    Helper.showMsg(he.getMessage());
-                } finally {
-                    update();
-                }
+                executeActions(command);
             }
         });
-        return playButton;
+        return button;
     }
 
-    //EFFECTS: creates and returns a button to quit
-    private JButton addQuitButton() {
-        JButton quitButton = new JButton("quit");
-        quitButton.setFont(Helper.BUTTON_FONT);
-        quitButton.setPreferredSize(Helper.BUTTON_SIZE_1);
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.quit();
+    //EFFECTS: executes action of option buttons
+    private void executeActions(String command) {
+        if (command.equals(PASS)) {
+            try {
+                game.pass();
+            } catch (FirstTurnException fe) {
+                Helper.showMsg(fe.getMessage());
             }
-        });
-        return quitButton;
+        } else if (command.equals(PLAY)) {
+            try {
+                game.play(cardList, player);
+            } catch (HandNotPlayableException he) {
+                Helper.showMsg(he.getMessage());
+            } finally {
+                update();
+            }
+        } else if (command.equals(QUIT)) {
+            game.quit();
+        }
     }
 
     //MODIFIES: this
