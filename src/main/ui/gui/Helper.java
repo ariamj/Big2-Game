@@ -52,14 +52,17 @@ public abstract class Helper {
         if (command.equals(NEW_GAME)) {
             parent.removeAll();
             new GameGUI();
-        } else if (command.equals(SAVE)) {
-            BigTwoGameGUI.saveGameStatus();
+            parent.setVisible(false);
+        } else if (command.equals(SAVE) || command.equals(DONT_SAVE)
+                || command.equals(CONFIRM) || command.equals(GAME_OVER))  {
             child.setVisible(false);
-            showMsg("Saved game status to file: " + BigTwoGameGUI.JSON_FILE);
-            displayEndGame("You have quit the game", parent);
-        } else if (command.equals(DONT_SAVE) || command.equals(CONFIRM) || command.equals(GAME_OVER)) {
-            child.setVisible(false);
-            if (command.equals(GAME_OVER)) {
+            if (command.equals(SAVE) || command.equals(DONT_SAVE)) {
+                if (command.equals(SAVE)) {
+                    BigTwoGameGUI.saveGameStatus();
+                    showMsg("Saved game status to file: " + BigTwoGameGUI.JSON_FILE);
+                }
+                displayEndGame("You have quit the game", parent);
+            } else if (command.equals(GAME_OVER)) {
                 displayEndGame("Game Over", parent);
             }
         }

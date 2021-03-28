@@ -11,7 +11,7 @@ import java.awt.*;
 public class GameGUI extends JFrame {
     private static final String YES = "Yes";
     private static final String NO = "No";
-    public static final int WIDTH = 1100;
+    public static final int WIDTH = 1300;
     public static final int HEIGHT = 700;
     public static final int POP_UP_WIDTH = 700;
     public static final int POP_UP_HEIGHT = 150;
@@ -39,7 +39,6 @@ public class GameGUI extends JFrame {
         globalArea.setBackground(BACKGROUND);
         JButton newGame = Helper.createButton("New Game", Helper.NEW_GAME, Helper.BUTTON_SIZE_2,
                 null, this);
-
         globalArea.add(newGame);
         return globalArea;
     }

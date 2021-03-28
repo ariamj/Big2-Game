@@ -21,7 +21,7 @@ public class CardsGUI {
     //MODIFIES: parent
     //EFFECTS: draws the card as an image onto parent
     public static void drawCard(JPanel parent, Card card) {
-        ImageIcon trial = new ImageIcon("./data/images/" + card.toString() + ".jpg");
+        ImageIcon trial = new ImageIcon("./data/images/cards/" + card.toString() + ".jpg");
         JLabel imageAsLabel75 = new JLabel(trial);
         parent.add(imageAsLabel75);
     }

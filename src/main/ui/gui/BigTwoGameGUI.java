@@ -58,7 +58,6 @@ public class BigTwoGameGUI extends JPanel {
         setBackground(GameGUI.BACKGROUND);
         setLayout(new GridBagLayout());
         constraints = new GridBagConstraints();
-
         announce = new JLabel();
         announce.setFont(ANNOUNCE_FONT);
         constraints.gridx = 0;
@@ -67,7 +66,6 @@ public class BigTwoGameGUI extends JPanel {
 
         initializeGame();
         setGameVersion(version);
-
         playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
         drawGame();
         update();
@@ -124,7 +122,7 @@ public class BigTwoGameGUI extends JPanel {
 
     /**
      * ========================================================================================================
-     * GRAPHIC DRAWING ----- May not need at all
+     * GRAPHIC DRAWING
      * ========================================================================================================
      */
 
@@ -216,8 +214,8 @@ public class BigTwoGameGUI extends JPanel {
         lostPoints = pointsLost(loser);
         winner.collectChips(loser.payChips(lostPoints));
         chipsGUI.update();
-        Helper.createPopUp(winner.getName() + " is the winner! \n " + winner.getName()
-                        + " won " + lostPoints + " points worth of chips!", "Yay!", "Oh well",
+        Helper.createPopUp(winner.getName() + " is the winner! \n " + winner.getName() + " won "
+                        + lostPoints + " points worth of chips!", "Yay!", "Oh well",
                 Helper.GAME_OVER, Helper.GAME_OVER, this);
     }
 
@@ -268,8 +266,8 @@ public class BigTwoGameGUI extends JPanel {
     //MODIFIES: this
     //EFFECTS: play a hand, if game is over, distribute winnings
     //          - throws HandNotPlayableException is the chosen hand cannot be played
-    public void play(List<Integer> playCardsIndex, Player player) throws HandNotPlayableException {
-        Hand selectedCards = new Hand(getPlayCards(playCardsIndex, player));
+    public void play(List<Card> playCards, Player player) throws HandNotPlayableException {
+        Hand selectedCards = new Hand(playCards);
         if (playable(selectedCards, table)) {
             playHand(selectedCards, player);
             if (!gameOver()) {
@@ -281,15 +279,6 @@ public class BigTwoGameGUI extends JPanel {
         } else {
             throw new HandNotPlayableException("You can't play that hand");
         }
-    }
-
-    //EFFECTS: returns chosen cards according to cardsIndex
-    private List<Card> getPlayCards(List<Integer> cardsIndex, Player player) {
-        List<Card> toPlay = new ArrayList<>();
-        for (Integer i : cardsIndex) {
-            toPlay.add(player.getCards().getCard(i));
-        }
-        return toPlay;
     }
 
     //MODIFIES: this

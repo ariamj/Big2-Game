@@ -17,9 +17,6 @@ public class ChipsDrawerGUI extends JPanel {
 
     //EFFECTS: creates a panel for the chips to be displayed
     public ChipsDrawerGUI(BigTwoGameGUI game) {
-//        setBackground(Color.lightGray);
-//        setSize(new Dimension((GameGUI.WIDTH / 10) * 2, (GameGUI.HEIGHT / 10) * 2));
-//        setLayout(new GridLayout(2, 1));
         setLayout(new GridBagLayout());
         this.game = game;
         draw();
@@ -63,6 +60,7 @@ public class ChipsDrawerGUI extends JPanel {
         redChips.setFont(FONT);
         JLabel goldChips = new JLabel("Gold Chips: " + drawer.getNumGoldChips());
         goldChips.setFont(FONT);
+
         constraints.gridy = 1;
         parent.add(whiteChips, constraints);
         constraints.gridy = 2;

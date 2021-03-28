@@ -17,7 +17,7 @@ public class UserInteractionArea extends JPanel {
     private static final int PLAYER2_TAB_INDEX = 1;
 
     public static final int WIDTH = GameGUI.WIDTH;
-    public static final int HEIGHT = GameGUI.HEIGHT / 3;
+    public static final int HEIGHT = GameGUI.HEIGHT / 2;
     private BigTwoGameGUI game;
     private JTabbedPane sideBar;
     private PlayerTab player1Tab;
