@@ -1,7 +1,6 @@
-package ui.gui;
+package ui;
 
 import model.Hand;
-import ui.GameGUI;
 
 import javax.swing.*;
 import java.awt.*;

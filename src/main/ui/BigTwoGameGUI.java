@@ -1,9 +1,8 @@
-package ui.gui;
+package ui;
 
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
-import ui.GameGUI;
 import ui.exceptions.FirstTurnException;
 import ui.exceptions.HandNotPlayableException;
 

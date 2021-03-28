@@ -1,4 +1,4 @@
-package ui.gui;
+package ui;
 
 import model.Card;
 import model.ListOfCards;

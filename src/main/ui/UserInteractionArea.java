@@ -1,12 +1,9 @@
-package ui.gui;
+package ui;
 
 import model.Player;
-import ui.GameGUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Represents the area where player can see their cards and play their turn

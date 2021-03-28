@@ -1,7 +1,5 @@
 package ui;
 
-import ui.gui.Helper;
-
 import javax.swing.*;
 import java.awt.*;
 

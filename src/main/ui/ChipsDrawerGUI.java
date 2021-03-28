@@ -1,7 +1,6 @@
-package ui.gui;
+package ui;
 
 import model.ChipsDrawer;
-import ui.GameGUI;
 
 import javax.swing.*;
 import java.awt.*;

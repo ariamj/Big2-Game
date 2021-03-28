@@ -1,9 +1,8 @@
-package ui.gui;
+package ui;
 
 import model.Card;
 import model.ListOfCards;
 import model.Player;
-import ui.GameGUI;
 import ui.exceptions.FirstTurnException;
 import ui.exceptions.HandNotPlayableException;
 
