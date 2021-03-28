@@ -53,7 +53,7 @@ own games as well, thus, the new rules for how chips are paid. Being able to mak
 ## USER STORIES
 
 - As a user, I want to be able to select whether to play with 13 cards or half a deck.
-- As a user, I want to be able to play a hand on the table.
+- As a user, I want to be able to play a hand on the table (ie. put cards onto the table).
 - As a user, I want to both add and remove chips from my drawer.
 - As a user, I want to both view my cards, and the current cards/hand on the table
 - As a user, I want to be able to save the state of the card game to file when I quit the game
