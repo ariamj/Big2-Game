@@ -36,6 +36,7 @@ public class GameGUI extends JFrame {
         FlowLayout layout = new FlowLayout();
         layout.setAlignment(FlowLayout.RIGHT);
         globalArea.setLayout(layout);
+        globalArea.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         globalArea.setBackground(BACKGROUND);
         JButton newGame = Helper.createButton("New Game", Helper.NEW_GAME, Helper.BUTTON_SIZE_2,
                 null, this);

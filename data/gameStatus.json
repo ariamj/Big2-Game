@@ -1,75 +1,71 @@
 {
-   "player turn": 2,
-   "player 2 cards": [],
-   "player 1 cards": [
-      {
-         "rank": 1,
-         "suit": "clubs"
-      },
-      {
-         "rank": 1,
-         "suit": "diamond"
-      },
-      {
-         "rank": 10,
-         "suit": "heart"
-      },
-      {
-         "rank": 10,
-         "suit": "spade"
-      },
-      {
-         "rank": 5,
-         "suit": "diamond"
-      },
+   "player turn": 1,
+   "player 2 cards": [
       {
          "rank": 7,
          "suit": "diamond"
       },
       {
-         "rank": 11,
-         "suit": "diamond"
-      },
-      {
-         "rank": 9,
-         "suit": "diamond"
-      },
-      {
-         "rank": 9,
-         "suit": "clubs"
-      },
-      {
-         "rank": 2,
-         "suit": "clubs"
-      },
-      {
-         "rank": 11,
-         "suit": "clubs"
-      },
-      {
-         "rank": 11,
+         "rank": 3,
          "suit": "heart"
       },
       {
-         "rank": 3,
+         "rank": 6,
+         "suit": "spade"
+      },
+      {
+         "rank": 12,
+         "suit": "clubs"
+      },
+      {
+         "rank": 4,
+         "suit": "spade"
+      },
+      {
+         "rank": 1,
+         "suit": "diamond"
+      },
+      {
+         "rank": 8,
+         "suit": "spade"
+      },
+      {
+         "rank": 7,
+         "suit": "heart"
+      },
+      {
+         "rank": 9,
+         "suit": "spade"
+      },
+      {
+         "rank": 8,
+         "suit": "diamond"
+      },
+      {
+         "rank": 12,
+         "suit": "spade"
+      },
+      {
+         "rank": 6,
          "suit": "heart"
       }
    ],
+   "player 1 cards": [],
    "player 1 chips": [{
       "gold chips": 1,
-      "white chips": 0,
-      "red chips": 0,
-      "blue chips": 0
+      "white chips": 22,
+      "red chips": 6,
+      "blue chips": 10
    }],
    "label": "Game number 1",
    "player 2 chips": [{
       "gold chips": 1,
-      "white chips": 48,
-      "red chips": 19,
-      "blue chips": 24
+      "white chips": 18,
+      "red chips": 4,
+      "blue chips": 10
    }],
    "table pile": [{
-      "rank": 5,
-      "suit": "clubs"
+      "rank": 4,
+      "suit": "heart"
    }]
 }

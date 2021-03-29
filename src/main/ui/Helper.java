@@ -96,6 +96,7 @@ public abstract class Helper {
         }
     }
 
+    //EFFECTS: helper to add game to parent and change visibilities
     private static void addGameAndSetVisibilities(JFrame child, Container parent, BigTwoGameGUI game) {
         parent.add(game);
         parent.setVisible(true);
@@ -129,11 +130,10 @@ public abstract class Helper {
     //EFFECTS: repaint entire window of parent to display message about end of game
     private static void displayEndGame(String text, Container parent) {
         parent.removeAll();
-        parent.setLayout(new GridBagLayout());
-//        parent.setLayout(new FlowLayout());
+        parent.setLayout(new FlowLayout());
         JLabel end = new JLabel(text);
         end.setFont(BigTwoGameGUI.ANNOUNCE_FONT);
-        parent.add(end, GridBagConstraints.CENTER);
+        parent.add(end, BorderLayout.CENTER);
         ((JPanel) parent).updateUI();
     }
 

@@ -31,7 +31,6 @@ public class BigTwoGameGUI extends JPanel {
     public static final int LOAD_SAVED = 2;
     public static final Font ANNOUNCE_FONT = new Font("Phosphate", 1, 64);
 
-    //TODO: MAKDE USER1, USER2, DECK STATIC
     private Player user1;
     private Player user2;
     private Player dummyPlayer;
@@ -96,8 +95,6 @@ public class BigTwoGameGUI extends JPanel {
                 initializeNewGameOrRound("13 cards");
             } else if (version == NEW_GAME_HALF_DECK) {
                 initializeNewGameOrRound("half deck");
-            } else {
-                //
             }
             if (user1HasStartCard()) {
                 playerTurn = 1;
@@ -110,25 +107,43 @@ public class BigTwoGameGUI extends JPanel {
     //MODIFIES: this
     //EFFECTS: initializes a new game or new round if newRound == true
     private void initializeNewGameOrRound(String numCardsStart) {
-        loadGameStatus();
-        initializePlayer(numCardsStart, GameStatus.PLAYER1, user1);
-        initializePlayer(numCardsStart, GameStatus.PLAYER2, user2);
+        if (newRound) {
+            loadGameStatus();
+        }
+        initializePlayer1(numCardsStart, GameStatus.PLAYER1);
+        initializePlayer2(numCardsStart, GameStatus.PLAYER2);
         newRound = false;
     }
 
     //MODIFIES: this
-    //EFFECTS: initializes a player's cards and drawer
-    private void initializePlayer(String numCardsStart, int playerNumber, Player player) {
+    //EFFECTS: initializes a user1's cards and drawer
+    private void initializePlayer1(String numCardsStart, int playerNumber) {
         ChipsDrawer drawer = gs.getDrawer(playerNumber);
         List<Card> startCards = deck.dealCards(numCardsStart);
         if (newRound) {
-            player = new Player("user" + playerNumber, startCards, drawer.getNumWhiteChips(),
+            user1 = new Player("user" + playerNumber, startCards, drawer.getNumWhiteChips(),
                     drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
         } else {
-            player = new Player("user" + playerNumber, startCards, NUM_INITIAL_WHITE_CHIPS,
+            user1 = new Player("user" + playerNumber, startCards, NUM_INITIAL_WHITE_CHIPS,
                     NUM_INITIAL_BLUE_CHIPS, NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
         }
-        gs.setDrawer(player.getDrawer(), playerNumber);
+        gs.setDrawer(user1.getDrawer(), playerNumber);
+        gs.setCardList(new PlayerCards(startCards), playerNumber);
+    }
+
+    //MODIFIES: this
+    //EFFECTS: initializes a user2's cards and drawer
+    private void initializePlayer2(String numCardsStart, int playerNumber) {
+        ChipsDrawer drawer = gs.getDrawer(playerNumber);
+        List<Card> startCards = deck.dealCards(numCardsStart);
+        if (newRound) {
+            user2 = new Player("user" + playerNumber, startCards, drawer.getNumWhiteChips(),
+                    drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
+        } else {
+            user2 = new Player("user" + playerNumber, startCards, NUM_INITIAL_WHITE_CHIPS,
+                    NUM_INITIAL_BLUE_CHIPS, NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+        }
+        gs.setDrawer(user2.getDrawer(), playerNumber);
         gs.setCardList(new PlayerCards(startCards), playerNumber);
     }
 
