@@ -23,6 +23,7 @@ public abstract class Helper {
     public static final String CARDS_13 = "13 cards";
     public static final String HALF_DECK = "Half Deck";
     public static final String NEW_GAME = "New Game";
+    public static final String NEW_ROUND = "New Round";
 
     //EFFECTS: creates a button labeled text that does command on child or parent
     public static JButton createButton(String text, String command, Dimension buttonSize,
@@ -47,8 +48,11 @@ public abstract class Helper {
     //          - parent: the frame with all the components
     private static void executeActions(String command, JFrame child, Container parent) {
         executeStartSettings(command, child, parent);
-        if (command.equals(NEW_GAME)) {
+        if (command.equals(NEW_GAME) || command.equals(NEW_ROUND)) {
             parent.removeAll();
+            if (command.equals(NEW_ROUND)) {
+                BigTwoGameGUI.setIsNewRound();
+            }
             new GameGUI();
             parent.setVisible(false);
         } else if (command.equals(SAVE) || command.equals(DONT_SAVE)
@@ -62,6 +66,7 @@ public abstract class Helper {
                 displayEndGame("You have quit the game", parent);
             } else if (command.equals(GAME_OVER)) {
                 displayEndGame("Game Over", parent);
+
             }
         }
     }
@@ -70,10 +75,12 @@ public abstract class Helper {
     private static void executeStartSettings(String command, JFrame child, Container parent) {
         BigTwoGameGUI game;
         if (command.equals(YES)) {
+            if (BigTwoGameGUI.getNewRound()) {
+                showMsg("You can't play another round of the same round");
+                return;
+            }
             game = new BigTwoGameGUI(BigTwoGameGUI.LOAD_SAVED);
-            parent.add(game);
-            parent.setVisible(true);
-            child.setVisible(false);
+            addGameAndSetVisibilities(child, parent, game);
             showMsg("Loaded game from file: " + BigTwoGameGUI.JSON_FILE);
         } else if (command.equals(NO)) {
             createPopUp("How many cards would you like to start with?",
@@ -85,10 +92,14 @@ public abstract class Helper {
             } else {
                 game = new BigTwoGameGUI(BigTwoGameGUI.NEW_GAME_HALF_DECK);
             }
-            parent.add(game);
-            parent.setVisible(true);
-            child.setVisible(false);
+            addGameAndSetVisibilities(child, parent, game);
         }
+    }
+
+    private static void addGameAndSetVisibilities(JFrame child, Container parent, BigTwoGameGUI game) {
+        parent.add(game);
+        parent.setVisible(true);
+        child.setVisible(false);
     }
 
     //EFFECTS: creates a pop up window displaying a message with options
@@ -118,10 +129,11 @@ public abstract class Helper {
     //EFFECTS: repaint entire window of parent to display message about end of game
     private static void displayEndGame(String text, Container parent) {
         parent.removeAll();
-        parent.setLayout(new FlowLayout());
+        parent.setLayout(new GridBagLayout());
+//        parent.setLayout(new FlowLayout());
         JLabel end = new JLabel(text);
         end.setFont(BigTwoGameGUI.ANNOUNCE_FONT);
-        parent.add(end, BorderLayout.CENTER);
+        parent.add(end, GridBagConstraints.CENTER);
         ((JPanel) parent).updateUI();
     }
 

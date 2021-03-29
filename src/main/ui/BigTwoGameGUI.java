@@ -31,6 +31,7 @@ public class BigTwoGameGUI extends JPanel {
     public static final int LOAD_SAVED = 2;
     public static final Font ANNOUNCE_FONT = new Font("Phosphate", 1, 64);
 
+    //TODO: MAKDE USER1, USER2, DECK STATIC
     private Player user1;
     private Player user2;
     private Player dummyPlayer;
@@ -39,6 +40,7 @@ public class BigTwoGameGUI extends JPanel {
     private DeckOfCards deck;
     private TablePile table;
     private boolean firstTurn = true;
+    private static boolean newRound = false;
     private int playerTurn = 2;
     private static GameStatus gs;
     private static JsonWriter writer;
@@ -91,9 +93,11 @@ public class BigTwoGameGUI extends JPanel {
             loadGameStatus();
         } else {
             if (version == NEW_GAME_13) {
-                initializeNewGame("13 cards");
+                initializeNewGameOrRound("13 cards");
+            } else if (version == NEW_GAME_HALF_DECK) {
+                initializeNewGameOrRound("half deck");
             } else {
-                initializeNewGame("half deck");
+                //
             }
             if (user1HasStartCard()) {
                 playerTurn = 1;
@@ -104,26 +108,29 @@ public class BigTwoGameGUI extends JPanel {
     }
 
     //MODIFIES: this
-    //EFFECTS: initializes a new game
-    private void initializeNewGame(String numCardsStart) {
-        List<Card> startCards = deck.dealCards(numCardsStart);
-        user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
-                NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
-        gs.setCardList(new PlayerCards(startCards), PLAYER1);
-        gs.setDrawer(user1.getDrawer(), PLAYER1);
-
-        startCards = deck.dealCards(numCardsStart);
-        user2 = new Player("user2", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
-                NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
-        gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER2);
-        gs.setDrawer(user2.getDrawer(), GameStatus.PLAYER2);
+    //EFFECTS: initializes a new game or new round if newRound == true
+    private void initializeNewGameOrRound(String numCardsStart) {
+        loadGameStatus();
+        initializePlayer(numCardsStart, GameStatus.PLAYER1, user1);
+        initializePlayer(numCardsStart, GameStatus.PLAYER2, user2);
+        newRound = false;
     }
 
-    /**
-     * ========================================================================================================
-     * GRAPHIC DRAWING
-     * ========================================================================================================
-     */
+    //MODIFIES: this
+    //EFFECTS: initializes a player's cards and drawer
+    private void initializePlayer(String numCardsStart, int playerNumber, Player player) {
+        ChipsDrawer drawer = gs.getDrawer(playerNumber);
+        List<Card> startCards = deck.dealCards(numCardsStart);
+        if (newRound) {
+            player = new Player("user" + playerNumber, startCards, drawer.getNumWhiteChips(),
+                    drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
+        } else {
+            player = new Player("user" + playerNumber, startCards, NUM_INITIAL_WHITE_CHIPS,
+                    NUM_INITIAL_BLUE_CHIPS, NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+        }
+        gs.setDrawer(player.getDrawer(), playerNumber);
+        gs.setCardList(new PlayerCards(startCards), playerNumber);
+    }
 
     //MODIFIES: this
     //EFFECTS: draws all the components of the game onto this
@@ -152,12 +159,6 @@ public class BigTwoGameGUI extends JPanel {
         add(interaction, constraints);
     }
 
-    /**
-     * ========================================================================================================
-     * RUN THE GAME -- HELPERS
-     * ========================================================================================================
-     */
-
     //MODIFIES: this
     //EFFECTS: update playerTurn with next player
     private void nextPlayer() {
@@ -178,12 +179,6 @@ public class BigTwoGameGUI extends JPanel {
         interaction.update();
     }
 
-    /**
-     * ------------------------------------------------------------------------------------
-     * RUN GAME - SECONDARY HELPERS
-     * ------------------------------------------------------------------------------------
-     */
-
     //EFFECTS: returns true if user1 has the starting card
     // 3 diamond or increasing suits if 3 diamond is not in play
     private boolean user1HasStartCard() {
@@ -193,7 +188,7 @@ public class BigTwoGameGUI extends JPanel {
 
     //EFFECTS: returns true if game is over
     // game is over when either player has played all their cards (ie. has no more cards left)
-    private boolean gameOver() {
+    public boolean gameOver() {
         return user1.getNumCards() == 0 || user2.getNumCards() == 0;
     }
 
@@ -212,6 +207,9 @@ public class BigTwoGameGUI extends JPanel {
         }
         lostPoints = pointsLost(loser);
         winner.collectChips(loser.payChips(lostPoints));
+        gs.setDrawer(user1.getDrawer(), GameStatus.PLAYER1);
+        gs.setDrawer(user2.getDrawer(), GameStatus.PLAYER2);
+        saveGameStatus();
         chipsGUI.update();
         Helper.createPopUp(winner.getName() + " is the winner! \n " + winner.getName() + " won "
                         + lostPoints + " points worth of chips!", "Yay!", "Oh well",
@@ -236,12 +234,6 @@ public class BigTwoGameGUI extends JPanel {
         return player.getNumCards() == 0;
     }
 
-    /**
-     * ========================================================================================================
-     * CHOSE TO PASS
-     * ========================================================================================================
-     */
-
     //MODIFIES: this
     //EFFECTS: player passed; if not first turn, reset table
     //          else: throw FirstTurnException
@@ -255,12 +247,6 @@ public class BigTwoGameGUI extends JPanel {
             throw new FirstTurnException("You can't pass as the starting player");
         }
     }
-
-    /**
-     * ========================================================================================================
-     * CHOSE TO PLAY HAND
-     * ========================================================================================================
-     */
 
     //MODIFIES: this
     //EFFECTS: play a hand, if game is over, distribute winnings
@@ -300,12 +286,6 @@ public class BigTwoGameGUI extends JPanel {
         return hand.isValidTypeHand() && hand.isValidPlay(tableHand);
     }
 
-    /**
-     * ------------------------------------------------------------------------------------
-     * PLAY - SECONDARY HELPERS
-     * ------------------------------------------------------------------------------------
-     */
-
     //EFFECTS: determine what the first card is
     // starts from 3 of diamond then increase suits
     private Card findStartingCard() {
@@ -337,12 +317,6 @@ public class BigTwoGameGUI extends JPanel {
         return false;
     }
 
-    /**
-     * ========================================================================================================
-     * QUIT GAME
-     * ========================================================================================================
-     */
-
     //EFFECTS: ask whether user wants to save game status to file
     //      - if yes: save game status to file
     //      - if no: quit application
@@ -362,18 +336,14 @@ public class BigTwoGameGUI extends JPanel {
         }
     }
 
-    /**
-     * ========================================================================================================
-     * LOAD GAME
-     * ========================================================================================================
-     */
-
     //MODIFIES: this
     //EFFECTS: loads the game status from file
     private void loadGameStatus() {
         try {
             gs = reader.read();
-            initializeLoadedGame();
+            if (!newRound) {
+                initializeLoadedGame();
+            }
         } catch (IOException e) {
             Helper.showMsg("Unable to load game from file: " + JSON_FILE);
         }
@@ -382,7 +352,7 @@ public class BigTwoGameGUI extends JPanel {
     //MODIFIES: this
     //EFFECTS: initializes the game according to saved stats from file
     private void initializeLoadedGame() {
-        int playerNumber = PLAYER1;
+        int playerNumber = GameStatus.PLAYER1;
         ChipsDrawer drawer = gs.getDrawer(playerNumber);
         user1 = new Player("user1", gs.getCardList(playerNumber), drawer.getNumWhiteChips(),
                 drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
@@ -396,11 +366,10 @@ public class BigTwoGameGUI extends JPanel {
         firstTurn = false;
     }
 
-    /**
-     * ========================================================================================================
-     * GETTERS/SETTERS
-     * ========================================================================================================
-     */
+    //setter
+    public static void setIsNewRound() {
+        newRound = true;
+    }
 
     //getter
     public TablePile getTable() {
@@ -424,5 +393,10 @@ public class BigTwoGameGUI extends JPanel {
         } else {
             return user2.getDrawer();
         }
+    }
+
+    //getter
+    public static boolean getNewRound() {
+        return newRound;
     }
 }

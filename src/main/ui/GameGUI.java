@@ -16,6 +16,8 @@ public class GameGUI extends JFrame {
     public static final Color BACKGROUND = new Color(130, 62, 56);
     public static final Color POP_UP_COLOUR = new Color(172, 127, 127);
 
+    private static boolean addButton = false;
+
     //EFFECTS: set up which game window to operate; saved or new game
     public GameGUI() {
         super("Big Two");
@@ -38,6 +40,9 @@ public class GameGUI extends JFrame {
         JButton newGame = Helper.createButton("New Game", Helper.NEW_GAME, Helper.BUTTON_SIZE_2,
                 null, this);
         globalArea.add(newGame);
+        JButton newRound = Helper.createButton("New Round", Helper.NEW_ROUND,
+                Helper.BUTTON_SIZE_2, null, this);
+        globalArea.add(newRound);
         return globalArea;
     }
 
