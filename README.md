@@ -58,3 +58,10 @@ own games as well, thus, the new rules for how chips are paid. Being able to mak
 - As a user, I want to both view my cards, and the current cards/hand on the table
 - As a user, I want to be able to save the state of the card game to file when I quit the game
 - As a user, I want to be able to load the state of the card game I last played from file when opening the game
+
+
+## PHASE 4: TASK 2
+
+Task chosen: Test and design a class in the model package that is robust.
+
+- Class: DeckOfCards, method: DeckOfCards.dealCards(String)

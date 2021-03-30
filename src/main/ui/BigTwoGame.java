@@ -1,6 +1,7 @@
 package ui;
 
 import model.*;
+import model.exceptions.TooFewCardsException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -102,17 +103,22 @@ public class BigTwoGame extends JFrame {
     //MODIFIES: this
     //EFFECTS: initializes a new game
     private void initializeNewGame() {
-        String cardsAmount = chooseAmountOfInitialCards();
-        List<Card> startCards = deck.dealCards(cardsAmount);
-        user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
-                NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
-        gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER1);
-        gs.setDrawer(user1.getDrawer(), GameStatus.PLAYER1);
-        startCards = deck.dealCards(cardsAmount);
-        user2 = new Player("user2", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
-                NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
-        gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER2);
-        gs.setDrawer(user2.getDrawer(), GameStatus.PLAYER2);
+        try {
+            String cardsAmount = chooseAmountOfInitialCards();
+            List<Card> startCards = deck.dealCards(cardsAmount);
+            user1 = new Player("user1", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
+                    NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+            gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER1);
+            gs.setDrawer(user1.getDrawer(), GameStatus.PLAYER1);
+
+            startCards = deck.dealCards(cardsAmount);
+            user2 = new Player("user2", startCards, NUM_INITIAL_WHITE_CHIPS, NUM_INITIAL_BLUE_CHIPS,
+                    NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+            gs.setCardList(new PlayerCards(startCards), GameStatus.PLAYER2);
+            gs.setDrawer(user2.getDrawer(), GameStatus.PLAYER2);
+        } catch (TooFewCardsException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     //EFFECTS: ask whether to play starting with 13 cards only or half a deck

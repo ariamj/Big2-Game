@@ -3,7 +3,6 @@ package model;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a player of the game of Big 2 with a name, cards, and drawer of chips

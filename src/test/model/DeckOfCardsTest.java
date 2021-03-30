@@ -1,5 +1,6 @@
 package model;
 
+import model.exceptions.TooFewCardsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,9 +49,26 @@ public class DeckOfCardsTest {
             cardsDealt.add(deck.getCard(i));
         }
         Hand dealtHand1 = new Hand(cardsDealt);
-        List<Card> dealtHandTest = deck.dealCards("13 cards");
-        assertEquals(13, dealtHandTest.size());
-        assertEquals(dealtHand1.getListOfCards(), dealtHandTest);
+        try {
+            List<Card> dealtHandTest = deck.dealCards("13 cards");
+            assertEquals(13, dealtHandTest.size());
+            assertEquals(dealtHand1.getListOfCards(), dealtHandTest);
+        } catch (TooFewCardsException e) {
+            fail("TooFewCardsException not expected");
+        }
+    }
+
+    @Test
+    public void testDealCardsLessThan26CardsInDeck() {
+        for (int i = 0; i < 27; i++) {
+            deck.removeCard(0);
+        }
+        try {
+            deck.dealCards("13 cards");
+            fail("TooFewCardsException expected");
+        } catch (TooFewCardsException e) {
+            assertEquals(25, deck.getSize());
+        }
     }
 
     @Test
@@ -60,9 +78,13 @@ public class DeckOfCardsTest {
             cardsDealt.add(deck.getCard(i));
         }
         Hand dealtHand1 = new Hand(cardsDealt);
-        List<Card> dealtHandTest = deck.dealCards("half deck");
-        assertEquals(26, dealtHandTest.size());
-        assertEquals(dealtHand1.getListOfCards(), dealtHandTest);
+        try {
+            List<Card> dealtHandTest = deck.dealCards("half deck");
+            assertEquals(26, dealtHandTest.size());
+            assertEquals(dealtHand1.getListOfCards(), dealtHandTest);
+        } catch (TooFewCardsException e) {
+            fail("TooFewCardsException not expected");
+        }
     }
 
     @Test

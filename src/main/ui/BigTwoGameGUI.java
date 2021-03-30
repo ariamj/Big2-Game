@@ -1,6 +1,7 @@
 package ui;
 
 import model.*;
+import model.exceptions.TooFewCardsException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.exceptions.FirstTurnException;
@@ -118,33 +119,41 @@ public class BigTwoGameGUI extends JPanel {
     //MODIFIES: this
     //EFFECTS: initializes a user1's cards and drawer
     private void initializePlayer1(String numCardsStart, int playerNumber) {
-        ChipsDrawer drawer = gs.getDrawer(playerNumber);
-        List<Card> startCards = deck.dealCards(numCardsStart);
-        if (newRound) {
-            user1 = new Player("user" + playerNumber, startCards, drawer.getNumWhiteChips(),
-                    drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
-        } else {
-            user1 = new Player("user" + playerNumber, startCards, NUM_INITIAL_WHITE_CHIPS,
-                    NUM_INITIAL_BLUE_CHIPS, NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+        try {
+            ChipsDrawer drawer = gs.getDrawer(playerNumber);
+            List<Card> startCards = deck.dealCards(numCardsStart);
+            if (newRound) {
+                user1 = new Player("user" + playerNumber, startCards, drawer.getNumWhiteChips(),
+                        drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
+            } else {
+                user1 = new Player("user" + playerNumber, startCards, NUM_INITIAL_WHITE_CHIPS,
+                        NUM_INITIAL_BLUE_CHIPS, NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+            }
+            gs.setDrawer(user1.getDrawer(), playerNumber);
+            gs.setCardList(new PlayerCards(startCards), playerNumber);
+        } catch (TooFewCardsException e) {
+            Helper.showMsg(e.getMessage());
         }
-        gs.setDrawer(user1.getDrawer(), playerNumber);
-        gs.setCardList(new PlayerCards(startCards), playerNumber);
     }
 
     //MODIFIES: this
     //EFFECTS: initializes a user2's cards and drawer
     private void initializePlayer2(String numCardsStart, int playerNumber) {
-        ChipsDrawer drawer = gs.getDrawer(playerNumber);
-        List<Card> startCards = deck.dealCards(numCardsStart);
-        if (newRound) {
-            user2 = new Player("user" + playerNumber, startCards, drawer.getNumWhiteChips(),
-                    drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
-        } else {
-            user2 = new Player("user" + playerNumber, startCards, NUM_INITIAL_WHITE_CHIPS,
-                    NUM_INITIAL_BLUE_CHIPS, NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+        try {
+            ChipsDrawer drawer = gs.getDrawer(playerNumber);
+            List<Card> startCards = deck.dealCards(numCardsStart);
+            if (newRound) {
+                user2 = new Player("user" + playerNumber, startCards, drawer.getNumWhiteChips(),
+                        drawer.getNumBlueChips(), drawer.getNumRedChips(), drawer.getNumGoldChips());
+            } else {
+                user2 = new Player("user" + playerNumber, startCards, NUM_INITIAL_WHITE_CHIPS,
+                        NUM_INITIAL_BLUE_CHIPS, NUM_INITIAL_RED_CHIPS, NUM_INITIAL_GOLD_CHIPS);
+            }
+            gs.setDrawer(user2.getDrawer(), playerNumber);
+            gs.setCardList(new PlayerCards(startCards), playerNumber);
+        } catch (TooFewCardsException e) {
+            Helper.showMsg(e.getMessage());
         }
-        gs.setDrawer(user2.getDrawer(), playerNumber);
-        gs.setCardList(new PlayerCards(startCards), playerNumber);
     }
 
     //MODIFIES: this

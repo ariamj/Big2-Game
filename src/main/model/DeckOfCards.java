@@ -1,5 +1,7 @@
 package model;
 
+import model.exceptions.TooFewCardsException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,16 +22,16 @@ public class DeckOfCards extends ListOfCards {
         }
     }
 
-    //REQUIRES: this has at least 26 cards (ie. size is >= 26)
     //MODIFIES: this
     //EFFECTS: deals out startAmount amount of cards
-    public List<Card> dealCards(String startAmount) {
+    public List<Card> dealCards(String startAmount) throws TooFewCardsException {
+        if (this.getSize() < 26) {
+            throw new TooFewCardsException("Not enough Cards to be dealt");
+        }
         List<Card> cardDealt = new ArrayList<>();
         int numCards = 26;
-//        int numCards = this.getSize();
         if (startAmount.equals("13 cards")) {
             numCards = 13;
-//            numCards = 26;
         }
         for (int i = 0; i < numCards; i++) {
             Card cardToBeRemoved = this.getCard(i);
