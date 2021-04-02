@@ -44,14 +44,12 @@ public class Player {
             while (pointsLost >= 5) {
                 while (pointsLost >= 10) {
                     while (pointsLost >= 25) {
-                        pointsLost = removeChips(new Chips("gold"), paidChips, pointsLost,
-                                25);
+                        pointsLost = removeChips(new Chips("gold"), paidChips, pointsLost, 25);
                     }
                     if (pointsLost < 10) {
                         break;
                     }
-                    pointsLost = removeChips(new Chips("red"), paidChips, pointsLost,
-                            10);
+                    pointsLost = removeChips(new Chips("red"), paidChips, pointsLost, 10);
                 }
                 if (pointsLost < 5) {
                     break;
