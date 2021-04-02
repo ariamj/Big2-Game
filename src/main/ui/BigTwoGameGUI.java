@@ -34,7 +34,6 @@ public class BigTwoGameGUI extends JPanel {
 
     private Player user1;
     private Player user2;
-    private Player dummyPlayer;
     private List<Player> playerList;
 
     private DeckOfCards deck;
@@ -67,7 +66,7 @@ public class BigTwoGameGUI extends JPanel {
 
         initializeGame();
         setGameVersion(version);
-        playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
+        playerList = new ArrayList<>(Arrays.asList(null, user1, user2));
         drawGame();
         update();
     }

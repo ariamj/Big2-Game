@@ -5,7 +5,6 @@ import model.exceptions.TooFewCardsException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +14,7 @@ import java.util.Scanner;
 /**
  * Represents the game of Big 2
  */
-public class BigTwoGame extends JFrame {
+public class BigTwoGame {
     private static final String JSON_FILE = "./data/gameStatus.json";
     private static final List<String> RANK_VALUES = new ArrayList<>(Arrays.asList("X", "A", "2", "3", "4", "5", "6",
             "7", "8", "9", "10", "J", "Q", "K"));
@@ -31,7 +30,6 @@ public class BigTwoGame extends JFrame {
 
     private Player user1;
     private Player user2;
-    private Player dummyPlayer;
     private List<Player> playerList;
     private DeckOfCards deck;
     private TablePile table;
@@ -58,7 +56,7 @@ public class BigTwoGame extends JFrame {
     // game is over when one player has played all their cards, pay/collect chips accordingly
     private void runBigTwoGame() {
         initializeGame();
-        playerList = new ArrayList<>(Arrays.asList(dummyPlayer, user1, user2));
+        playerList = new ArrayList<>(Arrays.asList(null, user1, user2));
         displayChips();
         if (firstTurn) {
             if (user1HasStartCard()) {

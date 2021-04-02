@@ -65,3 +65,13 @@ own games as well, thus, the new rules for how chips are paid. Being able to mak
 Task chosen: Test and design a class in the model package that is robust.
 
 - Class: DeckOfCards, method: DeckOfCards.dealCards(String)
+
+
+## PHASE 4: TASK 3
+
+After drawing out the full UML class diagram for my project, I realized that there are a lot more associations 
+between classes than I thought. However, even after thinking about any places where I can perhaps refractor to 
+improve my code, I found that my classes are still quite cohesive. Each class represented one aspect of my game that 
+had different functionality as any other classes. As for classes that did perhaps have similar functionality, they 
+were all subclasses of a more general class (eg. TablePile is a Hand which is a ListOfCards).
+

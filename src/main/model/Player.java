@@ -7,12 +7,7 @@ import java.util.List;
 /**
  * Represents a player of the game of Big 2 with a name, cards, and drawer of chips
  */
-public class Player extends JPanel {
-    private static final Chips WHITE_CHIP = new Chips("white");
-    private static final Chips BLUE_CHIP = new Chips("blue");
-    private static final Chips RED_CHIP = new Chips("red");
-    private static final Chips GOLD_CHIP = new Chips("gold");
-
+public class Player {
     private String name;
     private PlayerCards cards;
     private ChipsDrawer drawer;
@@ -49,22 +44,24 @@ public class Player extends JPanel {
             while (pointsLost >= 5) {
                 while (pointsLost >= 10) {
                     while (pointsLost >= 25) {
-                        pointsLost = removeChips(GOLD_CHIP, paidChips, pointsLost, 25);
+                        pointsLost = removeChips(new Chips("gold"), paidChips, pointsLost,
+                                25);
                     }
                     if (pointsLost < 10) {
                         break;
                     }
-                    pointsLost = removeChips(RED_CHIP, paidChips, pointsLost, 10);
+                    pointsLost = removeChips(new Chips("red"), paidChips, pointsLost,
+                            10);
                 }
                 if (pointsLost < 5) {
                     break;
                 }
-                pointsLost = removeChips(BLUE_CHIP, paidChips, pointsLost, 5);
+                pointsLost = removeChips(new Chips("blue"), paidChips, pointsLost, 5);
             }
             if (pointsLost < 1) {
                 break;
             }
-            pointsLost = removeChips(WHITE_CHIP, paidChips, pointsLost, 1);
+            pointsLost = removeChips(new Chips("white"), paidChips, pointsLost, 1);
         }
         return paidChips;
     }
