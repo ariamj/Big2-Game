@@ -26,8 +26,9 @@ public class GameStatusTest {
         gs.setDrawer(drawer2, 2);
         ChipsDrawer player1Drawer = gs.getDrawer(GameStatus.PLAYER1);
         ChipsDrawer player2Drawer = gs.getDrawer(GameStatus.PLAYER2);
-        assertEquals((18 + 12 + 5 + 1), player1Drawer.getDrawer().size());
-        assertEquals((22 + 8 + 5 + 1), player2Drawer.getDrawer().size());
+        assertEquals((18 + 12 + 5 + 1), player1Drawer.getSize());
+        assertEquals((22 + 8 + 5 + 1), player2Drawer.getSize());
+
         assertEquals(drawer1, player1Drawer);
         assertEquals(drawer2, player2Drawer);
     }

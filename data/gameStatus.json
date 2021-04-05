@@ -1,70 +1,44 @@
 {
-   "player turn": 2,
+   "player turn": 1,
    "player 2 cards": [
       {
-         "rank": 4,
-         "suit": "clubs"
-      },
-      {
-         "rank": 4,
-         "suit": "heart"
-      },
-      {
-         "rank": 10,
-         "suit": "clubs"
-      },
-      {
-         "rank": 10,
-         "suit": "heart"
-      },
-      {
-         "rank": 10,
-         "suit": "spade"
-      },
-      {
-         "rank": 9,
+         "rank": 1,
          "suit": "diamond"
       },
-      {
-         "rank": 5,
-         "suit": "clubs"
-      },
-      {
-         "rank": 8,
-         "suit": "clubs"
-      },
-      {
-         "rank": 4,
-         "suit": "spade"
-      },
-      {
-         "rank": 5,
-         "suit": "heart"
-      },
-      {
-         "rank": 11,
-         "suit": "diamond"
-      },
-      {
-         "rank": 5,
-         "suit": "diamond"
-      },
-      {
-         "rank": 11,
-         "suit": "clubs"
-      }
-   ],
-   "player 1 cards": [
       {
          "rank": 7,
          "suit": "clubs"
       },
       {
-         "rank": 9,
+         "rank": 1,
          "suit": "spade"
       },
       {
-         "rank": 6,
+         "rank": 4,
+         "suit": "heart"
+      },
+      {
+         "rank": 10,
+         "suit": "diamond"
+      },
+      {
+         "rank": 8,
+         "suit": "heart"
+      },
+      {
+         "rank": 10,
+         "suit": "clubs"
+      },
+      {
+         "rank": 2,
+         "suit": "clubs"
+      },
+      {
+         "rank": 2,
+         "suit": "diamond"
+      },
+      {
+         "rank": 2,
          "suit": "heart"
       },
       {
@@ -72,53 +46,36 @@
          "suit": "spade"
       },
       {
-         "rank": 2,
-         "suit": "diamond"
-      },
-      {
-         "rank": 9,
-         "suit": "clubs"
-      },
-      {
          "rank": 6,
-         "suit": "diamond"
-      },
-      {
-         "rank": 2,
-         "suit": "spade"
-      },
-      {
-         "rank": 10,
-         "suit": "diamond"
+         "suit": "heart"
       },
       {
          "rank": 5,
-         "suit": "spade"
-      },
-      {
-         "rank": 6,
-         "suit": "clubs"
-      },
-      {
-         "rank": 4,
          "suit": "diamond"
       }
    ],
+   "player 1 cards": [],
    "player 1 chips": [{
-      "gold chips": 1,
-      "white chips": 17,
-      "red chips": 4,
+      "gold chips": 2,
+      "white chips": 20,
+      "red chips": 5,
       "blue chips": 10
    }],
    "label": "Game number 1",
    "player 2 chips": [{
-      "gold chips": 1,
-      "white chips": 23,
-      "red chips": 6,
+      "gold chips": 0,
+      "white chips": 20,
+      "red chips": 5,
       "blue chips": 10
    }],
-   "table pile": [{
-      "rank": 3,
-      "suit": "heart"
-   }]
+   "table pile": [
+      {
+         "rank": 4,
+         "suit": "diamond"
+      },
+      {
+         "rank": 4,
+         "suit": "clubs"
+      }
+   ]
 }

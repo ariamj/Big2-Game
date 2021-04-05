@@ -3,8 +3,7 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents the chips that player is in possession of
@@ -15,19 +14,14 @@ public class ChipsDrawer implements Writable {
     private static final String RED = "red";
     private static final String GOLD = "gold";
 
-    private int numWhiteChips;
-    private int numBlueChips;
-    private int numRedChips;
-    private int numGoldChips;
-    private int balance;
-    private List<Chips> drawer;
+    private Map<String, List<Chips>> drawer2;
 
     public ChipsDrawer() {
-        drawer = new ArrayList<>();
-        this.numWhiteChips = 0;
-        this.numBlueChips = 0;
-        this.numRedChips = 0;
-        this.numGoldChips = 0;
+        this.drawer2 = new LinkedHashMap<>();
+        this.drawer2.put(WHITE, new ArrayList<>());
+        this.drawer2.put(BLUE, new ArrayList<>());
+        this.drawer2.put(RED, new ArrayList<>());
+        this.drawer2.put(GOLD, new ArrayList<>());
     }
 
     //EFFECTS: Makes a new drawer for chips for player with an initial state of:
@@ -35,120 +29,99 @@ public class ChipsDrawer implements Writable {
     //            numRedChips red chips, numGoldChips gold chips
     public ChipsDrawer(int numWhiteChips, int numBlueChips, int numRedChips, int numGoldChips) {
         this();
-        this.numWhiteChips = numWhiteChips;
-        this.numBlueChips = numBlueChips;
-        this.numRedChips = numRedChips;
-        this.numGoldChips = numGoldChips;
-        insertInitialChipsInDrawer(numWhiteChips, numBlueChips, numRedChips, numGoldChips);
+        insertInitialChipsInDrawer2(numWhiteChips, numBlueChips, numRedChips, numGoldChips);
     }
 
     //MODIFIES: this
     //EFFECTS: inserts multiple amounts of each chip colour to begin drawer
-    private void insertInitialChipsInDrawer(int numWhiteChips, int numBlueChips, int numRedChips, int numGoldChips) {
+    private void insertInitialChipsInDrawer2(int numWhiteChips, int numBlueChips, int numRedChips, int numGoldChips) {
+        Chips whiteChip = new Chips(WHITE);
+        Chips blueChip = new Chips(BLUE);
+        Chips redChip = new Chips(RED);
+        Chips goldChip = new Chips(GOLD);
+
         for (int i = 0; i < numWhiteChips; i++) {
-            Chips whiteChip = new Chips(WHITE);
-            drawer.add(whiteChip);
-            balance += whiteChip.getValue();
+            List<Chips> prev = drawer2.get(WHITE);
+            prev.add(whiteChip);
         }
         for (int i = 0; i < numBlueChips; i++) {
-            Chips blueChip = new Chips(BLUE);
-            drawer.add(blueChip);
-            balance += blueChip.getValue();
+            List<Chips> prev = drawer2.get(BLUE);
+            prev.add(blueChip);
         }
         for (int i = 0; i < numRedChips; i++) {
-            Chips redChip = new Chips(RED);
-            drawer.add(redChip);
-            balance += redChip.getValue();
+            List<Chips> prev = drawer2.get(RED);
+            prev.add(redChip);
         }
         for (int i = 0; i < numGoldChips; i++) {
-            Chips goldChip = new Chips(GOLD);
-            drawer.add(goldChip);
-            balance += goldChip.getValue();
+            List<Chips> prev = drawer2.get(GOLD);
+            prev.add(goldChip);
         }
     }
 
-    //REQUIRES: drawer is not empty and drawer contains chip
     //MODIFIES: this
-    //EFFECTS: removes chip from drawer
+    //EFFECTS: removes chip from drawer if drawer contains chip; else do nothing
     public void removeChipFromDrawer(Chips chip) {
-        if (drawer.size() == 0) {
-            return;
-        }
         String colour = chip.getColour();
-        for (int i = 0; i < drawer.size(); i++) {
-            if (drawer.get(i).getColour().equals(colour)) {
-                drawer.remove(i);
-                if (colour.equals(WHITE)) {
-                    numWhiteChips--;
-                } else if (colour.equals(BLUE)) {
-                    numBlueChips--;
-                } else if (colour.equals(RED)) {
-                    numRedChips--;
-                } else {
-                    numGoldChips--;
-                }
-                break;
-            }
+        List<Chips> chips = drawer2.get(colour);
+        if (chips != null && chips.size() != 0) {
+            chips.remove(0);
         }
     }
 
     //MODIFIES: this
     //EFFECTS: adds chip to drawer
     public void addChipToDrawer(Chips chip) {
-        drawer.add(chip);
-        String colour = chip.getColour();
-        if (colour.equals(WHITE)) {
-            numWhiteChips++;
-        } else if (colour.equals(BLUE)) {
-            numBlueChips++;
-        } else if (colour.equals(RED)) {
-            numRedChips++;
-        } else {
-            numGoldChips++;
-        }
+        List<Chips> chips = drawer2.get(chip.getColour());
+        chips.add(chip);
     }
 
     //EFFECTS: returns the number of chips in the drawer
     public int getSize() {
-        return drawer.size();
+        int sum = drawer2.get(WHITE).size() + drawer2.get(BLUE).size() + drawer2.get(RED).size()
+                + drawer2.get(GOLD).size();
+        return sum;
     }
 
-    //getter
+    //EFFECTS: returns total balance of this drawer
     public int getBalance() {
-        return balance;
+        int whiteBalance = drawer2.get(WHITE).size() * Chips.WHITE_CHIP_VALUE;
+        int blueBalance = drawer2.get(BLUE).size() * Chips.BLUE_CHIP_VALUE;
+        int redBalance = drawer2.get(RED).size() * Chips.RED_CHIP_VALUE;
+        int goldBalance = drawer2.get(GOLD).size() * Chips.GOLD_CHIP_VALUE;
+
+        return whiteBalance + blueBalance + redBalance + goldBalance;
     }
 
-    //getters
+    //EFFECTS: returns number of white chips
     public int getNumWhiteChips() {
-        return numWhiteChips;
+        return drawer2.get(WHITE).size();
     }
 
-    //getters
+    //EFFECTS: returns number of blue chips
     public int getNumBlueChips() {
-        return numBlueChips;
+        return drawer2.get(BLUE).size();
     }
 
-    //getters
+    //EFFECTS: returns number of red chips
     public int getNumRedChips() {
-        return numRedChips;
+        return drawer2.get(RED).size();
     }
 
-    //getters
+    //EFFECTS: returns number of gold chips
     public int getNumGoldChips() {
-        return numGoldChips;
-    }
-
-    //getters
-    public List<Chips> getDrawer() {
-        return this.drawer;
+        return drawer2.get(GOLD).size();
     }
 
     //EFFECTS: returns a string representation of the chip drawer
     public String toString() {
         String drawerString = "[";
-        for (int i = 0; i < drawer.size(); i++) {
-            drawerString += drawer.get(i).toString();
-            if (i != drawer.size() - 1) {
+        for (String key : drawer2.keySet()) {
+            List<Chips> chips = drawer2.get(key);
+            for (int i = 0; i < chips.size(); i++) {
+                drawerString += chips.get(i);
+                if (key.equals(GOLD) && i == chips.size() - 1) {
+                    break;
+                }
                 drawerString += ", ";
             }
         }
@@ -158,10 +131,10 @@ public class ChipsDrawer implements Writable {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("white chips", numWhiteChips);
-        json.put("blue chips", numBlueChips);
-        json.put("red chips", numRedChips);
-        json.put("gold chips", numGoldChips);
+        json.put("white chips", getNumWhiteChips());
+        json.put("blue chips", getNumBlueChips());
+        json.put("red chips", getNumRedChips());
+        json.put("gold chips", getNumGoldChips());
         return json;
     }
 }

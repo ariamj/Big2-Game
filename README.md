@@ -62,16 +62,18 @@ own games as well, thus, the new rules for how chips are paid. Being able to mak
 
 ## PHASE 4: TASK 2
 
-Task chosen: Test and design a class in the model package that is robust.
+Task chosen: using Map interface somewhere in code
 
-- Class: DeckOfCards, method: DeckOfCards.dealCards(String)
+- Class: ChipsDrawer
 
 
 ## PHASE 4: TASK 3
 
 After drawing out the full UML class diagram for my project, I realized that there are a lot more associations 
-between classes than I thought. However, even after thinking about any places where I can perhaps refractor to 
-improve my code, I found that my classes are still quite cohesive. Each class represented one aspect of my game that 
+between classes than I thought. While looking for places that I can perhaps refactor to improve my code, I found 
+that most of my classes are quite cohesive in my opinion. Each class represented one aspect of my game that 
 had different functionality as any other classes. As for classes that did perhaps have similar functionality, they 
-were all subclasses of a more general class (eg. TablePile is a Hand which is a ListOfCards).
+were all subclasses of a more general class (eg. TablePile is a Hand which is a ListOfCards). Although, I realized
+for my TablePile class, there really is no extra individual function and I could have removed that class. Instead,
+any references to TablePile would go to the Hand class and this would decrease a bit of coupling in my design.
 
