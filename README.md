@@ -72,7 +72,8 @@ After drawing out the full UML class diagram for my project, I realized that the
 between classes than I thought. While looking for places that I can perhaps refactor to improve my code, I found 
 that most of my classes are quite cohesive in my opinion. Each class represented one aspect of my game that 
 had different functionality as any other classes. As for classes that did perhaps have similar functionality, they 
-were all subclasses of a more general class (eg. TablePile is a Hand which is a ListOfCards). Although, I realized
-for my TablePile class, there really is no extra individual function and I could have removed that class. Instead,
-any references to TablePile would go to the Hand class and this would decrease a bit of coupling in my design.
+were all subclasses of a more general class (eg. TablePile is a Hand which is a ListOfCards). I also managed to put 
+mostly any duplicate codes as a single method to avoid coupling. Although, I noticed some refactoring I could do:
+
+- remove TablePile and any references to TablePile would go to the Hand class
 
