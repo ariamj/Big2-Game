@@ -9,10 +9,10 @@ import java.util.*;
  * Represents the chips that player is in possession of
  */
 public class ChipsDrawer implements Writable {
-    private static final String WHITE = "white";
-    private static final String BLUE = "blue";
-    private static final String RED = "red";
-    private static final String GOLD = "gold";
+    private static final String WHITE = Chips.WHITE;
+    private static final String BLUE = Chips.BLUE;
+    private static final String RED = Chips.RED;
+    private static final String GOLD = Chips.GOLD;
 
     private Map<String, List<Chips>> drawer2;
 
@@ -35,26 +35,21 @@ public class ChipsDrawer implements Writable {
     //MODIFIES: this
     //EFFECTS: inserts multiple amounts of each chip colour to begin drawer
     private void insertInitialChipsInDrawer2(int numWhiteChips, int numBlueChips, int numRedChips, int numGoldChips) {
-        Chips whiteChip = new Chips(WHITE);
-        Chips blueChip = new Chips(BLUE);
-        Chips redChip = new Chips(RED);
-        Chips goldChip = new Chips(GOLD);
-
         for (int i = 0; i < numWhiteChips; i++) {
             List<Chips> prev = drawer2.get(WHITE);
-            prev.add(whiteChip);
+            prev.add(new Chips(WHITE));
         }
         for (int i = 0; i < numBlueChips; i++) {
             List<Chips> prev = drawer2.get(BLUE);
-            prev.add(blueChip);
+            prev.add(new Chips(BLUE));
         }
         for (int i = 0; i < numRedChips; i++) {
             List<Chips> prev = drawer2.get(RED);
-            prev.add(redChip);
+            prev.add(new Chips(RED));
         }
         for (int i = 0; i < numGoldChips; i++) {
             List<Chips> prev = drawer2.get(GOLD);
-            prev.add(goldChip);
+            prev.add(new Chips(GOLD));
         }
     }
 
@@ -77,9 +72,8 @@ public class ChipsDrawer implements Writable {
 
     //EFFECTS: returns the number of chips in the drawer
     public int getSize() {
-        int sum = drawer2.get(WHITE).size() + drawer2.get(BLUE).size() + drawer2.get(RED).size()
+        return drawer2.get(WHITE).size() + drawer2.get(BLUE).size() + drawer2.get(RED).size()
                 + drawer2.get(GOLD).size();
-        return sum;
     }
 
     //EFFECTS: returns total balance of this drawer

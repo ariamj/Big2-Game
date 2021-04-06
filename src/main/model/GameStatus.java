@@ -95,10 +95,8 @@ public class GameStatus implements Writable {
     //MODIFIES: this
     //EFFECTS: remove card from the players hand, player depends on playerNumber
     public void removeCardsFromPlayer(ListOfCards cards, Player player) {
-//    public void removeCardsFromPlayer(ListOfCards cards, int playerNumber) {
         for (Card card : cards.getListOfCards()) {
             player.getCards().getCardsList().remove(card);
-//            getCardList(playerNumber).remove(card);
         }
     }
 

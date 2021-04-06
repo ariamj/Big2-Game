@@ -17,7 +17,7 @@ import java.util.List;
 import static model.GameStatus.PLAYER1;
 
 /**
- * Represents the game of Big 2
+ * Represents the game of Big 2 with a graphic interface
  */
 public class BigTwoGameGUI extends JPanel {
     public static final String JSON_FILE = "./data/gameStatus.json";
@@ -30,7 +30,7 @@ public class BigTwoGameGUI extends JPanel {
     public static final int NEW_GAME_13 = 0;
     public static final int NEW_GAME_HALF_DECK = 1;
     public static final int LOAD_SAVED = 2;
-    public static final Font ANNOUNCE_FONT = new Font("Phosphate", 1, 64);
+    public static final Font ANNOUNCE_FONT = new Font("Phosphate", Font.PLAIN, 64);
 
     private Player user1;
     private Player user2;
@@ -218,9 +218,8 @@ public class BigTwoGameGUI extends JPanel {
     //MODIFIES: this
     //EFFECTS: loser gives amount chips lost to winner
     private void distributeWinning() {
-        Player winner = null;
-        Player loser = null;
-        int lostPoints = 0;
+        Player winner;
+        Player loser;
         if (isWinner(user1)) {
             winner = user1;
             loser = user2;
@@ -228,7 +227,7 @@ public class BigTwoGameGUI extends JPanel {
             winner = user2;
             loser = user1;
         }
-        lostPoints = pointsLost(loser);
+        int lostPoints = pointsLost(loser);
         winner.collectChips(loser.payChips(lostPoints));
         gs.setDrawer(user1.getDrawer(), GameStatus.PLAYER1);
         gs.setDrawer(user2.getDrawer(), GameStatus.PLAYER2);

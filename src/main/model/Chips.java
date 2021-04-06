@@ -8,6 +8,10 @@ import persistence.Writable;
  * INVARIANT: colour is one of: white, blue, red, gold
  */
 public class Chips {
+    public static final String WHITE = "white";
+    public static final String BLUE = "blue";
+    public static final String RED = "red";
+    public static final String GOLD = "gold";
     public static final int WHITE_CHIP_VALUE = 1;
     public static final int BLUE_CHIP_VALUE = 5;
     public static final int RED_CHIP_VALUE = 10;
@@ -27,11 +31,11 @@ public class Chips {
 
     //getters
     public int getValue() {
-        if (colour.equals("white")) {
+        if (colour.equals(WHITE)) {
             return WHITE_CHIP_VALUE;
-        } else if (colour.equals("blue")) {
+        } else if (colour.equals(BLUE)) {
             return BLUE_CHIP_VALUE;
-        } else if (colour.equals("red")) {
+        } else if (colour.equals(RED)) {
             return RED_CHIP_VALUE;
         } else {
             return GOLD_CHIP_VALUE;
@@ -40,11 +44,11 @@ public class Chips {
 
     //EFFECTS: returns the string representation of a chip in form of first letter of colour
     public String toString() {
-        if (colour.equals("white")) {
+        if (colour.equals(WHITE)) {
             return "W";
-        } else if (colour.equals("blue")) {
+        } else if (colour.equals(BLUE)) {
             return "B";
-        } else if (colour.equals("red")) {
+        } else if (colour.equals(RED)) {
             return "R";
         } else {
             return "G";
