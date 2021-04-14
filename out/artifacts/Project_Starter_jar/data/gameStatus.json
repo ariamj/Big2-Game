@@ -1,28 +1,82 @@
 {
-   "player turn": 1,
+   "player turn": 2,
    "player 2 cards": [
+      {
+         "rank": 9,
+         "suit": "spade"
+      },
+      {
+         "rank": 5,
+         "suit": "diamond"
+      },
+      {
+         "rank": 10,
+         "suit": "diamond"
+      },
+      {
+         "rank": 6,
+         "suit": "diamond"
+      },
+      {
+         "rank": 7,
+         "suit": "diamond"
+      },
+      {
+         "rank": 10,
+         "suit": "clubs"
+      },
+      {
+         "rank": 10,
+         "suit": "heart"
+      },
+      {
+         "rank": 8,
+         "suit": "diamond"
+      },
+      {
+         "rank": 8,
+         "suit": "spade"
+      },
       {
          "rank": 10,
          "suit": "spade"
       },
       {
-         "rank": 7,
+         "rank": 11,
+         "suit": "diamond"
+      }
+   ],
+   "player 1 cards": [
+      {
+         "rank": 5,
          "suit": "clubs"
       },
       {
-         "rank": 11,
-         "suit": "diamond"
-      },
-      {
-         "rank": 2,
-         "suit": "diamond"
-      },
-      {
-         "rank": 11,
+         "rank": 9,
          "suit": "clubs"
       },
       {
-         "rank": 11,
+         "rank": 4,
+         "suit": "spade"
+      },
+      {
+         "rank": 9,
+         "suit": "diamond"
+      },
+      {
+         "rank": 1,
+         "suit": "heart"
+      },
+      {
+         "rank": 1,
+         "suit": "diamond"
+      },
+      {
+         "rank": 4,
+         "suit": "heart"
+      },
+      {
+         "rank": 9,
          "suit": "heart"
       },
       {
@@ -31,72 +85,10 @@
       },
       {
          "rank": 2,
-         "suit": "spade"
-      },
-      {
-         "rank": 11,
-         "suit": "spade"
-      },
-      {
-         "rank": 1,
-         "suit": "heart"
-      },
-      {
-         "rank": 12,
-         "suit": "diamond"
-      },
-      {
-         "rank": 1,
-         "suit": "spade"
-      }
-   ],
-   "player 1 cards": [
-      {
-         "rank": 4,
-         "suit": "heart"
-      },
-      {
-         "rank": 6,
-         "suit": "spade"
-      },
-      {
-         "rank": 9,
-         "suit": "clubs"
-      },
-      {
-         "rank": 4,
-         "suit": "diamond"
-      },
-      {
-         "rank": 9,
-         "suit": "heart"
-      },
-      {
-         "rank": 6,
          "suit": "diamond"
       },
       {
          "rank": 5,
-         "suit": "spade"
-      },
-      {
-         "rank": 7,
-         "suit": "diamond"
-      },
-      {
-         "rank": 9,
-         "suit": "spade"
-      },
-      {
-         "rank": 10,
-         "suit": "diamond"
-      },
-      {
-         "rank": 10,
-         "suit": "clubs"
-      },
-      {
-         "rank": 10,
          "suit": "heart"
       }
    ],
@@ -113,8 +105,14 @@
       "red chips": 5,
       "blue chips": 10
    }],
-   "table pile": [{
-      "rank": 4,
-      "suit": "clubs"
-   }]
+   "table pile": [
+      {
+         "rank": 2,
+         "suit": "spade"
+      },
+      {
+         "rank": 2,
+         "suit": "clubs"
+      }
+   ]
 }
